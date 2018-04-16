@@ -82,21 +82,21 @@ data class MatchesItem(@JsonProperty("date")
                        @JsonProperty("type")
                        val type: String = "",
                        @JsonProperty("home_team")
-                       val homeTeam: Int = 0,
+                       val homeTeam: String? = null,
                        @JsonProperty("away_team")
-                       val awayTeam: Int = 0)
+                       val awayTeam: String? = null)
 
 
 data class Knockout(@JsonProperty("round_8")
-                    val round16: Round,
-                    @JsonProperty("round_2")
                     val round8: Round,
+                    @JsonProperty("round_2")
+                    val round2: Round,
                     @JsonProperty("round_4")
                     val round4: Round,
                     @JsonProperty("round_2_loser")
                     val round2Loser: RoundLoser,
                     @JsonProperty("round_16")
-                    val round: Round)
+                    val round16: Round)
 
 
 data class Lsv(@JsonProperty("knockout")
