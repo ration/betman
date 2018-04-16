@@ -1,7 +1,8 @@
 package fi.iki.lahtela.betman
 
 import fi.iki.lahtela.betman.lsv.Lsv
-import org.omg.CORBA.Object
+import org.springframework.http.MediaType
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.client.RestTemplate
@@ -15,7 +16,7 @@ class GamesController {
     @GetMapping("/all")
     fun all(): List<Game> {
         val team = Team("Germany")
-        return List(REGULAR_GAMES, {Game(it,team,team)})
+        return List(REGULAR_GAMES, { Game(it, team, team) })
     }
 
     private fun games() {
@@ -87,9 +88,12 @@ class GamesController {
 */
     }
 
-    fun fetchRemote() : Lsv {
+    fun fetchRemote(): Lsv {
         val remoteUrl = "https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json"
         val template = RestTemplate()
+        template.messageConverters.
+                filterIsInstance<MappingJackson2HttpMessageConverter>().
+                forEach { it.supportedMediaTypes = listOf(MediaType.TEXT_PLAIN) }
         return template.getForObject(remoteUrl, Lsv::class.java)
     }
 
