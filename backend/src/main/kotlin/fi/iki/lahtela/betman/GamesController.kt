@@ -1,7 +1,10 @@
 package fi.iki.lahtela.betman
 
+import fi.iki.lahtela.betman.lsv.Lsv
+import org.omg.CORBA.Object
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.client.RestTemplate
 
 @RestController
 class GamesController {
@@ -82,6 +85,12 @@ class GamesController {
 63	L61 v L62	14-Jul	Saint Petersburg	Saint Petersburg Stadium
 64	W61 v W62	15-Jul	Moscow	Luzhniki Stadium
 */
+    }
+
+    fun fetchRemote() : Lsv {
+        val remoteUrl = "https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json"
+        val template = RestTemplate()
+        return template.getForObject(remoteUrl, Lsv::class.java)
     }
 
 }
