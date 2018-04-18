@@ -1,0 +1,5 @@
+package betman
+
+class BettingController {
+
+}
