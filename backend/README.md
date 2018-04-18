@@ -1,11 +1,4 @@
-## Spring Boot Example
+# Betman
 
-This is a basic example of how to use Kotlin in a Spring Boot application. See the [accompanying tutorial](http://kotlinlang.org/docs/tutorials/spring-boot-restful.html)
-for more information.
-
-To run:
-
-```
-$ ./gradlew bootRun
-```
-
+Uses data from:
+https://github.com/lsv/fifa-worldcup-2018
