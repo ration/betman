@@ -7,15 +7,15 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat
 
-
+/**
+ * Adapter for LSV provided WorldCup data as one JSON response
+ */
 class LsvAdapter {
 
     private val data = fetchRemote()
 
     companion object {
         const val REGULAR_GAMES = 48
-
-
     }
 
     fun fetchRemote(): Lsv {
