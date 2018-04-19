@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.util.ISO8601DateFormat
  */
 class LsvAdapter {
 
-    private val data = fetchRemote()
+    val data = fetchRemote()
 
     companion object {
         const val REGULAR_GAMES = 48
