@@ -7,7 +7,7 @@ import org.junit.Test
 
 
 class GamesControllerTest {
-    val games = GamesController()
+    private val games = GamesController()
 
     @Test
     fun availableGames() {
@@ -15,7 +15,4 @@ class GamesControllerTest {
         assertEquals(list.size, LsvAdapter.REGULAR_GAMES)
         assertEquals("Russia", list[0].home.name)
     }
-
-
-
 }
