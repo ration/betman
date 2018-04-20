@@ -31,7 +31,9 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" // Required for Kotlin integration
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-security'
-    compile "org.springframework.security:spring-security-jwt:$jwt_version"
+	compile("org.springframework.boot:spring-boot-devtools")
+
+	compile "org.springframework.security:spring-security-jwt:$jwt_version"
     compile "org.springframework.security.oauth:spring-security-oauth2:$oauth_version"
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
