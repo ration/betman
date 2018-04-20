@@ -34,7 +34,9 @@ class LsvAdapter {
                     data.groups.e.matches,
                     data.groups.f.matches,
                     data.groups.g.matches,
-                    data.groups.h.matches).map { asGame(it) }.filterNotNull()
+                    data.groups.h.matches).map { asGame(it) }.filterNotNull().
+                    sortedBy { it.id }
+
         }
         return listOf()
     }
