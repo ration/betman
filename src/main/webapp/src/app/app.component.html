@@ -12,8 +12,8 @@
     <div class="matchNumber">{{game.id}}</div>
     <div class="team homeTeam">{{game.home.name}}</div>
 
-    <input type=text class="score" (ngModelChange)="onChange($event)" [(ngModel)]="bets[game.id].home" name="{{game.id}}.homeGoals" ><div class="vs">-</div>
-    <input type=text class="score" (ngModelChange)="onChange($event)" [(ngModel)]="bets[game.id].away" name="{{game.id}}.awayGoals">
+    <input title="Home team goals" type=text class="score" [(ngModel)]="bets[game.id].home" (ngModelChange)="onChange($event)"  name="{{game.id}}.homeGoals" ><div class="vs">-</div>
+    <input title="Away team goals" type=text class="score" [(ngModel)]="bets[game.id].away" (ngModelChange)="onChange($event)"  name="{{game.id}}.awayGoals">
     <div class="team awayTeam">{{game.away.name}}</div>
   </div>
 </div>
