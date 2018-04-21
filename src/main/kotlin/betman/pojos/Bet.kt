@@ -1,4 +1,7 @@
 package betman.pojos
 
+import com.fasterxml.jackson.annotation.JsonProperty
 
-data class Bet(val user: User, val game: Game)
+data class Bet(@JsonProperty("id") val id: Int,
+               @JsonProperty("home") val home: Int,
+               @JsonProperty("away") val away: Int)

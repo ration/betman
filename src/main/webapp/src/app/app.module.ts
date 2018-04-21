@@ -5,7 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { BettingComponent } from './betting/betting.component';
-import {GamesService} from "./games.service";
+import {GamesService} from './games.service';
+import {FormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import {GamesService} from "./games.service";
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [GamesService],
   bootstrap: [AppComponent]
