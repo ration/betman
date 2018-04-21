@@ -1,6 +1,10 @@
 import {Component} from '@angular/core';
 import {GamesService} from './games.service';
 import {Bet} from 'app/bet.model';
+import {Subject} from 'rxjs/Subject';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+
 
 @Component({
   selector: 'app-root',
@@ -11,26 +15,41 @@ export class AppComponent {
   title = 'Betman';
   games = null;
   bets = {};
-
+  private saveSubject: Subject<Bet[]> = new Subject<Bet[]>();
+  private user = '1';
+  private game = '1';
 
   constructor(private gamesService: GamesService) {
     this.gamesService.all().subscribe(data => {
       this.games = data;
       this.getBettingData();
     });
+
+    this.saveSubject.debounceTime(2000).distinctUntilChanged().subscribe(value => {
+      this.onSubmit(value);
+    });
+
   }
 
   private getBettingData() {
     for (const game of this.games) {
-      this.bets[game.id] = new Bet(game.id, 1, 2);
+      this.bets[game.id] = new Bet(game.id, 0, 0);
     }
+    this.gamesService.bets(this.game, this.user).subscribe(value => {
+      for (const game of value) {
+        this.bets[game.id] = new Bet(game.id, game.home, game.away);
+      }
+    });
   }
+
 
   onChange(change) {
-    console.log(JSON.stringify(this.bets));
+    this.saveSubject.next(Object.values(this.bets));
   }
 
-  onSubmit() {
-
+  onSubmit(value: Bet[]) {
+    this.gamesService.saveBet(this.game, this.user, value).subscribe(res => {
+      console.log('Saved: ' + res);
+    });
   }
 }
