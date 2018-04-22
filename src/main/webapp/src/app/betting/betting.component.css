@@ -1,0 +1,37 @@
+.match {
+  display: inline-block;
+  margin: 3px;
+  background-color: lightslategrey;
+  padding: 5px;
+}
+.vs {
+  display: inline-block;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.matchNumber {
+  float: left;
+  padding: 10px;
+}
+
+.score {
+  width: 25px;
+  padding: 10px 10px 10px 10px;
+}
+.team {
+  padding: 10px;
+  width: 100px;
+
+}
+.homeTeam {
+  float: left;
+  background-color: greenyellow;
+  margin-right: 4px;
+}
+
+.awayTeam {
+  float: right;
+  background-color: crimson;
+  margin-left: 4px;
+}
