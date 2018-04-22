@@ -1,7 +1,9 @@
+@import "~flag-icon-css/css/flag-icon.css";
+
 .match {
   display: inline-block;
-  margin: 3px;
-  background-color: lightslategrey;
+  margin: 1px;
+  background-color: beige;
   padding: 5px;
 }
 .vs {
@@ -13,10 +15,11 @@
 .matchNumber {
   float: left;
   padding: 10px;
+  width: 20px;
 }
 
 .score {
-  width: 25px;
+  width: 15px;
   padding: 10px 10px 10px 10px;
 }
 .team {
@@ -25,13 +28,16 @@
 
 }
 .homeTeam {
-  float: left;
-  background-color: greenyellow;
+  display: inline-block;
   margin-right: 4px;
 }
 
 .awayTeam {
-  float: right;
-  background-color: crimson;
+  display: inline-block;
   margin-left: 4px;
+}
+
+.gameDate {
+  display: inline-block;
+  padding: 10px 10px 10px 10px;
 }
