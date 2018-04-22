@@ -35,9 +35,9 @@ export class BettingComponent implements OnInit {
     for (const game of this.games) {
       this.bets[game.id] = new Bet(game.id, 0, 0);
     }
-    this.gamesService.bets(this.game, this.user).subscribe((value: Game[]) => {
+    this.gamesService.bets(this.game, this.user).subscribe((value: Bet[]) => {
       for (const game of value) {
-        this.bets[game.id] = new Bet(game.id, game.home, game.away);
+        this.bets[game.id] = game;
       }
     });
   }
