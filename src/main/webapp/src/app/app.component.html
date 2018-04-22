@@ -4,18 +4,12 @@
     Welcome to {{title}}!
   </h1>
 </div>
-<h2>Nanananana Betman!</h2>
-
-<form #bettingForm="ngForm">
-<div *ngFor="let game of games">
-  <div class="match">
-    <div class="matchNumber">{{game.id}}</div>
-    <div class="team homeTeam">{{game.home.name}}</div>
-
-    <input title="Home team goals" type=text class="score" [(ngModel)]="bets[game.id].home" (ngModelChange)="onChange($event)"  name="{{game.id}}.homeGoals" ><div class="vs">-</div>
-    <input title="Away team goals" type=text class="score" [(ngModel)]="bets[game.id].away" (ngModelChange)="onChange($event)"  name="{{game.id}}.awayGoals">
-    <div class="team awayTeam">{{game.away.name}}</div>
+<!-- main app container -->
+<div class="jumbotron">
+  <div class="container">
+    <div class="col-sm-8 col-sm-offset-2">
+      <app-alert-message></app-alert-message>
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </div>
-</form>
-
