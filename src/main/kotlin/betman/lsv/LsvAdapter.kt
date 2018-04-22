@@ -60,7 +60,7 @@ class LsvAdapter {
     }
 
     private fun asTeam(id: String?): Team? {
-        return data.teams?.filter { it.id.toString() == id }?.map { Team(it.name) }?.first()
+        return data.teams?.filter { it.id.toString() == id }?.map { Team(it.name, it.iso) }?.first()
     }
 }
 

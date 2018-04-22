@@ -1,3 +1,3 @@
 package betman.pojos
 
-data class Team(val name: String)
+data class Team(val name: String, val iso: String)

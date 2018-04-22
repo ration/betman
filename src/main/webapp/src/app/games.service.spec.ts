@@ -27,7 +27,7 @@ describe('GamesService', () => {
         'date': '2018-06-14T15:00:00.000+0000'
       }, {'id': 2, 'home': {'name': 'Egypt'}, 'away': {'name': 'Uruguay'}, 'date': '2018-06-15T12:00:00.000+0000'}];
 
-      gamesService.all().subscribe(res => {
+      gamesService.all().subscribe((res: Object) => {
         expect(res).toEqual(mockGames);
       });
       const req = httpMock.expectOne(gamesService.apiAllUrl);
@@ -40,7 +40,7 @@ describe('GamesService', () => {
     [HttpTestingController, GamesService],
     (httpMock: HttpTestingController, gamesService: GamesService) => {
       const bets = [new Bet(1, 2, 3)];
-      gamesService.bets('1', '2').subscribe(res => {
+      gamesService.bets(1, 2).subscribe((res: Object) => {
         expect(res).toBe(bets);
       });
       const req = httpMock.expectOne(gamesService.betsUrl + '?game=1&user=2');
@@ -52,7 +52,7 @@ describe('GamesService', () => {
     [HttpTestingController, GamesService],
     (httpMock: HttpTestingController, gamesService: GamesService) => {
       const bets = [new Bet(1, 2, 3)];
-      gamesService.saveBet('1', '2', bets).subscribe(res => {
+      gamesService.saveBet(1, 2, bets).subscribe((res: Object) => {
         expect(res).toBe(null);
       });
       const req = httpMock.expectOne(gamesService.saveBetUrl + '?game=1&user=2');
