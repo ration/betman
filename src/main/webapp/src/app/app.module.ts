@@ -18,6 +18,7 @@ import {AuthGuard} from './auth.guard';
 import {HomeComponent} from './home/home.component';
 import {AuthenticationService} from './authentication.service';
 import {fakeBackendProvider} from './fakes/fake-backend';
+import { GroupComponent } from './group/group.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import {fakeBackendProvider} from './fakes/fake-backend';
     LoginComponent,
     RegisterComponent,
     AlertComponent,
-    HomeComponent
+    HomeComponent,
+    GroupComponent
   ],
   imports: [
     BrowserModule,

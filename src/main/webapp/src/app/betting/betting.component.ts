@@ -2,9 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {Bet} from '../bet.model';
 import {GamesService} from '../games.service';
 import {Subject} from 'rxjs/Subject';
-import {Game} from '../game';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
+import {AuthenticationService} from '../authentication.service';
+import {Game} from '../game.model';
+import {AlertService} from '../alert.service';
 
 @Component({
   selector: 'app-betting',
@@ -13,14 +15,15 @@ import 'rxjs/add/operator/distinctUntilChanged';
 })
 export class BettingComponent implements OnInit {
 
-  games = null;
-  bets = {};
+  games: Game[] = [];
+  bets: { [id: number]: Bet } = {};
   private saveSubject: Subject<Bet[]> = new Subject<Bet[]>();
-  private user = '1';
-  private game = '1';
+  private user = 1;
+  private game = 1;
 
-  constructor(private gamesService: GamesService) {
-    this.gamesService.all().subscribe(data => {
+  constructor(private gamesService: GamesService, private authService: AuthenticationService,
+              private alertService: AlertService) {
+    this.gamesService.all().subscribe((data: Game[]) => {
       this.games = data;
       this.getBettingData();
     });
@@ -28,7 +31,7 @@ export class BettingComponent implements OnInit {
     this.saveSubject.debounceTime(2000).distinctUntilChanged().subscribe(value => {
       this.onSubmit(value);
     });
-
+    this.user = this.authService.currentUser().id;
   }
 
   private getBettingData() {
@@ -48,7 +51,7 @@ export class BettingComponent implements OnInit {
 
   onSubmit(value: Bet[]) {
     this.gamesService.saveBet(this.game, this.user, value).subscribe(res => {
-      console.log('Saved: ' + res);
+        this.alertService.success('Saved');
     });
   }
 

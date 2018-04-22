@@ -16,13 +16,13 @@ export class GamesService {
     return this.http.get(this.apiAllUrl);
   }
 
-  saveBet(game: string, user: string, bets: Bet[]) {
-    const params = new HttpParams().set('game', game).set('user', user);
+  saveBet(game: number, user: number, bets: Bet[]) {
+    const params = new HttpParams().set('game', game.toString()).set('user', user.toString());
     return this.http.post(this.saveBetUrl, bets, {params});
   }
 
-  bets(game: string, user: string) {
-    const params = new HttpParams().set('game', game).set('user', user);
+  bets(game: number, user: number) {
+    const params = new HttpParams().set('game', game.toString()).set('user', user.toString());
     return this.http.get(this.betsUrl, {params});
   }
 }
