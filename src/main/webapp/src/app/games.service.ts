@@ -7,7 +7,7 @@ export class GamesService {
   private host = 'http://localhost:8080';
   public apiAllUrl = this.host + '/api/all';
   public saveBetUrl = this.host + '/api/addBets';
-  public betsUrl = this.host + '/api/bets';
+  public betsUrl = this.host + '/api/bets.ts';
 
   constructor(private http: HttpClient) {
   }

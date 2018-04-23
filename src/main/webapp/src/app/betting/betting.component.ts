@@ -7,6 +7,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import {AuthenticationService} from '../authentication.service';
 import {Game} from '../game.model';
 import {AlertService} from '../alert.service';
+import {getRandomString} from 'selenium-webdriver/safari';
 
 @Component({
   selector: 'app-betting',
@@ -45,13 +46,26 @@ export class BettingComponent implements OnInit {
     });
   }
 
+  guess() {
+    if (confirm('Are you sure? This will overwrite all of your choices?')) {
+      for (const bet of Object.values(this.bets)) {
+        bet.home = this.getRandomGoals(1, 5);
+        bet.away = this.getRandomGoals(1, 5);
+      }
+    }
+  }
+
+  private getRandomGoals(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
   onChange(change) {
     this.saveSubject.next(Object.values(this.bets));
   }
 
   onSubmit(value: Bet[]) {
     this.gamesService.saveBet(this.game, this.user, value).subscribe(res => {
-        this.alertService.success('Saved');
+      this.alertService.success('Saved', false, 2000);
     });
   }
 

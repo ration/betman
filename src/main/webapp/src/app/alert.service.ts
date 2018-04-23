@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {Router, NavigationStart} from '@angular/router';
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/delay';
 
 @Injectable()
 export class AlertService {
@@ -23,9 +25,9 @@ export class AlertService {
     });
   }
 
-  success(message: string, keepAfterNavigationChange = false) {
+  success(message: string, keepAfterNavigationChange = false, clearAfter: number = -1) {
     this.keepAfterNavigationChange = keepAfterNavigationChange;
-    this.subject.next({type: 'success', text: message});
+    this.subject.next({type: 'success', text: message, clearAfter: clearAfter});
   }
 
   error(message: string, keepAfterNavigationChange = false) {

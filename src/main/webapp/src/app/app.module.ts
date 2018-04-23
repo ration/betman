@@ -19,7 +19,7 @@ import {HomeComponent} from './home/home.component';
 import {AuthenticationService} from './authentication.service';
 import {fakeBackendProvider} from './fakes/fake-backend';
 import { GroupComponent } from './group/group.component';
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -35,7 +35,8 @@ import { GroupComponent } from './group/group.component';
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    routing
+    routing,
+    NgbModule.forRoot()
   ],
   providers: [GamesService, AlertService, UserService, AuthGuard, AuthenticationService,
     fakeBackendProvider],
