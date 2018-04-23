@@ -36,7 +36,7 @@ describe('GamesService', () => {
       httpMock.verify();
     }));
 
-  it('gets bets', inject(
+  it('gets bets.ts', inject(
     [HttpTestingController, GamesService],
     (httpMock: HttpTestingController, gamesService: GamesService) => {
       const bets = [new Bet(1, 2, 3)];
@@ -48,7 +48,7 @@ describe('GamesService', () => {
       httpMock.verify();
     }));
 
-  it('stores bets', inject(
+  it('stores bets.ts', inject(
     [HttpTestingController, GamesService],
     (httpMock: HttpTestingController, gamesService: GamesService) => {
       const bets = [new Bet(1, 2, 3)];

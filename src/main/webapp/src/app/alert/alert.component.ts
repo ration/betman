@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AlertService} from '../alert.service';
-
 
 
 @Component({
@@ -9,12 +8,18 @@ import {AlertService} from '../alert.service';
   templateUrl: 'alert.component.html'
 })
 
-export class AlertComponent {
+export class AlertComponent implements OnInit {
   message: any;
 
-  constructor(private alertService: AlertService) { }
+  constructor(private alertService: AlertService) {
+  }
 
   ngOnInit() {
-    this.alertService.getMessage().subscribe(message => { this.message = message; });
+    this.alertService.getMessage().subscribe(message => {
+      this.message = message;
+      if (message && message.clearAfter > 0) {
+        setTimeout(() => this.message = null, message.clearAfter);
+      }
+    });
   }
 }

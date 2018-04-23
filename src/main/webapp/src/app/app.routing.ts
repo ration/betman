@@ -5,12 +5,16 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from './auth.guard';
 import {HomeComponent} from './home/home.component';
+import {GroupAst} from '@angular/animations/browser/src/dsl/animation_ast';
+import {GroupComponent} from './group/group.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'betting', component: BettingComponent },
+  { path: 'group', component: GroupComponent },
+
 
   // otherwise redirect to home
   { path: '**', redirectTo: '' }

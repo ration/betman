@@ -23,7 +23,6 @@ class BettingController {
     @GetMapping("bets", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun bets(game: Int, user: Long): List<Bet> {
         // TODO actually from dao
-
         return userBets
     }
 
