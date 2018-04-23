@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import {UserService} from '../user.service';
 import {AlertService} from '../alert.service';
+import {User} from "../user";
 
 
 
@@ -11,7 +12,7 @@ import {AlertService} from '../alert.service';
 })
 
 export class RegisterComponent {
-  model: any = {};
+  model: User = new User();
   loading = false;
 
   constructor(
