@@ -27,7 +27,7 @@ describe('GamesService', () => {
         'date': '2018-06-14T15:00:00.000+0000'
       }, {'id': 2, 'home': {'name': 'Egypt'}, 'away': {'name': 'Uruguay'}, 'date': '2018-06-15T12:00:00.000+0000'}];
 
-      gamesService.all().subscribe((res: Object) => {
+      gamesService.all(1).subscribe((res: Object) => {
         expect(res).toEqual(mockGames);
       });
       const req = httpMock.expectOne(gamesService.apiAllUrl);

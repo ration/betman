@@ -1,9 +1,12 @@
 buildscript {
-    ext.kotlin_version = '1.2.31' // Required for Kotlin integration
+    ext.kotlin_version = '1.2.40' // Required for Kotlin integration
     ext.spring_boot_version = '1.5.4.RELEASE'
     ext.jwt_version = '1.0.9.RELEASE'
     ext.oauth_version = '2.3.2.RELEASE'
-    
+    ext.h2_version = '1.4.197'
+    ext.postgresql_version = '42.2.2'
+    ext.hikari_version = '3.1.0'
+
     repositories {
         jcenter()
     }
@@ -25,18 +28,29 @@ jar {
 
 repositories {
     jcenter()
+    maven {
+        url = "https://dl.bintray.com/kotlin/exposed"
+    }
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" // Required for Kotlin integration
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-security'
-	compile("org.springframework.boot:spring-boot-devtools")
+    compile 'org.springframework.boot:spring-boot-devtools'
+    compile "org.springframework.boot:spring-boot-configuration-processor"
+    compile "org.postgresql:postgresql:$postgresql_version"
+    compileOnly "com.h2database:h2:$h2_version"
 
 	compile "org.springframework.security:spring-security-jwt:$jwt_version"
     compile "org.springframework.security.oauth:spring-security-oauth2:$oauth_version"
+    compile 'org.jetbrains.exposed:exposed:0.10.2'
 
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile "com.h2database:h2:$h2_version"
+    testCompile group: 'com.nhaarman', name: 'mockito-kotlin', version: '1.5.0'
+    compile "com.zaxxer:HikariCP:$hikari_version"
+
 }
 
 // Angular Webapp stuff
@@ -63,9 +77,9 @@ task buildAngular(type:Exec) {
 	group = BasePlugin.BUILD_GROUP
 	// ng doesn't exist as a file in windows -> ng.cmd
 	if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
-		commandLine "ng.cmd", "build"
+		commandLine "ng.cmd", "build --prod"
 	} else {
-		commandLine "ng", "build"
+		commandLine "ng", "build --prod"
 	}
 }
  
