@@ -5,6 +5,7 @@ import betman.lsv.LsvAdapter
 import betman.pojos.Game
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -14,7 +15,7 @@ class GamesController {
     private val lsvAdapter = LsvAdapter()
 
     @GetMapping("/all")
-    fun all(): List<Game> {
+    fun all(@RequestParam game: Int): List<Game> {
         return lsvAdapter.regularGames()
     }
 
