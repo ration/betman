@@ -14,7 +14,7 @@ export class GamesService {
 
   all(game: number) {
     const params = new HttpParams().set('game', game.toString());
-    return this.http.get(this.betsUrl, {params});
+    return this.http.get(this.apiAllUrl, {params});
   }
 
   saveBet(game: number, user: number, bets: Bet[]) {

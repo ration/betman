@@ -154,17 +154,14 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       return this.getUsers(request, users);
     }
 
-    // create user
     if (request.url.endsWith('/api/users') && request.method === 'POST') {
       return this.addUser(request, users);
     }
 
-    // delete user
     if (request.url.match(/\/api\/users\/\d+$/) && request.method === 'DELETE') {
       return this.delete(request, users);
     }
 
-    // delete user
     if (request.url.match(/\/api\/all/) && request.method === 'GET') {
       return this.games(request);
     }

@@ -1,13 +1,33 @@
-<div class="col-md-6 col-md-offset-3">
-  <h1>Hi {{currentUser.firstName}}!</h1>
-  <p>You're logged in with Angular 2/5 and Angular CLI!!</p>
-  <h3>All registered users:</h3>
+<div id="homePage">
+  <h2>What's Betman?</h2>
+  <p>
+    Betman is a betting game on scores for tournaments such as the World Cup. Each player guesses the score of each
+    match and the guesses
+    can be scored such for example:
   <ul>
-    <li *ngFor="let user of users">
-      {{user.username}} ({{user.firstName}} {{user.lastName}})
-      - <a (click)="deleteUser(user.id)">Delete</a>
-    </li>
+    <li>1 point for correct amount of goals per team</li>
+    <li>1 point if winner is correct</li>
+    <li>3 points if score is exactly right</li>
   </ul>
-  <p><a [routerLink]="['/betting']">Betting</a></p>
-  <p><a [routerLink]="['/login']">Logout</a></p>
+
+  <div id="groups">
+    <h3>Groups</h3>
+    <div id="inviteBox">
+      <form #inviteForm="ngForm">
+        <label for="invite">Do you have a group invite?</label>
+        <input title="invite key" id="invite" type="text" placeholder="Enter key here"/>
+      </form>
+    </div>
+    <div id="oldGroups">
+      <p>
+        Currently active groups:
+      </p>
+    </div>
+    <div id="createGroup">
+      <p>
+        Create new group
+      </p>
+    </div>
+  </div>
+
 </div>
