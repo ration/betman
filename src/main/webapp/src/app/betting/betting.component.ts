@@ -24,7 +24,7 @@ export class BettingComponent implements OnInit {
 
   constructor(private gamesService: GamesService, private authService: AuthenticationService,
               private alertService: AlertService) {
-    this.gamesService.all().subscribe((data: Game[]) => {
+    this.gamesService.all(this.game).subscribe((data: Game[]) => {
       this.games = data;
       this.getBettingData();
     });

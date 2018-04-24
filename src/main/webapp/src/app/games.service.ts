@@ -12,8 +12,9 @@ export class GamesService {
   constructor(private http: HttpClient) {
   }
 
-  all() {
-    return this.http.get(this.apiAllUrl);
+  all(game: number) {
+    const params = new HttpParams().set('game', game.toString());
+    return this.http.get(this.betsUrl, {params});
   }
 
   saveBet(game: number, user: number, bets: Bet[]) {
