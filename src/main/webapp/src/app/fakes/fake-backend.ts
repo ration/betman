@@ -133,6 +133,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
   }
 
   private filterRequest(request: HttpRequest<any>, next: HttpHandler, users: User[]) {
+    console.log("Filtering request");
     // authenticate
     if (request.url.endsWith('/api/authenticate') && request.method === 'POST') {
       return this.authenticate(request, users);
