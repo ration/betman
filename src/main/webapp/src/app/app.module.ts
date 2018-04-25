@@ -20,6 +20,19 @@ import {AuthenticationService} from './authentication.service';
 import {fakeBackendProvider} from './fakes/fake-backend';
 import { GroupComponent } from './group/group.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { environment } from 'environments/environment';
+
+
+let providers: Array<any> = [
+  GamesService, AlertService, UserService, AuthGuard, AuthenticationService
+];
+
+if (!environment.production) {
+  providers.push(
+    fakeBackendProvider
+  );
+}
+
 
 @NgModule({
   declarations: [
@@ -38,8 +51,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     routing,
     NgbModule.forRoot()
   ],
-  providers: [GamesService, AlertService, UserService, AuthGuard, AuthenticationService,
-    fakeBackendProvider],
+  providers: [providers],
   bootstrap: [AppComponent]
 })
 export class AppModule {

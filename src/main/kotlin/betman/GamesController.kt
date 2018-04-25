@@ -19,6 +19,9 @@ class GamesController {
         return lsvAdapter.regularGames()
     }
 
+
+
+
     @GetMapping("/lsv")
     fun lsv(): Lsv {
         return lsvAdapter.data

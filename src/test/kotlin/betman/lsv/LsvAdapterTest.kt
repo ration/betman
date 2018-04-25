@@ -15,7 +15,7 @@ class LsvAdapterTest {
     @Test
     fun allGamesAsPojo() {
         val games = lsvData.regularGames()
-        Assert.assertEquals(LsvAdapter.REGULAR_GAMES,games.size)
+        Assert.assertEquals(LsvAdapter.REGULAR_GAMES + LsvAdapter.PLAYOFF_GAMES, games.size)
         Assert.assertEquals("Russia", games[0].home.name)
     }
 }
