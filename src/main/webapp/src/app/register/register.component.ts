@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import {UserService} from '../user.service';
 import {AlertService} from '../alert.service';
-import {User} from "../user";
+import {User} from '../user';
 
 
 
