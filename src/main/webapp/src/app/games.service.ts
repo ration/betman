@@ -4,7 +4,7 @@ import {Bet} from './bet.model';
 
 @Injectable()
 export class GamesService {
-  private host = 'http://localhost:8080';
+  private host = 'http://localhost:8090';
   public apiAllUrl = this.host + '/api/all';
   public saveBetUrl = this.host + '/api/addBets';
   public betsUrl = this.host + '/api/bets.ts';

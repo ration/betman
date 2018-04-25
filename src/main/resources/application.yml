@@ -1,6 +1,9 @@
 security:
  oauth2: resource.filter-order=3
 
+
+server:
+  port: 8090
 #security:
 #    signing-key=39I525S6VIZ2pjXh
 #security.encoding-strength=256

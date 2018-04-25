@@ -12,7 +12,8 @@ class GamesControllerTest {
     @Test
     fun availableGames() {
         val list: List<Game> = games.all(1)
-        assertEquals(list.size, LsvAdapter.REGULAR_GAMES)
+        assertEquals(list.size, LsvAdapter.REGULAR_GAMES+ LsvAdapter.PLAYOFF_GAMES)
         assertEquals("Russia", list[0].home.name)
+        assertEquals("Russia", list[2].home.name)
     }
 }

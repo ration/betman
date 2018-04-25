@@ -2,10 +2,10 @@ package betman.lsv
 
 import betman.pojos.Game
 import betman.pojos.Team
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.web.client.RestTemplate
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat
 
 /**
  * Adapter for LSV provided WorldCup data as one JSON response
@@ -16,6 +16,7 @@ class LsvAdapter {
 
     companion object {
         const val REGULAR_GAMES = 48
+        const val PLAYOFF_GAMES = 16
     }
 
     fun fetchRemote(): Lsv {
@@ -27,40 +28,43 @@ class LsvAdapter {
 
     fun regularGames(): List<Game> {
         if (data.teams != null) {
-            return union(data.groups.a.matches,
-                    data.groups.b.matches,
-                    data.groups.c.matches,
-                    data.groups.d.matches,
-                    data.groups.e.matches,
-                    data.groups.f.matches,
-                    data.groups.g.matches,
-                    data.groups.h.matches).map { asGame(it) }.filterNotNull().
-                    sortedBy { it.id }
-
+            return (mapGames("Group A", data.groups.a.matches) +
+                    mapGames("Group B", data.groups.b.matches) +
+                    mapGames("Group C", data.groups.c.matches) +
+                    mapGames("Group D", data.groups.d.matches) +
+                    mapGames("Group E", data.groups.e.matches) +
+                    mapGames("Group F", data.groups.f.matches) +
+                    mapGames("Group G", data.groups.g.matches) +
+                    mapGames("Group H", data.groups.h.matches) +
+                    mapGames("Round of 16", data.knockout.round16.matches) +
+                    mapGames("Quarter Finals", data.knockout.round8.matches) +
+                    mapGames("Semi Finals", data.knockout.round4.matches) +
+                    mapGames("Bronze Game", data.knockout.round2Loser.matches) +
+                    mapGames("Final", data.knockout.round2.matches)).sortedBy { it.id }
         }
         return listOf()
     }
 
 
-    private fun union(vararg items: List<MatchesItem>?): List<MatchesItem> {
-        return items.filterNotNull().flatMap { it }
+    private fun mapGames(description: String, matches: List<MatchesItem>?): List<Game> {
+        if (matches == null) {
+            return listOf()
+        }
+        return matches.mapNotNull { match -> asGame(description, match) }
     }
 
-    private fun asGame(match: MatchesItem?): Game? {
+    private fun asGame(description: String, match: MatchesItem?): Game? {
         if (match != null && data.teams != null) {
             val home = asTeam(match.homeTeam)
             val away = asTeam(match.awayTeam)
-            if (home != null && away != null) {
-                val df = ISO8601DateFormat()
-
-                return Game(match.name, home, away, df.parse(match.date))
-            }
+            val df = ISO8601DateFormat()
+            return Game(match.name, home, away, description, df.parse(match.date))
         }
         return null
     }
 
-    private fun asTeam(id: String?): Team? {
-        return data.teams?.filter { it.id.toString() == id }?.map { Team(it.name, it.iso) }?.first()
+    private fun asTeam(id: String?): Team {
+        return data.teams?.filter { it.id.toString() == id }?.map { Team(it.name, it.iso) }?.firstOrNull() ?: Team.UNKNOWN_TEAM
     }
 }
 

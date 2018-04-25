@@ -3,6 +3,7 @@
     <div *ngFor="let game of games">
     <div class="match">
       <div class="matchNumber">{{game.id}}</div>
+      <div class="matchDescription">{{game.description}}</div>
       <div class="team homeTeam">{{game.home.name}}</div>
       <span class="flag-icon flag-icon-{{game.home.iso}}"></span>
 
@@ -11,6 +12,7 @@
       <div class="vs">-</div>
       <input title="Away team goals" type=text class="score" [(ngModel)]="bets[game.id].away"
              (ngModelChange)="onChange($event)" name="{{game.id}}.awayGoals">
+
       <span class="flag-icon flag-icon-{{game.away.iso}}"></span>
       <div class="team awayTeam">{{game.away.name}}</div>
       <div class="gameDate">{{game.date | date:'yyyy-MM-dd HH:mm'}}</div>
