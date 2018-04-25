@@ -21,10 +21,12 @@ import {fakeBackendProvider} from './fakes/fake-backend';
 import { GroupComponent } from './group/group.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'environments/environment';
+import { NewGroupComponent } from './new-group/new-group.component';
+import {GroupsService} from './groups.service';
 
 
-let providers: Array<any> = [
-  GamesService, AlertService, UserService, AuthGuard, AuthenticationService
+const providers: Array<any> = [
+  GamesService, AlertService, UserService, AuthGuard, AuthenticationService, GroupsService
 ];
 
 if (!environment.production) {
@@ -42,7 +44,8 @@ if (!environment.production) {
     RegisterComponent,
     AlertComponent,
     HomeComponent,
-    GroupComponent
+    GroupComponent,
+    NewGroupComponent
   ],
   imports: [
     BrowserModule,

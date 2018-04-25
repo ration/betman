@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping
 class ForwardController {
 
-    @GetMapping(value = "/**/{[path:[^\\.]*}")
+    @GetMapping(value = ["/**/{[path:[^\\.]*}"])
     fun forward(): ModelAndView {
         return ModelAndView("/index.html")
     }
