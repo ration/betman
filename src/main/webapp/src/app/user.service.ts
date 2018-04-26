@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {User} from './user';
+import {AuthenticationService} from './authentication.service';
 
 
 @Injectable()
 export class UserService {
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthenticationService) {
   }
 
   getAll() {
@@ -21,7 +22,9 @@ export class UserService {
   }
 
   update(user: User) {
-    return this.http.put('/api/users/' + user.id, user);
+    return this.http.put('/api/users/' + user.id, user).subscribe(result => {
+      this.authService.updateCurrentUser(user);
+    });
   }
 
   delete(id: number) {

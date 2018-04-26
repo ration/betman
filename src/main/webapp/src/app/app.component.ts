@@ -26,6 +26,6 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
 
   logout() {
-    this.authService.logout()
+    this.authService.logout();
   }
 }

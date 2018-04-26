@@ -1,26 +1,30 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
+import {environment} from '../environments/environment';
+import {Group} from './group.model';
+import {HttpClient, HttpParams} from '@angular/common/http';
 
 @Injectable()
 export class GroupsService {
+  public static readonly newGroupUrl = environment.host + '/api/groups/new';
+  public static readonly getGroupUrl = environment.host + '/api/groups/';
 
-  constructor() {
+
+  constructor(private http: HttpClient) {
   }
 
-  newInviteKey(): Observable<string> {
-    // TODO from backend
-
-    return Observable.of(this.makeid());
+  newGroup(group: Group): Observable<Group> {
+    return this.http.post<Group>(GroupsService.newGroupUrl, group);
   }
 
-   makeid() {
-    let text = '';
-    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-    for (let i = 0; i < 32; i++) {
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-
-    return text;
+  get(id: number): Observable<Group> {
+    const params = new HttpParams().set('group', id.toString());
+    return this.http.get<Group>(GroupsService.newGroupUrl, {params});
   }
+
+  getGroups(ids: number[]): Observable<Group[]> {
+    const urlParam = '[' + ids.join(',') + ']';
+    return this.http.get<Group[]>(GroupsService.newGroupUrl + urlParam);
+  }
+
 }

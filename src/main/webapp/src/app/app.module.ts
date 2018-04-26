@@ -17,12 +17,13 @@ import {UserService} from './user.service';
 import {AuthGuard} from './auth.guard';
 import {HomeComponent} from './home/home.component';
 import {AuthenticationService} from './authentication.service';
-import {fakeBackendProvider} from './fakes/fake-backend';
-import { GroupComponent } from './group/group.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { environment } from 'environments/environment';
-import { NewGroupComponent } from './new-group/new-group.component';
+import {fakeBackendProvider} from './fakes/FakeBackendInterceptor';
+import {GroupComponent} from './group/group.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {environment} from 'environments/environment';
+import {NewGroupComponent} from './new-group/new-group.component';
 import {GroupsService} from './groups.service';
+import { JoinComponent } from './join/join.component';
 
 
 const providers: Array<any> = [
@@ -45,7 +46,8 @@ if (!environment.production) {
     AlertComponent,
     HomeComponent,
     GroupComponent,
-    NewGroupComponent
+    NewGroupComponent,
+    JoinComponent
   ],
   imports: [
     BrowserModule,

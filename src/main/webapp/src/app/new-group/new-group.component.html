@@ -1,4 +1,30 @@
-<div id="new-group">
-  <pre>Create a new group</pre>
-  <pre>Your invite token is:</pre><div>{{token}}</div>
+<div id="new-group" class="col-md-6 col-md-offset-3">
+  <h2>Create a new group</h2>
+  <form class="needs-validation" (ngSubmit)="newGroupForm.form.valid && onSubmit()" #newGroupForm="ngForm" novalidate>
+    <div class="form-group">
+      <div class="form-row">
+        <div class="col-md-8 mb-8">
+          <label for="name" class="form-control-label">Group Name</label>
+          <input name="name" id="name" #name="ngModel" [(ngModel)]="model.name" required type="text"
+                 class="form-control"
+                 placeholder="Group Name" aria-label="Group Name" aria-describedby="Group Name">
+          <div *ngIf="newGroupForm.submitted && !name.valid" class="invalid-feedback">Group name is required</div>
+        </div>
+        <div class="col-md-12">
+          <label for="name" class="form-control-label">Description</label>
+          <input name="name" id="description" #name="ngModel" [(ngModel)]="model.description" type="text"
+                 class="form-control"
+                 placeholder="Group Description" aria-label="Description" aria-describedby="Group Description">
+        </div>
+      </div>
+      <div class="form-group">
+        Event is Fifa World Cup 2018
+      </div>
+    </div>
+
+
+    <input class="btn btn-primary" type="submit" value="Create">
+
+
+  </form>
 </div>

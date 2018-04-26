@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Bet} from './bet.model';
+import {environment} from '../environments/environment';
 
 @Injectable()
 export class GamesService {
-  private host = 'http://localhost:8090';
-  public apiAllUrl = this.host + '/api/all';
-  public saveBetUrl = this.host + '/api/addBets';
-  public betsUrl = this.host + '/api/bets.ts';
+  public apiAllUrl = environment.host + '/api/all';
+  public saveBetUrl = environment.host + '/api/bets/update';
+  public betsUrl = environment.host + '/api/bets';
 
   constructor(private http: HttpClient) {
   }
