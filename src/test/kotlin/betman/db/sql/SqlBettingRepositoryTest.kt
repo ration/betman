@@ -3,7 +3,7 @@ package betman.db.sql
 import org.junit.Assert
 import org.junit.Test
 
-class SqlBettingRepositoryTest {
+class SqlBettingRepositoryTest : DbTest() {
 
     private val repository = SqlBettingRepository()
 
