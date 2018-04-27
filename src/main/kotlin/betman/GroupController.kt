@@ -20,7 +20,7 @@ class GroupController {
     @GetMapping("/group/new", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun new(@RequestParam name: String,
             @RequestParam description: String): Group {
-        return repository.create(name, description, generateKey())
+        return repository.create(Group(name = name, description = description, key = generateKey()))
     }
 
 

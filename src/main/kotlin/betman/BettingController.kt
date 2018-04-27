@@ -1,8 +1,8 @@
 package betman
 
 import betman.db.BettingRepository
-import betman.lsv.LsvAdapter
-import betman.pojos.Bet
+import betman.gameprovider.fifa2018.Fifa2018Provider
+import betman.pojos.ScoreBet
 import betman.pojos.Odds
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -16,21 +16,17 @@ class BettingController {
     @Autowired
     lateinit var repository: BettingRepository
 
-
     val LOG = Logger.getLogger(this.javaClass.name)
-    var userBets: List<Bet> = LsvAdapter().regularGames().map { Bet(it.id, 2, 3) }
 
 
     @PostMapping("/bets/update", consumes = [(MediaType.APPLICATION_JSON_VALUE)])
-    fun addBets(game: Int, user: Long, @RequestBody bets: List<Bet>) {
-        LOG.info(String.format("received bets from %s, %s", game, bets.toString()))
-        this.userBets = bets
+    fun addBets(game: Int, user: Long, @RequestBody scoreBets: List<ScoreBet>) {
+        LOG.info(String.format("received bets from %s, %s", game, scoreBets.toString()))
     }
 
     @GetMapping("bets", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun bets(game: Int, user: Long): List<Bet> {
-        // TODO actually from dao
-        return userBets
+    fun bets(game: Int, user: Long): List<ScoreBet> {
+        return listOf()
     }
 
     fun odds(game: Int): List<Odds> {

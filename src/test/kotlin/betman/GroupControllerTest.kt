@@ -1,10 +1,9 @@
 package betman
 
 import betman.db.GroupRepository
-import com.nhaarman.mockito_kotlin.capture
-import com.nhaarman.mockito_kotlin.eq
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
+import betman.pojos.Game
+import betman.pojos.Group
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -32,13 +31,9 @@ class GroupControllerTest {
 
     @Test
     fun newGroup() {
-        val name = "name"
         val description = "description"
-
+        val name = "name"
         controller.new(name, description)
-
-        verify(groupRepository, times(1)).create(eq(name), eq(description), capture(captor))
-        Assert.assertEquals(32, captor.value.length)
-
+        verify(groupRepository, times(1)).create(any())
     }
 }

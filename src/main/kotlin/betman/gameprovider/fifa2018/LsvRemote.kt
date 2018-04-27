@@ -1,4 +1,7 @@
-package betman.lsv
+/**
+ * Generated JSON pojos from https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json
+ */
+package betman.gameprovider.fifa2018
 
 
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -84,7 +87,16 @@ data class MatchesItem(@JsonProperty("date")
                        @JsonProperty("home_team")
                        val homeTeam: String? = null,
                        @JsonProperty("away_team")
-                       val awayTeam: String? = null)
+                       val awayTeam: String? = null,
+                       @JsonProperty("home_penalty")
+                       val homePenalty: Int? = null,
+                       @JsonProperty("winner")
+                       val winner: String? = null,
+                       @JsonProperty("away_penalty")
+                       val awayPenalty: Int? = null,
+                       @JsonProperty("channels")
+                       val channels: List<String>? = null
+)
 
 
 data class Knockout(@JsonProperty("round_8")
@@ -166,6 +178,14 @@ data class TvchannelsItem(@JsonProperty("name")
                           @JsonProperty("icon")
                           val icon: String = "",
                           @JsonProperty("id")
-                          val id: Int = 0)
+                          val id: Int = 0,
+                          @JsonProperty("country")
+                          val country: String = "",
+                          @JsonProperty("iso2")
+                          val iso2: String = "",
+                          @JsonProperty("lang")
+                          val Lang: List<String>? = null
+
+)
 
 

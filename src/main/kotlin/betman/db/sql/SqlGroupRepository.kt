@@ -7,19 +7,16 @@ import org.springframework.stereotype.Component
 
 @Component
 class SqlGroupRepository : GroupRepository {
-
-
-    override fun create(groupName: String, groupDescription: String, groupKey: String): Group {
+    override fun create(group: Group): Group {
         return transaction {
             val group: GroupDao = GroupDao.new {
-                name = groupName
-                description = groupDescription
-                key = groupKey
+                name = group.name
+                description = group.description
+                key = group.key
             }
             commit()
             Group(group.id.value, group.name, group.description, group.key)
         }
-
     }
 }
 

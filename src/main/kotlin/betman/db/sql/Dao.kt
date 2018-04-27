@@ -12,3 +12,10 @@ class GroupDao(id: EntityID<Int>) : IntEntity(id) {
     var name by Groups.name
     var key by Groups.key
 }
+
+class GameDao(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<GameDao>(Games)
+
+    var name by Games.name
+    var description by Games.description
+}

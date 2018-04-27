@@ -1,32 +1,44 @@
-package betman.lsv
+package betman.gameprovider.fifa2018
 
-import betman.pojos.Game
+import betman.api.GameDataProvider
+import betman.api.JsonLoader
+import betman.pojos.Match
+import betman.pojos.Other
 import betman.pojos.Team
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat
-import org.springframework.http.MediaType
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
-import org.springframework.web.client.RestTemplate
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.stereotype.Component
 
 /**
- * Adapter for LSV provided WorldCup data as one JSON response
+ * Provider for  WorldCup data via LSV "https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json"
  */
-class LsvAdapter {
+@Component
+class Fifa2018Provider : GameDataProvider {
 
-    val data = fetchRemote()
+    @Autowired
+    @Qualifier("FileJsonLoader")
+    private lateinit var remote: JsonLoader
+
+    private val data: Lsv by lazy {
+        loadData()
+    }
+
+    private fun loadData(): Lsv {
+        return remote.fetch("https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json", Lsv::class.java)
+    }
 
     companion object {
         const val REGULAR_GAMES = 48
         const val PLAYOFF_GAMES = 16
     }
 
-    fun fetchRemote(): Lsv {
-        val remoteUrl = "https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json"
-        val template = RestTemplate()
-        template.messageConverters.filterIsInstance<MappingJackson2HttpMessageConverter>().forEach { it.supportedMediaTypes = listOf(MediaType.TEXT_PLAIN) }
-        return template.getForObject(remoteUrl, Lsv::class.java)
+    override fun others(): List<Other> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun regularGames(): List<Game> {
+    override fun matches(): List<Match> {
+        val data = loadData()
         if (data.teams != null) {
             return (mapGames("Group A", data.groups.a.matches) +
                     mapGames("Group B", data.groups.b.matches) +
@@ -46,19 +58,19 @@ class LsvAdapter {
     }
 
 
-    private fun mapGames(description: String, matches: List<MatchesItem>?): List<Game> {
+    private fun mapGames(description: String, matches: List<MatchesItem>?): List<Match> {
         if (matches == null) {
             return listOf()
         }
         return matches.mapNotNull { match -> asGame(description, match) }
     }
 
-    private fun asGame(description: String, match: MatchesItem?): Game? {
+    private fun asGame(description: String, match: MatchesItem?): Match? {
         if (match != null && data.teams != null) {
             val home = asTeam(match.homeTeam)
             val away = asTeam(match.awayTeam)
             val df = ISO8601DateFormat()
-            return Game(match.name, home, away, description, df.parse(match.date))
+            return Match(id = match.name, home = home, away = away, description = description, date = df.parse(match.date))
         }
         return null
     }

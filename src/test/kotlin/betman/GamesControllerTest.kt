@@ -1,7 +1,7 @@
 package betman
 
-import betman.lsv.LsvAdapter
-import betman.pojos.Game
+import betman.gameprovider.fifa2018.Fifa2018Provider
+import betman.pojos.Match
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -11,9 +11,10 @@ class GamesControllerTest {
 
     @Test
     fun availableGames() {
-        val list: List<Game> = games.all(1)
-        assertEquals(list.size, LsvAdapter.REGULAR_GAMES+ LsvAdapter.PLAYOFF_GAMES)
-        assertEquals("Russia", list[0].home.name)
-        assertEquals("Russia", list[2].home.name)
+
+    }
+
+    @Test
+    fun game() {
     }
 }

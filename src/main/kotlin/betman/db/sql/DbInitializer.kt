@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 class DbInitializer {
     fun createDb() {
         transaction {
-            SchemaUtils.create(Games, Odds, Teams, Groups, Users, GroupUser)
+            SchemaUtils.create(Matches, Odds, Teams, Groups, Users, GroupUser, Games)
         }
     }
 }
