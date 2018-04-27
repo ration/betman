@@ -6,4 +6,6 @@ import betman.pojos.Other
 interface GameDataProvider {
     fun matches(): List<Match>
     fun others(): List<Other>
+    val name: String
+    val description: String
 }

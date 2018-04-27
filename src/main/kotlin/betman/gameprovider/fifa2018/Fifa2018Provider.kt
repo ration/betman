@@ -13,8 +13,12 @@ import org.springframework.stereotype.Component
 /**
  * Provider for  WorldCup data via LSV "https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json"
  */
-@Component
+@Component("Fifa2018")
 class Fifa2018Provider : GameDataProvider {
+    override val name: String
+        get() = "Fifa2018"
+    override val description: String
+        get() = "Fifa 2018 World Cup"
 
     @Autowired
     @Qualifier("FileJsonLoader")
