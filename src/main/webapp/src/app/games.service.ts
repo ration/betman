@@ -5,6 +5,7 @@ import {environment} from '../environments/environment';
 
 @Injectable()
 export class GamesService {
+  private host = 'http://localhost:8090';
   public apiAllUrl = environment.host + '/api/all';
   public saveBetUrl = environment.host + '/api/bets/update';
   public betsUrl = environment.host + '/api/bets';
