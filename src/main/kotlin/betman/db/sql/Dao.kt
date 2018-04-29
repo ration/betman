@@ -19,3 +19,22 @@ class GameDao(id: EntityID<Int>) : IntEntity(id) {
     var name by Games.name
     var description by Games.description
 }
+
+class TeamDao(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<TeamDao>(Teams)
+
+    var game by GameDao referencedOn Teams.game
+    var name by Teams.name
+    var iso by Teams.iso
+    var externalId by Teams.externalId
+}
+
+class MatchDao(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<MatchDao>(Matches)
+
+    var externalId by Matches.externalId
+    var game by GameDao referencedOn Matches.game
+    var home by TeamDao referencedOn Matches.home
+    var away by TeamDao referencedOn Matches.away
+
+}

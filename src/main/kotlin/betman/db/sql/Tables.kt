@@ -16,20 +16,26 @@ object Games : IntIdTable() {
     val description = varchar("description", 1024).uniqueIndex()
 }
 
+
 object Odds : IntIdTable() {
     val home = decimal("home", 5, 2)
     val away = decimal("away", 5, 2)
     val game = reference("game", Matches)
 }
 
-object Matches : ManualIntIdTable() {
+object Matches : IntIdTable() {
+    val externalId = integer("extrernalId")
+    val game = reference("game", Games)
     val home = reference("home", Teams)
     val away = reference("away", Teams)
     // TODO dates, other data
 }
 
-object Teams : ManualIntIdTable() {
+object Teams : IntIdTable() {
+    val game = reference("game", Games)
+    val externalId = integer("extrernalId").uniqueIndex()
     val name = varchar("name", 50).index()
+    var iso = varchar("iso", 2)
 }
 
 object Groups : IntIdTable() {

@@ -80,7 +80,8 @@ class Fifa2018Provider : GameDataProvider {
     }
 
     private fun asTeam(id: String?): Team {
-        return data.teams?.filter { it.id.toString() == id }?.map { Team(it.name, it.iso) }?.firstOrNull() ?: Team.UNKNOWN_TEAM
+        return data.teams?.filter { it.id.toString() == id }?.map { Team(it.id, it.name, it.iso) }?.firstOrNull()
+                ?: Team.UNKNOWN_TEAM
     }
 }
 
