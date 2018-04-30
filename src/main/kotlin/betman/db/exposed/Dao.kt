@@ -1,4 +1,4 @@
-package betman.db.sql
+package betman.db.exposed
 
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntEntity
@@ -36,5 +36,7 @@ class MatchDao(id: EntityID<Int>) : IntEntity(id) {
     var game by GameDao referencedOn Matches.game
     var home by TeamDao referencedOn Matches.home
     var away by TeamDao referencedOn Matches.away
-
+    var awayGoals by Matches.awayGoals
+    var homeGoals by Matches.homeGoals
+    var date by Matches.date
 }

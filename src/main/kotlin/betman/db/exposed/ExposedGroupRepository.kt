@@ -1,4 +1,4 @@
-package betman.db.sql
+package betman.db.exposed
 
 import betman.db.GroupRepository
 import betman.pojos.Group
@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Component
 
 @Component
-class SqlGroupRepository : GroupRepository {
+class ExposedGroupRepository : GroupRepository {
     override fun create(group: Group): Group {
         return transaction {
             val group: GroupDao = GroupDao.new {

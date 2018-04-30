@@ -1,4 +1,4 @@
-package betman.db.sql
+package betman.db.exposed
 
 import betman.config.Settings
 import org.junit.Assert

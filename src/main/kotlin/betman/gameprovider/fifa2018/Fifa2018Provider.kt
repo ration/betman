@@ -1,7 +1,7 @@
 package betman.gameprovider.fifa2018
 
-import betman.api.GameDataProvider
 import betman.api.JsonLoader
+import betman.api.provider.GameDataProvider
 import betman.pojos.Match
 import betman.pojos.Other
 import betman.pojos.Team
@@ -38,7 +38,7 @@ class Fifa2018Provider : GameDataProvider {
     }
 
     override fun others(): List<Other> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return listOf()
     }
 
     override fun matches(): List<Match> {

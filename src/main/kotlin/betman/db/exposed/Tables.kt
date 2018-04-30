@@ -1,19 +1,12 @@
-package betman.db.sql
+package betman.db.exposed
 
 
-import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.dao.IdTable
 import org.jetbrains.exposed.dao.IntIdTable
-import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
-
-open class ManualIntIdTable(name: String = "", columnName: String = "id") : IdTable<Int>(name) {
-    override val id: Column<EntityID<Int>> = integer(columnName).autoIncrement().entityId()
-}
 
 object Games : IntIdTable() {
     val name = varchar("name", 50).uniqueIndex()
-    val description = varchar("description", 1024).uniqueIndex()
+    val description = varchar("description", 1024)
 }
 
 
@@ -24,18 +17,20 @@ object Odds : IntIdTable() {
 }
 
 object Matches : IntIdTable() {
-    val externalId = integer("extrernalId")
+    val externalId = integer("external_id")
     val game = reference("game", Games)
     val home = reference("home", Teams)
     val away = reference("away", Teams)
-    // TODO dates, other data
+    val homeGoals = integer("home_goals").nullable()
+    val awayGoals = integer("away_goals").nullable()
+    val date = long("date")
 }
 
 object Teams : IntIdTable() {
     val game = reference("game", Games)
-    val externalId = integer("extrernalId").uniqueIndex()
+    val externalId = integer("external_id")
     val name = varchar("name", 50).index()
-    var iso = varchar("iso", 2)
+    var iso = varchar("iso", 10)
 }
 
 object Groups : IntIdTable() {

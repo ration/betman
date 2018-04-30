@@ -1,27 +1,25 @@
 package betman
 
-import betman.api.GameAdapter
+import betman.db.GameRepository
 import betman.pojos.Game
-import betman.pojos.Match
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api")
-class GamesController {
+class GamesController @Autowired constructor(private val gameRepository: GameRepository) {
 
 
-    @GetMapping("/all")
-    fun all(@RequestParam game: Int): List<Match> {
-        return listOf()
-       // return adapter.regularMatches()
+    @GetMapping("/games")
+    fun all(): List<String> {
+        return gameRepository.games()
     }
 
-    @GetMapping("/game")
-    fun game(@RequestParam game: Int): Game {
-        TODO("implement")
+    @GetMapping("/games/{game}")
+    fun game(@PathVariable game: String): Game? {
+        return gameRepository.get(game)
     }
 }

@@ -1,11 +1,11 @@
-package betman.db.sql
+package betman.db.exposed
 
 import org.junit.Assert
 import org.junit.Test
 
-class SqlBettingRepositoryTest : DbTest() {
+class ExposedBettingRepositoryTest : DbTest() {
 
-    private val repository = SqlBettingRepository()
+    private val repository = ExposedBettingRepository()
 
     @Test
     fun odds() {

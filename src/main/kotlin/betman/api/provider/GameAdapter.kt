@@ -1,4 +1,4 @@
-package betman.api
+package betman.api.provider
 
 import betman.pojos.Match
 import betman.pojos.Other

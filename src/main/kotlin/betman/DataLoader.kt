@@ -1,18 +1,30 @@
 package betman
 
-import betman.api.GameDataProvider
+import betman.api.provider.GameDataProvider
 import betman.db.GameRepository
 import betman.pojos.Game
+import mu.KotlinLogging
 
-class DataLoader(private val provider: GameDataProvider,
-                 private var gameRepository: GameRepository) {
+/**
+ * Loads data from game repository
+ */
+class DataLoader {
+    private val logger = KotlinLogging.logger {}
 
-    fun load() {
-        val game: Game = gameRepository.get(provider.name)
-                ?: gameRepository.create(Game(name = provider.name, description = provider.description))
-
-        val matches = provider.matches()
-        val others = provider.others()
-        gameRepository.update(game.withData(matches, others))
+    fun load(provider: GameDataProvider,
+             gameRepository: GameRepository) {
+        val game: Game? = gameRepository.get(provider.name)
+        if (game == null) {
+            logger.info("Db did not exist. Creating")
+            gameRepository.create(Game(name = provider.name, description = provider.description,
+                    matches = provider.matches(), other = provider.others()))
+        } else {
+            logger.info("Updating database")
+            gameRepository.update(Game(name = provider.name, description = provider.description,
+                    matches = provider.matches(), other = provider.others()))
+        }
+        logger.info("Db sync done")
     }
+
+
 }
