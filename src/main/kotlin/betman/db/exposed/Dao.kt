@@ -40,3 +40,10 @@ class MatchDao(id: EntityID<Int>) : IntEntity(id) {
     var homeGoals by Matches.homeGoals
     var date by Matches.date
 }
+
+class UserDao(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<UserDao>(Users)
+
+    var name by Users.name
+    var password by Users.password
+}

@@ -1,6 +1,7 @@
 package betman.db.exposed
 
 import betman.config.Settings
+import betman.db.HikariDatabase
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -15,15 +16,15 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader
 @EnableConfigurationProperties
 @TestPropertySource(properties = ["db.url=jdbc:h2:mem:test"])
 @RunWith(SpringRunner::class)
-@ContextConfiguration(loader = AnnotationConfigContextLoader::class, classes = [DbFactory::class, Settings::class])
-class DbFactoryTest {
+@ContextConfiguration(loader = AnnotationConfigContextLoader::class, classes = [HikariDatabase::class, Settings::class])
+class HikariDatabaseTest {
 
     @Autowired
-    lateinit var dbFactory: DbFactory
+    lateinit var dbFactory: HikariDatabase
 
     @Test
     fun loadDb() {
-        Assert.assertNotNull(dbFactory.datasource())
+        Assert.assertNotNull(dbFactory.datasource)
     }
 
 }

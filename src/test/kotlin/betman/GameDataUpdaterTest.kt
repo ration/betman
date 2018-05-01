@@ -1,8 +1,8 @@
 package betman
 
 import betman.api.provider.GameDataProvider
+import betman.db.Database
 import betman.db.GameRepository
-import betman.db.exposed.DbFactory
 import com.nhaarman.mockito_kotlin.whenever
 import com.zaxxer.hikari.HikariDataSource
 import org.junit.Assert.assertNotNull
@@ -21,7 +21,7 @@ class GameDataUpdaterTest {
     lateinit var repo: GameRepository
 
     @Mock
-    lateinit var dbFactory: DbFactory
+    lateinit var database: Database
 
     @Mock
     lateinit var dataSource: HikariDataSource
@@ -31,9 +31,9 @@ class GameDataUpdaterTest {
     @Before
     fun init() {
         MockitoAnnotations.initMocks(this)
-        whenever(dbFactory.datasource()).thenReturn(dataSource)
+        whenever(database.datasource).thenReturn(dataSource)
         whenever(provider.updateInterval()).thenReturn(Duration.ofSeconds(1))
-        updater = GameDataUpdater(listOf(provider), repo, dbFactory)
+        updater = GameDataUpdater(listOf(provider), repo, database)
     }
 
     @Test

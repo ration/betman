@@ -1,5 +1,4 @@
 package betman.pojos
 
-class User {
+data class User(val id: Int? = null, val name: String, val password: String? = null)
 
-}

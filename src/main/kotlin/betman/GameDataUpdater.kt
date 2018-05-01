@@ -1,8 +1,8 @@
 package betman
 
 import betman.api.provider.GameDataProvider
+import betman.db.Database
 import betman.db.GameRepository
-import betman.db.exposed.DbFactory
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -12,15 +12,15 @@ import java.util.concurrent.TimeUnit
 @Component
 class GameDataUpdater @Autowired constructor(providers: Collection<GameDataProvider>,
                                              private val gameRepository: GameRepository,
-                                             dbFactory: DbFactory) {
+                                             database: Database) {
 
     private val logger = KotlinLogging.logger {}
 
     private val executorService = ScheduledThreadPoolExecutor(4)
 
     init {
-        dbFactory.connect()
-        dbFactory.createDb(dbFactory.datasource())
+        database.connect()
+        database.create()
         for (provider in providers) {
             schedule(provider)
         }
