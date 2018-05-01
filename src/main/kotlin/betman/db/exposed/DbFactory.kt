@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.sql.Connection
 import javax.sql.DataSource
+import javax.xml.crypto.Data
 
 @Component
 class DbFactory @Autowired constructor(private val settings: Settings) {
@@ -18,7 +19,7 @@ class DbFactory @Autowired constructor(private val settings: Settings) {
     private final val logger = KotlinLogging.logger {}
 
     private final val config = HikariConfig()
-    final val datasource: DataSource
+    private val datasource: HikariDataSource
 
     init {
         config.jdbcUrl = this.settings.db.url
@@ -27,12 +28,16 @@ class DbFactory @Autowired constructor(private val settings: Settings) {
         this.datasource = HikariDataSource(config)
     }
 
+    fun datasource(): DataSource {
+        return this.datasource
+    }
+
     fun connect(): Connection {
         return Database.connect(datasource).connector()
     }
 
     fun close() {
-        (datasource as HikariDataSource).close()
+        datasource.close()
     }
 
     fun createDb(dataSource: DataSource) {

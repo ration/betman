@@ -20,7 +20,7 @@ class GameDataUpdater @Autowired constructor(providers: Collection<GameDataProvi
 
     init {
         dbFactory.connect()
-        dbFactory.createDb(dbFactory.datasource)
+        dbFactory.createDb(dbFactory.datasource())
         for (provider in providers) {
             schedule(provider)
         }

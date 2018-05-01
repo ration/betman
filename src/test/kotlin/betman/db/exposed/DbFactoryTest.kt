@@ -23,7 +23,7 @@ class DbFactoryTest {
 
     @Test
     fun loadDb() {
-        Assert.assertNotNull(dbFactory.datasource)
+        Assert.assertNotNull(dbFactory.datasource())
     }
 
 }

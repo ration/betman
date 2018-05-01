@@ -31,7 +31,7 @@ class GameDataUpdaterTest {
     @Before
     fun init() {
         MockitoAnnotations.initMocks(this)
-        whenever(dbFactory.datasource).thenReturn(dataSource)
+        whenever(dbFactory.datasource()).thenReturn(dataSource)
         whenever(provider.updateInterval()).thenReturn(Duration.ofSeconds(1))
         updater = GameDataUpdater(listOf(provider), repo, dbFactory)
     }

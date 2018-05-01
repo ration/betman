@@ -18,7 +18,7 @@ open class DbTest {
         factory = DbFactory(settings)
         connection = factory.connect()
 
-        factory.createDb(factory.datasource)
+        factory.createDb(factory.datasource())
 
     }
 
