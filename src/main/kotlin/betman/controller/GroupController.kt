@@ -1,4 +1,4 @@
-package betman
+package betman.controller
 
 import betman.db.GroupRepository
 import betman.pojos.Group

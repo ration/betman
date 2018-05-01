@@ -1,4 +1,4 @@
-package betman
+package betman.controller
 
 import betman.db.GameRepository
 import betman.pojos.Game
@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/games")
 class GamesController @Autowired constructor(private val gameRepository: GameRepository) {
 
 
-    @GetMapping("/games")
+    @GetMapping("/")
     fun all(): List<String> {
         return gameRepository.games()
     }
 
-    @GetMapping("/games/{game}")
+    @GetMapping("/{game}")
     fun game(@PathVariable game: String): Game? {
         return gameRepository.get(game)
     }

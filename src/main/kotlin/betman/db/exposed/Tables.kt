@@ -40,8 +40,8 @@ object Groups : IntIdTable() {
 }
 
 object Users : IntIdTable() {
-    val name = varchar("name", 50).index()
-    val password = varchar("password", 50).index()
+    val name = varchar("name", 50).uniqueIndex()
+    val password = varchar("password", 50)
 }
 
 object GroupUser : Table(name = "users_groups") {
