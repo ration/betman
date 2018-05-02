@@ -1,4 +1,4 @@
-package betman
+package betman.controller
 
 import org.junit.Test
 

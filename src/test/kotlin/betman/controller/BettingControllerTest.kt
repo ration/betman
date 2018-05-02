@@ -1,11 +1,7 @@
-package betman
+package betman.controller
 
 import betman.db.BettingRepository
-import betman.pojos.ScoreBet
-import betman.pojos.Odds
-import com.nhaarman.mockito_kotlin.whenever
 import junit.framework.Assert.assertNotNull
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

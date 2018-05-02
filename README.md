@@ -3,7 +3,7 @@
 Betman is a probably over-engineered implementation of a betting system for groups. 
 * Players guess the score of games, and are given points per given rules.
 
-## Backend API
+## Backend API, all under /api/
 
 | Type | PATH | Body | Response |
 |------|------|------|----------|
