@@ -47,7 +47,8 @@ object GroupUser : IntIdTable(name = "users_groups") {
 
 
 object Bets : IntIdTable() {
-    val match = reference("game", Matches)
+    var game = reference("game", Games)
+    val match = reference("match", Matches)
     val user = reference("user", Users)
     val home = integer("home")
     val away = integer("away")

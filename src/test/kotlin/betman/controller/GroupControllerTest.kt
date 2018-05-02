@@ -3,8 +3,8 @@ package betman.controller
 import betman.db.GroupRepository
 import betman.pojos.Group
 import com.nhaarman.mockito_kotlin.*
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertNotNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.mockito.InjectMocks

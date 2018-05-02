@@ -5,8 +5,8 @@ import betman.db.UnknownMatchException
 import betman.db.UnknownUserException
 import betman.pojos.Bet
 import betman.pojos.ScoreBet
-import junit.framework.Assert.assertEquals
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import java.time.Instant
@@ -54,13 +54,13 @@ class ExposedBettingRepositoryTest : DbTest() {
         val game = createGame()
         makeBet(game)
         val bet = repository.get(game.id.value, name)
-        assertEquals("england", bet.scores[0].home)
+        assertEquals(44, bet.scores[0].home)
     }
 
     private fun makeBet(game: GameDao) {
         val match: MatchDao = createMatch(game, createTeam(game, "england", 2),
                 createTeam(game, "germany", 1), 1)
-        val bet = Bet(scores = listOf(ScoreBet(match.externalId, 1, 2)))
+        val bet = Bet(scores = listOf(ScoreBet(match.externalId, 44, 2)))
         repository.bet(game.id.value, bet, name)
     }
 
@@ -70,7 +70,7 @@ class ExposedBettingRepositoryTest : DbTest() {
                 game = gameDao
                 name = team
                 iso = "xx"
-                externalId = 1
+                externalId = ext
             }
         }
     }

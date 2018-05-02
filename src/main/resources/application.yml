@@ -28,3 +28,8 @@ db:
   url:  jdbc:postgresql://localhost:5432/betman
   username: betman
   password: manbet
+
+logging:
+  level:
+    Exposed: DEBUG
+

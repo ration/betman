@@ -61,6 +61,7 @@ class GroupUserDao(id: EntityID<Int>) : IntEntity(id) {
 class BetDao(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<BetDao>(Bets)
 
+    var game by Bets.game
     var match by Bets.match
     var user by Bets.user
     var home by Bets.home
