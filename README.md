@@ -10,6 +10,7 @@ Betman is a probably over-engineered implementation of a betting system for grou
 | POST | /users/register | {username:string, password:string, group?:string} |  |
 | POST | /users/login | {username:string, password:string} |  |
 | POST | /groups/join/:id?group=id |  |  |
+| GET | /groups/new/| {name="name", description="description", game=number } | {name="name", description="description", game=number, key="key" } |
 | GET  | /groups/:id | | {name:string, description:string, game:string}
 | GET  | /games/:name  | | { id:int, name:string, description:string, matches[]: {home:string,away:string,date:date, homeGoals:int, awayGoals:int} }
 | GET  | /bets/:userid?groupId=int

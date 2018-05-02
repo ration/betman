@@ -5,24 +5,24 @@ import betman.pojos.Group
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.security.oauth2.common.util.RandomValueStringGenerator
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import java.security.Principal
+
 
 @RestController
-@RequestMapping("/api")
-class GroupController {
+@RequestMapping("/api/groups")
+class GroupController @Autowired constructor(private val repository: GroupRepository) {
 
-    @Autowired
-    lateinit var repository: GroupRepository
-
-    @GetMapping("/group/new", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun new(@RequestParam name: String,
-            @RequestParam description: String): Group {
-        return repository.create(Group(name = name, description = description, key = generateKey()))
+    @PostMapping("/new", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun new(@RequestBody group: Group): Group {
+        return repository.create(group, generateKey())
     }
 
+    @PostMapping("join")
+    fun join(@RequestParam("key") key: String, @RequestParam displayName: String,
+             principal: Principal): Group {
+        return repository.join(key, displayName, principal.name)
+    }
 
     private fun generateKey(): String {
         val generator = RandomValueStringGenerator()

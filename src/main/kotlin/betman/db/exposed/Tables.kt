@@ -2,7 +2,6 @@ package betman.db.exposed
 
 
 import org.jetbrains.exposed.dao.IntIdTable
-import org.jetbrains.exposed.sql.Table
 
 object Games : IntIdTable() {
     val name = varchar("name", 50).uniqueIndex()
@@ -36,7 +35,8 @@ object Teams : IntIdTable() {
 object Groups : IntIdTable() {
     val name = varchar("name", 50).index()
     val description = varchar("description", 250).index()
-    val key = varchar("key", 32).index()
+    val key = varchar("key", 32).uniqueIndex()
+    val game = reference("game", Games)
 }
 
 object Users : IntIdTable() {
@@ -44,14 +44,15 @@ object Users : IntIdTable() {
     val password = varchar("password", 50)
 }
 
-object GroupUser : Table(name = "users_groups") {
-    val user = reference("user", Users).primaryKey(0)
-    val group = reference("group", Groups).primaryKey(1)
+object GroupUser : IntIdTable(name = "users_groups") {
+    val user = reference("user", Users).primaryKey(2)
+    val group = reference("group", Groups).primaryKey(3)
     val name = varchar("name", 50).index()
 }
 
-object GroupGame : Table(name = "groups_games") {
-    val game = reference("game", Games).primaryKey(0)
-    val group = reference("group", Groups).primaryKey(1)
-}
 
+object Bets : IntIdTable() {
+    val match = reference("game", Matches)
+    val home = integer("home")
+    val away = integer("away")
+}

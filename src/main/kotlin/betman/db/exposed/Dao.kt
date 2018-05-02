@@ -11,6 +11,7 @@ class GroupDao(id: EntityID<Int>) : IntEntity(id) {
     var description by Groups.description
     var name by Groups.name
     var key by Groups.key
+    var game by Groups.game
 }
 
 class GameDao(id: EntityID<Int>) : IntEntity(id) {
@@ -47,3 +48,13 @@ class UserDao(id: EntityID<Int>) : IntEntity(id) {
     var name by Users.name
     var password by Users.password
 }
+
+
+class GroupUserDao(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<GroupUserDao>(GroupUser)
+
+    var group by GroupUser.group
+    var user by GroupUser.user
+    var name by GroupUser.name
+}
+

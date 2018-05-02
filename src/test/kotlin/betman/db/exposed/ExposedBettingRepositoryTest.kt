@@ -1,6 +1,7 @@
 package betman.db.exposed
 
-import org.junit.Assert
+import betman.pojos.Bet
+import betman.pojos.ScoreBet
 import org.junit.Test
 
 class ExposedBettingRepositoryTest : DbTest() {
@@ -8,8 +9,13 @@ class ExposedBettingRepositoryTest : DbTest() {
     private val repository = ExposedBettingRepository()
 
     @Test
-    fun odds() {
-        val odds = repository.odds(1)
-        Assert.assertTrue(odds.isEmpty())
+    fun bet() {
+        val bet = Bet(scores = listOf(ScoreBet(1, 1, 2)))
+        repository.bet(1, bet)
+    }
+
+    @Test
+    fun invalidGameId() {
+
     }
 }
