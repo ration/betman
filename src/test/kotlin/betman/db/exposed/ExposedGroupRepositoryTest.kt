@@ -4,7 +4,6 @@ import betman.db.InvalidKeyException
 import betman.db.InvalidRequestException
 import betman.db.UnknownUserException
 import betman.pojos.Group
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 
@@ -38,13 +37,13 @@ class ExposedGroupRepositoryTest : DbTest() {
 
     @Test(expected = InvalidKeyException::class)
     fun invalidKey() {
-        createUser()
+        createUser(userName)
         repository.join("key", "myName", userName)
     }
 
     @Test
     fun join() {
-        createUser()
+        createUser(userName)
         val game: GameDao = createGame()
         val group = Group(name = name, description = description, game = game.id.value)
         val groups = repository.create(group, key)
@@ -53,18 +52,6 @@ class ExposedGroupRepositoryTest : DbTest() {
 
     }
 
-    private fun createGame(): GameDao = transaction {
-        GameDao.new {
-            name = "test"
-            description = "description"
-        }
-    }
 
-    private fun createUser() = transaction {
-        UserDao.new {
-            name = userName
-            password = "password"
-        }
-    }
 
 }

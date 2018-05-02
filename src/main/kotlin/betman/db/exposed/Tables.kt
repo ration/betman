@@ -9,11 +9,6 @@ object Games : IntIdTable() {
 }
 
 
-object Odds : IntIdTable() {
-    val home = decimal("home", 5, 2)
-    val away = decimal("away", 5, 2)
-    val game = reference("game", Matches)
-}
 
 object Matches : IntIdTable() {
     val externalId = integer("external_id")
@@ -53,6 +48,7 @@ object GroupUser : IntIdTable(name = "users_groups") {
 
 object Bets : IntIdTable() {
     val match = reference("game", Matches)
+    val user = reference("user", Users)
     val home = integer("home")
     val away = integer("away")
 }

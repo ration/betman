@@ -42,7 +42,7 @@ class DbFactory @Autowired constructor(private val settings: Settings) {
     fun createDb(dataSource: DataSource) {
         logger.info("Loading database")
         transaction {
-            SchemaUtils.create(Matches, Odds, Teams, Groups, Users, GroupUser, Games)
+            SchemaUtils.create(Matches, Teams, Groups, Users, GroupUser, Games)
         }
     }
 

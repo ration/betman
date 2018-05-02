@@ -1,7 +1,6 @@
 package betman.controller
 
 import betman.db.BettingRepository
-import betman.pojos.Odds
 import betman.pojos.ScoreBet
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,9 +26,6 @@ class BettingController {
         return listOf()
     }
 
-    fun odds(game: Int): List<Odds> {
-        return repository.odds(game)
-    }
 
 }
 

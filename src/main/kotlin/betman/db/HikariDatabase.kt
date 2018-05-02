@@ -38,7 +38,7 @@ class HikariDatabase @Autowired constructor(private val settings: Settings) : be
     override fun create() {
         logger.info("Loading database")
         transaction {
-            SchemaUtils.create(Matches, Odds, Teams, Groups, Users, GroupUser, Games)
+            SchemaUtils.create(Matches, Teams, Groups, Users, GroupUser, Games, Bets)
         }
     }
 

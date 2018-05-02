@@ -81,8 +81,8 @@ class ExposedGameRepository : GameRepository {
     }
 
     private fun createTeams(gameDao: GameDao, teams: Set<Team>) {
-        for (team in teams) {
-            transaction {
+        transaction {
+            for (team in teams) {
                 TeamDao.new {
                     game = gameDao
                     name = team.name
