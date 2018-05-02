@@ -1,26 +1,30 @@
 package betman.controller
 
-import betman.controller.GroupController
 import betman.db.GroupRepository
+import betman.pojos.Group
 import com.nhaarman.mockito_kotlin.*
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.*
-import org.springframework.test.context.junit4.SpringRunner
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
+import java.security.Principal
 
-
-@RunWith(SpringRunner::class)
 class GroupControllerTest {
 
-    @InjectMocks
-    lateinit var controller: GroupController
+    @Mock
+    private lateinit var groupRepository: GroupRepository
 
     @Mock
-    lateinit var groupRepository: GroupRepository
+    private lateinit var principal: Principal
 
-    @Captor
-    lateinit var captor: ArgumentCaptor<String>
+    @InjectMocks
+    private lateinit var controller: GroupController
+
+    private val group = Group(name = "test", description = "desc", game = 1)
+
 
     @Before
     fun init() {
@@ -28,10 +32,24 @@ class GroupControllerTest {
     }
 
     @Test
-    fun newGroup() {
-        val description = "description"
-        val name = "name"
-        controller.new(name, description)
-        verify(groupRepository, times(1)).create(any())
+    fun new() {
+        argumentCaptor<String>().apply {
+            whenever(groupRepository.create(any(), any())).thenReturn(Group(name = group.name, description = group.name, key = "value", game = 1))
+            val ans = controller.new(group)
+            verify(groupRepository, times(1)).create(eq(group), capture())
+            assertNotNull(ans.key)
+            assertNotNull(firstValue)
+        }
+    }
+
+    @Test
+    fun join() {
+        val key = "mykey"
+        val userName = "myusername"
+        val displayName = "jack"
+        whenever(principal.name).thenReturn(userName)
+        whenever(groupRepository.join(eq(key), eq(displayName), eq(userName))).thenReturn(group)
+        val ans = controller.join(key, displayName, principal)
+        assertEquals(group, ans)
     }
 }

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.sql.Connection
 import javax.sql.DataSource
-import javax.xml.crypto.Data
 
 @Component
 class DbFactory @Autowired constructor(private val settings: Settings) {
@@ -43,7 +42,7 @@ class DbFactory @Autowired constructor(private val settings: Settings) {
     fun createDb(dataSource: DataSource) {
         logger.info("Loading database")
         transaction {
-            SchemaUtils.create(Matches, Odds, Teams, Groups, Users, GroupUser, Games, GroupGame)
+            SchemaUtils.create(Matches, Teams, Groups, Users, GroupUser, Games)
         }
     }
 

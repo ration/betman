@@ -1,7 +1,10 @@
 package betman.db
 
-import betman.pojos.Odds
+import betman.pojos.Bet
 
 interface BettingRepository {
-    fun odds(game: Int): List<Odds>
+
+    fun get(gameId: Int, username: String): Bet
+
+    fun bet(gameId: Int, bet: Bet, username: String)
 }

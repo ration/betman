@@ -1,5 +1,6 @@
 package betman.controller
 
+import betman.controller.BettingController
 import betman.db.BettingRepository
 import junit.framework.Assert.assertNotNull
 import org.junit.Before
