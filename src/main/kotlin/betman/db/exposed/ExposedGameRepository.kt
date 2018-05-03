@@ -1,6 +1,6 @@
 package betman.db.exposed
 
-import betman.RxUtils
+import betman.RxUtils.maybeNull
 import betman.db.GameRepository
 import betman.db.exposed.Games.name
 import betman.db.exposed.Matches.externalId
@@ -10,11 +10,13 @@ import betman.pojos.Team
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.rxkotlin.Maybes
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Component
 import java.time.Instant
 import java.util.*
+
 
 @Component
 class ExposedGameRepository : GameRepository {
@@ -25,8 +27,9 @@ class ExposedGameRepository : GameRepository {
         }).singleOrError()
     }
 
+
     override fun update(game: Game): Maybe<Game> {
-        return RxUtils.maybeNull(
+        return Maybes.maybeNull(
                 transaction {
                     val dao: GameDao? = GameDao.find { name eq game.name }.limit(1).firstOrNull()
                     dao?.name = game.name
@@ -99,7 +102,7 @@ class ExposedGameRepository : GameRepository {
     }
 
     override fun get(game: String): Maybe<Game> {
-        return RxUtils.maybeNull(transaction {
+        return Maybes.maybeNull(transaction {
             GameDao.find { name eq game }.limit(1).map {
                 toGame(it)
             }.firstOrNull()
