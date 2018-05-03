@@ -5,7 +5,9 @@ import betman.db.UserAlreadyTakenException
 import betman.pojos.User
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.whenever
-import org.junit.Assert.*
+import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.mockito.InjectMocks
@@ -30,7 +32,7 @@ class ExposedUserRepositoryTest : DbTest() {
     @Test
     fun register() {
         val user = User(id = null, name = "testUser", password = "myPassword")
-        val dbUser = repo.register(user)
+        val dbUser = repo.register(user).blockingGet()
         assertNotNull(dbUser.id)
     }
 
@@ -50,13 +52,15 @@ class ExposedUserRepositoryTest : DbTest() {
     fun get() {
         val user = User(id = null, name = "testUser", password = "myPassword")
         repo.register(user)
-        val ans = repo.get(user.name)
+        val ans = repo.get(user.name).blockingGet()
         assertEquals(user.name, ans?.name)
     }
 
     @Test()
     fun noUser() {
-        val ans = repo.get("some")
-        assertNull(ans)
+        repo.get("some").subscribe({
+            Assert.fail()
+        }, { Assert.fail() }, {})
+
     }
 }

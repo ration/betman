@@ -2,6 +2,8 @@ package betman.controller
 
 import betman.db.GameRepository
 import betman.pojos.Game
+import io.reactivex.Maybe
+import io.reactivex.Single
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -14,12 +16,12 @@ class GamesController @Autowired constructor(private val gameRepository: GameRep
 
 
     @GetMapping("")
-    fun all(): List<String> {
+    fun all(): Single<List<String>> {
         return gameRepository.games()
     }
 
     @GetMapping("/{game}")
-    fun game(@PathVariable game: String): Game? {
+    fun game(@PathVariable game: String): Maybe<Game> {
         return gameRepository.get(game)
     }
 }

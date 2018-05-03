@@ -5,7 +5,7 @@ import betman.api.provider.GameDataProvider
 import betman.pojos.Match
 import betman.pojos.Other
 import betman.pojos.Team
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat
+import org.codehaus.jackson.map.util.StdDateFormat
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
@@ -73,7 +73,7 @@ class Fifa2018Provider : GameDataProvider {
         if (match != null && data.teams != null) {
             val home = asTeam(match.homeTeam)
             val away = asTeam(match.awayTeam)
-            val df = ISO8601DateFormat()
+            val df = StdDateFormat()
             return Match(id = match.name, home = home, away = away, description = description, date = df.parse(match.date))
         }
         return null

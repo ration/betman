@@ -12,11 +12,9 @@ import org.springframework.stereotype.Service
 class DbUserDetailsService @Autowired constructor(private val userRepository: UserRepository) : UserDetailsService {
     override fun loadUserByUsername(username: String?): UserDetails {
         if (username != null) {
-            val user = userRepository.get(username)
-            if (user != null) {
-                return org.springframework.security.core.userdetails.User.withUsername(user.name).
-                        password(user.password).authorities("USER").build()
-            }
+            return userRepository.get(username).map {
+                org.springframework.security.core.userdetails.User.withUsername(it.name).password(it.password).authorities("USER").build()
+            }.doOnComplete { throw UsernameNotFoundException("User not found") }.blockingGet()
         }
         throw UsernameNotFoundException("User not found")
     }

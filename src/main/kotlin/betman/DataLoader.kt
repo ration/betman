@@ -14,17 +14,19 @@ class DataLoader {
     fun load(provider: GameDataProvider,
              gameRepository: GameRepository) {
         try {
-            val game: Game? = gameRepository.get(provider.name)
-            if (game == null) {
-                logger.info("Db did not exist. Creating")
-                gameRepository.create(Game(name = provider.name, description = provider.description,
-                        matches = provider.matches(), other = provider.others()))
-            } else {
+            gameRepository.get(provider.name).subscribe({ _ ->
                 logger.info("Updating database")
                 gameRepository.update(Game(name = provider.name, description = provider.description,
                         matches = provider.matches(), other = provider.others()))
-            }
-            logger.info("Db sync done")
+
+                logger.info("Db sync done")
+            }, { e ->
+                logger.error("Error in subscriber", e)
+            }, {
+                logger.info("Game did not exist. Creating")
+                gameRepository.create(Game(name = provider.name, description = provider.description,
+                        matches = provider.matches(), other = provider.others()))
+            })
         } catch (e: Exception) {
             logger.error("Error during sync", e)
         }

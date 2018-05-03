@@ -19,14 +19,14 @@ class ExposedGameRepositoryTest : DbTest() {
 
     @Test
     fun create() {
-        val ans = repo.create(game)
+        val ans = repo.create(game).blockingGet()
         assertNotNull(ans.id)
     }
 
     @Test
     fun get() {
-        val ans = repo.create(game)
-        val db = repo.get(ans.name)
+        val ans = repo.create(game).blockingGet()
+        val db = repo.get(ans.name).blockingGet()
 
         assertNotNull(db)
         assertEquals(germany, ans.matches[0].home)
@@ -41,7 +41,7 @@ class ExposedGameRepositoryTest : DbTest() {
                 matches = matches())
         repo.create(game)
         repo.create(game2)
-        assertEquals(listOf("test", "test2"), repo.games())
+        assertEquals(listOf("test", "test2"), repo.games().blockingGet())
     }
 
     @Test
@@ -50,8 +50,8 @@ class ExposedGameRepositoryTest : DbTest() {
         val description = "new description"
         val game2 = Game(name = game.name, description = description,
                 matches = matches2())
-        val updated = repo.update(game2)
-        val db = repo.get(game2.name)!!
+        val updated = repo.update(game2).blockingGet()
+        val db = repo.get(game2.name).blockingGet()!!
         assertNotNull(db)
         assertEquals(description, updated?.description)
         assertEquals(description, db.description)

@@ -18,7 +18,7 @@ class ExposedGroupRepositoryTest : DbTest() {
     @Test(expected = InvalidRequestException::class)
     fun missingGame() {
         val group = Group(name = name, description = description, game = 1)
-        val groups = repository.create(group, key)
+        val groups = repository.create(group, key).blockingGet()!!
         assertNotNull(groups.id)
     }
 
@@ -26,7 +26,7 @@ class ExposedGroupRepositoryTest : DbTest() {
     fun game() {
         val game: GameDao = createGame()
         val group = Group(name = name, description = description, game = game.id.value)
-        val groups = repository.create(group, key)
+        val groups = repository.create(group, key).blockingGet()!!
         assertNotNull(groups.id)
     }
 
@@ -46,8 +46,8 @@ class ExposedGroupRepositoryTest : DbTest() {
         createUser(userName)
         val game: GameDao = createGame()
         val group = Group(name = name, description = description, game = game.id.value)
-        val groups = repository.create(group, key)
-        val ans = repository.join(key, "myDisplayName", userName)
+        repository.create(group, key)
+        val ans = repository.join(key, "myDisplayName", userName).blockingGet()
         assertNotNull(ans.userDisplayName)
 
     }
