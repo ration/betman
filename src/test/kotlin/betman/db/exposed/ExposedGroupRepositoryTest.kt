@@ -1,8 +1,8 @@
 package betman.db.exposed
 
-import betman.db.InvalidKeyException
-import betman.db.InvalidRequestException
-import betman.db.UnknownUserException
+import betman.InvalidKeyException
+import betman.InvalidRequestException
+import betman.UnknownUserException
 import betman.pojos.Group
 import org.junit.Assert.assertNotNull
 import org.junit.Test

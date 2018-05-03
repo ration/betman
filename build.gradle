@@ -49,7 +49,7 @@ dependencies {
     compile 'io.github.microutils:kotlin-logging:1.4.9'
     compile "io.reactivex.rxjava2:rxjava:$rx_version"
     compile "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
-
+    compile 'io.jsonwebtoken:jjwt:0.9.0'
 
     compile "org.springframework.security:spring-security-jwt:$jwt_version"
     compile "org.springframework.security.oauth:spring-security-oauth2:$oauth_version"

@@ -1,12 +1,11 @@
 package betman.db.exposed
 
+import betman.InvalidKeyException
+import betman.InvalidRequestException
+import betman.UnknownUserException
 import betman.db.GroupRepository
-import betman.db.InvalidKeyException
-import betman.db.InvalidRequestException
-import betman.db.UnknownUserException
 import betman.db.exposed.Groups.key
 import betman.db.exposed.Users.name
-
 import betman.pojos.Group
 import io.reactivex.Observable
 import io.reactivex.Single

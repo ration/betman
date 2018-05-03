@@ -1,9 +1,9 @@
 package betman.db.exposed
 
+import betman.UnknownGameException
+import betman.UnknownMatchException
+import betman.UnknownUserException
 import betman.db.BettingRepository
-import betman.db.UnknownGameException
-import betman.db.UnknownMatchException
-import betman.db.UnknownUserException
 import betman.db.exposed.Bets.game
 import betman.db.exposed.Bets.user
 import betman.db.exposed.Matches.externalId

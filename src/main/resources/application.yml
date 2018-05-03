@@ -30,6 +30,12 @@ db:
   password: manbet
   driverClassName: org.h2.Driver
 
+security:
+  jwt:
+    token:
+      secret-key: secret-key
+      expire-length: 36000
+
 logging:
   level:
     Exposed: DEBUG

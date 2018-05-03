@@ -1,8 +1,8 @@
 package betman.db.exposed
 
+import betman.InvalidRequestException
 import betman.RxUtils.maybeNull
-import betman.db.InvalidRequestException
-import betman.db.UserAlreadyTakenException
+import betman.UserAlreadyTakenException
 import betman.db.UserRepository
 import betman.db.exposed.Users.name
 import betman.pojos.User

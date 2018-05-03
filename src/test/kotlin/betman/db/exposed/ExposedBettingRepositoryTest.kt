@@ -1,8 +1,8 @@
 package betman.db.exposed
 
-import betman.db.UnknownGameException
-import betman.db.UnknownMatchException
-import betman.db.UnknownUserException
+import betman.UnknownGameException
+import betman.UnknownMatchException
+import betman.UnknownUserException
 import betman.pojos.Bet
 import betman.pojos.ScoreBet
 import org.jetbrains.exposed.sql.transactions.transaction

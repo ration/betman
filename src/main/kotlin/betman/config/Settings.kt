@@ -17,4 +17,17 @@ class Settings {
             var username: String? = null,
             var password: String? = null
     )
+
+    @NestedConfigurationProperty
+    var security = Security()
+
+    inner class Security(
+            var token: Token = Token()
+    )
+
+    inner class Token(
+            var secretKey: String = "secret-key",
+            var expirationTime: Int = 864_000_000
+    )
+
 }

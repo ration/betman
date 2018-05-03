@@ -1,7 +1,7 @@
 package betman.db.exposed
 
-import betman.db.InvalidRequestException
-import betman.db.UserAlreadyTakenException
+import betman.InvalidRequestException
+import betman.UserAlreadyTakenException
 import betman.pojos.User
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.whenever
