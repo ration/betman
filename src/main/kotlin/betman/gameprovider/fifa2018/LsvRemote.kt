@@ -128,7 +128,11 @@ data class TeamsItem(@JsonProperty("name")
                      @JsonProperty("id")
                      val id: Int = 0,
                      @JsonProperty("iso2")
-                     val iso: String = "")
+                     val iso: String = "",
+                     @JsonProperty("flag")
+                     val flag: String? = null,
+                     @JsonProperty("emoji")
+                     val emoji: String? = null)
 
 
 data class Groups(@JsonProperty("a")

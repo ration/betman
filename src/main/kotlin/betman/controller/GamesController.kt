@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 class GamesController @Autowired constructor(private val gameRepository: GameRepository) {
 
 
-    @GetMapping("/")
+    @GetMapping("")
     fun all(): List<String> {
         return gameRepository.games()
     }

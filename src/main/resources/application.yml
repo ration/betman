@@ -24,10 +24,11 @@ spring:
 
 
 db:
-#  url:  jdbc:h2:mem:test #jdbc:postgresql://localhost:5432/betman
-  url:  jdbc:postgresql://localhost:5432/betman
+  url:  jdbc:h2:mem:test
+#  url:  jdbc:postgresql://localhost:5432/betman
   username: betman
   password: manbet
+  driverClassName: org.h2.Driver
 
 logging:
   level:

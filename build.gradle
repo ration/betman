@@ -40,7 +40,7 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-devtools'
     compile "org.springframework.boot:spring-boot-configuration-processor"
     compile "org.postgresql:postgresql:$postgresql_version"
-    compileOnly "com.h2database:h2:$h2_version"
+    compile "com.h2database:h2:$h2_version"
     compile 'io.github.microutils:kotlin-logging:1.4.9'
 
 

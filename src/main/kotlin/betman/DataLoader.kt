@@ -13,17 +13,21 @@ class DataLoader {
 
     fun load(provider: GameDataProvider,
              gameRepository: GameRepository) {
-        val game: Game? = gameRepository.get(provider.name)
-        if (game == null) {
-            logger.info("Db did not exist. Creating")
-            gameRepository.create(Game(name = provider.name, description = provider.description,
-                    matches = provider.matches(), other = provider.others()))
-        } else {
-            logger.info("Updating database")
-            gameRepository.update(Game(name = provider.name, description = provider.description,
-                    matches = provider.matches(), other = provider.others()))
+        try {
+            val game: Game? = gameRepository.get(provider.name)
+            if (game == null) {
+                logger.info("Db did not exist. Creating")
+                gameRepository.create(Game(name = provider.name, description = provider.description,
+                        matches = provider.matches(), other = provider.others()))
+            } else {
+                logger.info("Updating database")
+                gameRepository.update(Game(name = provider.name, description = provider.description,
+                        matches = provider.matches(), other = provider.others()))
+            }
+            logger.info("Db sync done")
+        } catch (e: Exception) {
+            logger.error("Error during sync", e)
         }
-        logger.info("Db sync done")
     }
 
 
