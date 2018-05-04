@@ -7,6 +7,7 @@ import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Observable
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 import org.mockito.InjectMocks
@@ -37,6 +38,13 @@ class UserControllerTest {
         whenever(userRepository.register(user)).thenReturn(Observable.just(ans).singleOrError())
         userController.register(user)
         verify(userRepository, times(1)).register(any())
+    }
+
+
+    fun login() {
+        val user = User(name = "name")
+        //val ans: Single<User> = userController.login(user)
+        fail()
     }
 
 

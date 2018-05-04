@@ -43,7 +43,7 @@ class JwtTokenProvider @Autowired constructor(private val settings: Settings,
 
     fun getAuthentication(token: String): Authentication {
         val userDetails = detailsService.loadUserByUsername(getUsername(token))
-        return UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities())
+        return UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities)
     }
 
     fun getUsername(token: String): String {

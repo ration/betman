@@ -1,6 +1,5 @@
 package betman.db.exposed
 
-import betman.UnknownGameException
 import betman.UnknownMatchException
 import betman.UnknownUserException
 import betman.pojos.Bet
@@ -24,23 +23,23 @@ class ExposedBettingRepositoryTest : DbTest() {
     @Test(expected = UnknownMatchException::class)
     fun invalidMatchId() {
         createGame()
-        val bet = Bet(scores = listOf(ScoreBet(1, 1, 2)))
-        repository.bet(1, bet, name)
-        repository.get(1, name)
+        val bet = Bet("game", scores = listOf(ScoreBet(1, 1, 2)))
+        repository.bet("game", bet, name)
+        repository.get("game", name)
     }
 
     @Test(expected = UnknownUserException::class)
     fun invalidUserId() {
         createGame()
-        val bet = Bet(scores = listOf(ScoreBet(1, 1, 2)))
-        repository.bet(1, bet, "invalid")
+        val bet = Bet("game", scores = listOf(ScoreBet(1, 1, 2)))
+        repository.bet("game", bet, "invalid")
     }
 
 
-    @Test(expected = UnknownGameException::class)
+    @Test(expected = UnknownMatchException::class)
     fun invalidGameId() {
-        val bet = Bet(scores = listOf(ScoreBet(1, 1, 2)))
-        repository.bet(1, bet, name)
+        val bet = Bet("game", scores = listOf(ScoreBet(1, 1, 2)))
+        repository.bet("game", bet, name)
     }
 
     @Test
@@ -50,18 +49,30 @@ class ExposedBettingRepositoryTest : DbTest() {
     }
 
     @Test
+    fun update() {
+        val game = createGame()
+        val match = makeBet(game)
+        val bet = Bet("game", scores = listOf(ScoreBet(match.externalId, 56, 2)))
+        repository.bet("game", bet, name)
+        val update = repository.get("game", name).blockingGet()
+        assertEquals(56, update.scores[0].home)
+    }
+
+
+    @Test
     fun getBet() {
         val game = createGame()
         makeBet(game)
-        val bet = repository.get(game.id.value, name)
+        val bet = repository.get("game", name).blockingGet()
         assertEquals(44, bet.scores[0].home)
     }
 
-    private fun makeBet(game: GameDao) {
+    private fun makeBet(game: GameDao): MatchDao {
         val match: MatchDao = createMatch(game, createTeam(game, "england", 2),
                 createTeam(game, "germany", 1), 1)
-        val bet = Bet(scores = listOf(ScoreBet(match.externalId, 44, 2)))
-        repository.bet(game.id.value, bet, name)
+        val bet = Bet("game", scores = listOf(ScoreBet(match.externalId, 44, 2)))
+        repository.bet("game", bet, name)
+        return match
     }
 
     private fun createTeam(gameDao: GameDao, team: String, ext: Int): TeamDao {

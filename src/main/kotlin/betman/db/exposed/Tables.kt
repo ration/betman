@@ -36,7 +36,7 @@ object Groups : IntIdTable() {
 
 object Users : IntIdTable() {
     val name = varchar("name", 50).uniqueIndex()
-    val password = varchar("password", 50)
+    val password = varchar("password", 4096)
 }
 
 object GroupUser : IntIdTable(name = "users_groups") {
@@ -47,8 +47,7 @@ object GroupUser : IntIdTable(name = "users_groups") {
 
 
 object Bets : IntIdTable() {
-    var game = reference("game", Games)
-    val match = reference("match", Matches)
+    val match = reference("match", Matches).primaryKey(2)
     val user = reference("user", Users)
     val home = integer("home")
     val away = integer("away")

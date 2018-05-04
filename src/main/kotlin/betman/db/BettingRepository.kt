@@ -1,10 +1,11 @@
 package betman.db
 
 import betman.pojos.Bet
+import io.reactivex.Maybe
 
 interface BettingRepository {
 
-    fun get(gameId: Int, username: String): Bet
+    fun get(gameId: String, username: String): Maybe<Bet>
 
-    fun bet(gameId: Int, bet: Bet, username: String)
+    fun bet(gameId: String, bet: Bet, username: String)
 }

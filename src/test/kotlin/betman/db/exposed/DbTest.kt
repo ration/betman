@@ -31,7 +31,7 @@ open class DbTest {
 
     protected fun createGame(): GameDao = transaction {
         GameDao.new {
-            name = "test"
+            name = "game"
             description = "description"
         }
     }

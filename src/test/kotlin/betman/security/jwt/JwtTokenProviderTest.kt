@@ -2,24 +2,35 @@ package betman.security.jwt
 
 import betman.InvalidTokenException
 import betman.config.Settings
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.fail
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.eq
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
+import io.jsonwebtoken.MalformedJwtException
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
+import org.mockito.MockitoAnnotations
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
+import javax.servlet.http.HttpServletRequest
 
 class JwtTokenProviderTest {
 
-    val settings = Settings()
+    private val settings = Settings()
 
     @Mock
-    lateinit var userDetailsService: UserDetailsService
+    private lateinit var request: HttpServletRequest
 
-    lateinit var provider: JwtTokenProvider
+    @Mock
+    private lateinit var userDetailsService: UserDetailsService
+
+    private lateinit var provider: JwtTokenProvider
 
     @Before
     fun init() {
+        MockitoAnnotations.initMocks(this)
         provider = JwtTokenProvider(settings, userDetailsService)
     }
 
@@ -30,32 +41,59 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    fun resolveToken() {
-        fail()
+    fun resolveTokenNotFound() {
+        val token = provider.resolveToken(request)
+        assertNull(token)
     }
 
     @Test
-    fun resolveTokenAsNull() {
-        fail()
+    fun invalidTokenHeader() {
+        val tokenValue = "some"
+        whenever(request.getHeader(eq("Authorization"))).thenReturn(tokenValue)
+        val token = provider.resolveToken(request)
+        assertNull(token)
     }
+
+    @Test
+    fun resolveTokenFound() {
+        val tokenValue = "Bearer tokenValue"
+        whenever(request.getHeader(eq("Authorization"))).thenReturn(tokenValue)
+        val token = provider.resolveToken(request)
+        assertEquals("tokenValue", token)
+    }
+
 
     @Test
     fun getAuthentication() {
-        fail()
+        val details: UserDetails = mock()
+        val token = provider.createToken("jack", listOf("USER"))
+        whenever(userDetailsService.loadUserByUsername(any())).thenReturn(details)
+        val auth = provider.getAuthentication(token)
+        assertNotNull(auth)
+    }
+
+    @Test(expected = MalformedJwtException::class)
+    fun invalidToken() {
+        val token = "invalid"
+        val details: UserDetails = mock()
+        whenever(userDetailsService.loadUserByUsername(any())).thenReturn(details)
+        provider.getAuthentication(token)
     }
 
     @Test
     fun getUsername() {
-        fail()
+        val token = provider.createToken("jack", listOf("USER"))
+        assertEquals("jack", provider.getUsername(token))
     }
 
     @Test
     fun validateToken() {
-        fail()
+        val token = provider.createToken("jack", listOf("USER"))
+        assertTrue(provider.validateToken(token))
     }
 
     @Test(expected = InvalidTokenException::class)
     fun validateInvalidToken() {
-        fail()
+        assertTrue(provider.validateToken("sflkjsdhfölksdjf sdl"))
     }
 }
