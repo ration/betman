@@ -40,8 +40,8 @@ class JwtAuthenticationFilter(private val manager: AuthenticationManager,
                                           res: HttpServletResponse,
                                           chain: FilterChain,
                                           auth: Authentication) {
-        val user = auth.principal as User
-        val token = tokenProvider.createToken(user.name, listOf("USER"))
+        val user = auth.principal as org.springframework.security.core.userdetails.User
+        val token = tokenProvider.createToken(user.username, listOf("ROLE_USER"))
 
         res.addHeader("Authorization", "Bearer $token")
     }

@@ -54,6 +54,7 @@ class ExposedUserRepositoryTest : DbTest() {
         repo.register(user)
         val ans = repo.get(user.name).blockingGet()
         assertEquals(user.name, ans?.name)
+        assertEquals("secret", ans?.password)
     }
 
     @Test()

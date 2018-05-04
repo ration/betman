@@ -5,6 +5,7 @@ import betman.pojos.Game
 import io.reactivex.Maybe
 import io.reactivex.Single
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -20,6 +21,7 @@ class GamesController @Autowired constructor(private val gameRepository: GameRep
         return gameRepository.games()
     }
 
+    @Secured("USER")
     @GetMapping("/{game}")
     fun game(@PathVariable game: String): Maybe<Game> {
         return gameRepository.get(game)

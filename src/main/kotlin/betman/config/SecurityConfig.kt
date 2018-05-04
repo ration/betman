@@ -13,9 +13,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 
 @Configuration
@@ -27,19 +29,20 @@ class SecurityConfig @Autowired constructor(private val jwtTokenProvider: JwtTok
 
     override fun configure(http: HttpSecurity) {
         // Allow api/users (signup) and anything under Angular
-        http.cors().and().csrf().disable().authorizeRequests().antMatchers("/api/users/*").permitAll().antMatchers("/api/*").authenticated().anyRequest().permitAll().and().addFilter(getJWTAuthenticationFilter()).addFilter(getJWTAuthorizationFilter()).sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        http.cors().and().csrf().disable().authorizeRequests().antMatchers("/*").permitAll().antMatchers("/api/users/register").permitAll().antMatchers("/api/**").authenticated().and().addFilter(getJWTAuthenticationFilter()).addFilter(getJWTAuthorizationFilter()).sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
     }
 
-    @Autowired
-    fun registerAuth(auth: AuthenticationManagerBuilder) {
-        auth.inMemoryAuthentication().withUser("betman").password("manbet").roles("ADMIN")
-    }
 
     public override fun configure(auth: AuthenticationManagerBuilder?) {
         auth?.userDetailsService(userDetailsService)?.passwordEncoder(encoder)
     }
 
-
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", CorsConfiguration().applyPermitDefaultValues())
+        return source
+    }
 
 
     @Bean
@@ -51,6 +54,6 @@ class SecurityConfig @Autowired constructor(private val jwtTokenProvider: JwtTok
 
     @Bean
     fun getJWTAuthorizationFilter(): JwtAuthorizationFilter {
-        return JwtAuthorizationFilter(authenticationManager(), jwtTokenProvider, SecurityContextHolder.getContext())
+        return JwtAuthorizationFilter(authenticationManager(), jwtTokenProvider)
     }
 }

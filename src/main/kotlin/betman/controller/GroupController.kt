@@ -19,7 +19,7 @@ class GroupController @Autowired constructor(private val repository: GroupReposi
         return repository.create(group, generateKey())
     }
 
-    @PostMapping("join")
+    @PostMapping("/join")
     fun join(@RequestParam("key") key: String, @RequestParam displayName: String,
              principal: Principal): Single<Group> {
         return repository.join(key, displayName, principal.name)

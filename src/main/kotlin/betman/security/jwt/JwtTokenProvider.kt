@@ -26,6 +26,7 @@ class JwtTokenProvider @Autowired constructor(private val settings: Settings,
         val now = Date()
         val validity = Date(now.time + settings.security.token.expirationTime)
 
+
         return Jwts.builder()//
                 .setClaims(claims)//
                 .setIssuedAt(now)//

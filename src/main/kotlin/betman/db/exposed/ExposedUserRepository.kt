@@ -39,7 +39,7 @@ class ExposedUserRepository @Autowired constructor(private val passwordEncoder: 
         }).singleOrError()
     }
 
-    private fun toUser(dao: UserDao) = User(dao.id.value, dao.name)
+    private fun toUser(dao: UserDao) = User(id = dao.id.value, name = dao.name, password = dao.password)
 
     private fun encode(password: String): String {
         return passwordEncoder.encode(password)
