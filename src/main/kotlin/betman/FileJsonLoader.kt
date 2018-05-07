@@ -16,8 +16,8 @@ class FileJsonLoader: JsonLoader {
     @Autowired
     lateinit var resourceLoader: ResourceLoader
 
-    override fun <T> fetch(url: String, type: Class<T>): T {
-        return load(resourceLoader.getResource(url).inputStream, type)
+    override fun <T> fetch(remoteUrl: String, type: Class<T>): T {
+        return load(resourceLoader.getResource(remoteUrl).inputStream, type)
     }
 
     companion object {

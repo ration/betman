@@ -30,6 +30,7 @@ class Fifa2018Provider : GameDataProvider {
 
     private fun loadData(): Lsv {
         return remote.fetch("https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json", Lsv::class.java)
+                ?: throw RuntimeException("Failed to load external url data")
     }
 
     companion object {

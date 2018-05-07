@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate
 
 @Component
 class RemoteJsonLoader : JsonLoader {
-    override fun <T> fetch(remoteUrl: String, type: Class<T>): T {
+    override fun <T> fetch(remoteUrl: String, type: Class<T>): T? {
         val template = RestTemplate()
         template.messageConverters.filterIsInstance<MappingJackson2HttpMessageConverter>().forEach { it.supportedMediaTypes = listOf(MediaType.TEXT_PLAIN) }
         return template.getForObject(remoteUrl, type)
