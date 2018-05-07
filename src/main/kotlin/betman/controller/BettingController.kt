@@ -18,15 +18,22 @@ class BettingController {
     @Autowired
     lateinit var repository: BettingRepository
 
+    /**
+     * @param group game key
+     */
     @PostMapping("/update", consumes = [(MediaType.APPLICATION_JSON_VALUE)])
-    fun addBets(@RequestParam game: String, @RequestBody bet: Bet, user: Principal) {
-        logger.debug("Received request to game {}", game)
-        repository.bet(game, bet, user.name)
+    fun addBets(@RequestParam group: String, @RequestBody bet: Bet, user: Principal) {
+        logger.debug("Received request to game {}", group)
+        repository.bet(group, bet, user.name)
     }
 
+    /**
+     * @param group game key
+     */
     @GetMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun bets(@RequestParam game: String, user: Principal): Maybe<Bet> {
-        return repository.get(game, user.name)
+    fun bets(@RequestParam group: String,
+             user: Principal): Maybe<Bet> {
+        return repository.get(group, user.name)
     }
 
 

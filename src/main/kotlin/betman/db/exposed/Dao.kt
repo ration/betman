@@ -65,5 +65,6 @@ class BetDao(id: EntityID<Int>) : IntEntity(id) {
     var user by Bets.user
     var home by Bets.home
     var away by Bets.away
+    var group by Bets.group
 }
 

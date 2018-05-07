@@ -20,4 +20,5 @@ class UserController @Autowired constructor(private val userRepository: UserRepo
     fun register(@RequestBody user: User) {
         userRepository.register(user)
     }
+
 }

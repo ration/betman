@@ -95,7 +95,9 @@ data class MatchesItem(@JsonProperty("date")
                        @JsonProperty("away_penalty")
                        val awayPenalty: Int? = null,
                        @JsonProperty("channels")
-                       val channels: List<String>? = null
+                       val channels: List<String>? = null,
+                       @JsonProperty("matchday")
+                       val matchDay: Int? = null
 )
 
 

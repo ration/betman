@@ -42,4 +42,12 @@ open class DbTest {
             password = "password"
         }
     }
+
+    protected fun createGroup(groupName: String, groupKey: String, gameDao: GameDao) = transaction {
+        GroupDao.new {
+            name = groupName
+            key = groupKey
+            game = gameDao.id
+        }
+    }
 }

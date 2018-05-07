@@ -5,7 +5,7 @@ import io.reactivex.Maybe
 
 interface BettingRepository {
 
-    fun get(gameId: String, username: String): Maybe<Bet>
+    fun get(groupId: String, username: String): Maybe<Bet>
 
-    fun bet(gameId: String, bet: Bet, username: String)
+    fun bet(groupId: String, bet: Bet, username: String)
 }

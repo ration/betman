@@ -1,12 +1,16 @@
 package betman
 
-class UnknownUserException : RuntimeException("Unknown user")
-class InvalidKeyException(msg: String) : RuntimeException(msg)
-class UnknownGameException : RuntimeException("Unknown game id")
-class UnknownMatchException(msg: String) : RuntimeException(msg)
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.ResponseStatus
 
-class InvalidRequestException(reason: String) : RuntimeException(reason)
+@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+open class BadRequestException(msg: String) : RuntimeException(msg)
 
-class UserAlreadyTakenException : RuntimeException("Username already taken")
-
-class InvalidTokenException(msg: String) : RuntimeException(msg)
+class UnknownUserException : BadRequestException("Unknown user")
+class UnknownGroupException : BadRequestException("Unknown group")
+class InvalidKeyException(msg: String) : BadRequestException(msg)
+class UnknownGameException : BadRequestException("Unknown game id")
+class UnknownMatchException(msg: String) : BadRequestException(msg)
+class InvalidRequestException(reason: String) : BadRequestException(reason)
+class UserAlreadyTakenException : BadRequestException("Username already taken")
+class InvalidTokenException(msg: String) : BadRequestException(msg)

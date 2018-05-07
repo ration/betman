@@ -15,14 +15,29 @@ import java.security.Principal
 class GroupController @Autowired constructor(private val repository: GroupRepository) {
 
     @PostMapping("/new", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun new(@RequestBody group: Group): Single<Group> {
-        return repository.create(group, generateKey())
+    fun new(@RequestBody group: Group, principal: Principal): Single<Group> {
+        return repository.create(group, generateKey()).flatMap {
+            repository.join(it.key!!, principal.name, group.name)
+        }
     }
+
+
 
     @PostMapping("/join")
     fun join(@RequestParam("key") key: String, @RequestParam displayName: String,
              principal: Principal): Single<Group> {
-        return repository.join(key, displayName, principal.name)
+        return repository.join(key, principal.name, displayName)
+    }
+
+
+    @PostMapping("/update")
+    fun updateDisplayName(@RequestParam name: String, @RequestParam displayName: String, principal: Principal) {
+        return repository.updateDisplayName(name, principal.name, displayName)
+    }
+
+    @GetMapping("/")
+    fun get(principal: Principal): Single<List<Group>> {
+        return repository.get(principal.name)
     }
 
     private fun generateKey(): String {
@@ -30,4 +45,5 @@ class GroupController @Autowired constructor(private val repository: GroupReposi
         generator.setLength(32)
         return generator.generate()
     }
+
 }

@@ -24,34 +24,52 @@ class GroupControllerTest {
     @InjectMocks
     private lateinit var controller: GroupController
 
-    private val group = Group(name = "test", description = "desc", game = 1)
+    private val group = Group(name = "test", description = "desc", game = "game")
+    val username = "myusername"
 
 
     @Before
     fun init() {
         MockitoAnnotations.initMocks(this)
+        whenever(principal.name).thenReturn(username)
+
     }
 
     @Test
     fun new() {
-        val newGroup = Group(name = group.name, description = group.name, key = "value", game = 1)
+        val newGroup = Group(name = group.name, description = group.name, key = "value", game = "game")
         argumentCaptor<String>().apply {
             whenever(groupRepository.create(any(), any())).thenReturn(Observable.just(newGroup).singleOrError())
-            val ans = controller.new(newGroup).blockingGet()!!
+            whenever(groupRepository.join(any(), any(), any())).thenReturn(Observable.just(newGroup).singleOrError())
+
+            val ans = controller.new(newGroup, principal).blockingGet()!!
             verify(groupRepository, times(1)).create(eq(newGroup), capture())
             assertNotNull(ans.key)
             assertNotNull(firstValue)
+            verify(groupRepository, times(1)).join(eq(ans.key!!), eq(username), any())
         }
+    }
+
+    @Test
+    fun getGroups() {
+        whenever(principal.name).thenReturn(username)
+        controller.get(principal)
+        verify(groupRepository, times(1)).get(eq(username))
     }
 
     @Test
     fun join() {
         val key = "mykey"
-        val userName = "myusername"
         val displayName = "jack"
-        whenever(principal.name).thenReturn(userName)
-        whenever(groupRepository.join(eq(key), eq(displayName), eq(userName))).thenReturn(Observable.just(group).singleOrError())
+        whenever(groupRepository.join(eq(key), eq(username), eq(displayName))).thenReturn(Observable.just(group).singleOrError())
         val ans = controller.join(key, displayName, principal).blockingGet()
         assertEquals(group, ans)
+    }
+
+    @Test
+    fun update() {
+        val displayName = "newDisplayName"
+        controller.updateDisplayName(group.name, displayName, principal)
+        verify(groupRepository, times(1)).updateDisplayName(eq(group.name), eq(username), eq(displayName))
     }
 }

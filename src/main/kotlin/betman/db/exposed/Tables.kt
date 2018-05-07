@@ -29,7 +29,7 @@ object Teams : IntIdTable() {
 
 object Groups : IntIdTable() {
     val name = varchar("name", 50).index()
-    val description = varchar("description", 250).index()
+    val description = varchar("description", 250).nullable()
     val key = varchar("key", 32).uniqueIndex()
     val game = reference("game", Games)
 }
@@ -51,4 +51,5 @@ object Bets : IntIdTable() {
     val user = reference("user", Users)
     val home = integer("home")
     val away = integer("away")
+    val group = reference("group", Groups)
 }

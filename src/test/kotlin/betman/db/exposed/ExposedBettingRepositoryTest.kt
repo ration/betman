@@ -14,64 +14,66 @@ class ExposedBettingRepositoryTest : DbTest() {
 
     private val repository = ExposedBettingRepository()
     private val name = "user"
+    private val key = "mykey"
+    private lateinit var game: GameDao
+    private lateinit var group: GroupDao
 
     @Before
     fun init() {
         createUser(name)
+        game = createGame()
+        group = createGroup("newGroup", key, game)
+        val groupRepo = ExposedGroupRepository()
+        groupRepo.join(group.key, name, "displayName")
     }
 
     @Test(expected = UnknownMatchException::class)
     fun invalidMatchId() {
-        createGame()
-        val bet = Bet("game", scores = listOf(ScoreBet(1, 1, 2)))
-        repository.bet("game", bet, name)
-        repository.get("game", name)
+        val bet = Bet(key, scores = listOf(ScoreBet(1, 1, 2)))
+        repository.bet(key, bet, name)
+        repository.get(key, name)
     }
 
     @Test(expected = UnknownUserException::class)
     fun invalidUserId() {
-        createGame()
-        val bet = Bet("game", scores = listOf(ScoreBet(1, 1, 2)))
-        repository.bet("game", bet, "invalid")
+        val bet = Bet(key, scores = listOf(ScoreBet(1, 1, 2)))
+        repository.bet(key, bet, "invalid")
     }
 
 
     @Test(expected = UnknownMatchException::class)
     fun invalidGameId() {
-        val bet = Bet("game", scores = listOf(ScoreBet(1, 1, 2)))
-        repository.bet("game", bet, name)
+        val bet = Bet(key, scores = listOf(ScoreBet(1, 1, 2)))
+        repository.bet(key, bet, name)
     }
 
     @Test
     fun bet() {
-        val game = createGame()
         makeBet(game)
     }
 
     @Test
     fun update() {
-        val game = createGame()
         val match = makeBet(game)
-        val bet = Bet("game", scores = listOf(ScoreBet(match.externalId, 56, 2)))
-        repository.bet("game", bet, name)
-        val update = repository.get("game", name).blockingGet()
+        val bet = Bet(key, scores = listOf(ScoreBet(match.externalId, 56, 2)))
+        repository.bet(key, bet, name)
+        val update = repository.get(key, name).blockingGet()
         assertEquals(56, update.scores[0].home)
     }
 
 
     @Test
     fun getBet() {
-        val game = createGame()
         makeBet(game)
-        val bet = repository.get("game", name).blockingGet()
+        val bet = repository.get(key, name).blockingGet()
         assertEquals(44, bet.scores[0].home)
     }
 
     private fun makeBet(game: GameDao): MatchDao {
         val match: MatchDao = createMatch(game, createTeam(game, "england", 2),
                 createTeam(game, "germany", 1), 1)
-        val bet = Bet("game", scores = listOf(ScoreBet(match.externalId, 44, 2)))
-        repository.bet("game", bet, name)
+        val bet = Bet(key, scores = listOf(ScoreBet(match.externalId, 44, 2)))
+        repository.bet(key, bet, name)
         return match
     }
 
