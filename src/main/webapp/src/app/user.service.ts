@@ -21,13 +21,5 @@ export class UserService {
     return this.http.post('/api/users/register', user);
   }
 
-  update(user: User) {
-    return this.http.put('/api/users/' + user.id, user).subscribe(result => {
-      this.authService.updateCurrentUser(user);
-    });
-  }
 
-  delete(id: number) {
-    return this.http.delete('/api/users/' + id);
-  }
 }

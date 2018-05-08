@@ -23,7 +23,6 @@ export class AuthenticationFilter implements ApiFilter {
       // if login details are valid return 200 OK with user details and fake jwt token
       const user = filteredUsers[0];
       const body = {
-        id: user.id,
         username: user.username,
         token: 'fake-jwt-token',
         memberGroups: [1]

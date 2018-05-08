@@ -7,7 +7,6 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import {AuthenticationService} from '../authentication.service';
 import {Game} from '../game.model';
 import {AlertService} from '../alert.service';
-import {getRandomString} from 'selenium-webdriver/safari';
 
 @Component({
   selector: 'app-betting',
@@ -19,8 +18,8 @@ export class BettingComponent implements OnInit {
   games: Game[] = [];
   bets: { [id: number]: Bet } = {};
   private saveSubject: Subject<Bet[]> = new Subject<Bet[]>();
-  private user = 1;
-  private game = 1;
+  private user = '';
+  private game = '';
 
   constructor(private gamesService: GamesService, private authService: AuthenticationService,
               private alertService: AlertService) {
@@ -32,7 +31,9 @@ export class BettingComponent implements OnInit {
     this.saveSubject.debounceTime(2000).distinctUntilChanged().subscribe(value => {
       this.onSubmit(value);
     });
-    this.user = this.authService.currentUser().id;
+    if (this.authService.currentUser() != null) {
+      this.user = this.authService.currentUser().username;
+    }
   }
 
   private getBettingData() {

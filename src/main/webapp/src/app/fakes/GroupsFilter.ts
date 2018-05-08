@@ -7,18 +7,17 @@ import {GroupsService} from '../groups.service';
 export class GroupsFilter implements ApiFilter {
 
   private groups = {};
-  private id = 2;
+  private key = 'key';
 
   constructor() {
-    this.groups[1] = {id: '1', name: 'Sample group', description: 'this is a group', key: this.makeid()};
+    this.groups[1] = {name: 'Sample group', description: 'this is a group', key: this.makeid()};
   }
 
   filter(request: HttpRequest<any>): Observable<HttpResponse<any>> {
     if (request.url.match(GroupsService.newGroupUrl) && request.method === 'POST') {
       const group: Group = request.body;
       group.key = this.makeid();
-      group.id = this.id++;
-      this.groups[group.id] = group;
+      this.groups[group.key] = group;
       return Observable.of(new HttpResponse({status: 200, body: group}));
     }
     if (request.url.match(GroupsService.getGroupUrl) && request.method === 'GET') {

@@ -4,8 +4,10 @@
 package betman.gameprovider.fifa2018
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class A(@JsonProperty("winner")
              val winner: String? = null,
              @JsonProperty("runnerup")
@@ -13,7 +15,7 @@ data class A(@JsonProperty("winner")
              @JsonProperty("matches")
              val matches: List<MatchesItem>?)
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class B(@JsonProperty("winner")
              val winner: String? = null,
              @JsonProperty("runnerup")
@@ -21,7 +23,7 @@ data class B(@JsonProperty("winner")
              @JsonProperty("matches")
              val matches: List<MatchesItem>?)
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class C(@JsonProperty("winner")
              val winner: String? = null,
              @JsonProperty("runnerup")
@@ -29,7 +31,7 @@ data class C(@JsonProperty("winner")
              @JsonProperty("matches")
              val matches: List<MatchesItem>?)
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class D(@JsonProperty("winner")
              val winner: String? = null,
              @JsonProperty("runnerup")
@@ -38,6 +40,7 @@ data class D(@JsonProperty("winner")
              val matches: List<MatchesItem>?)
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class E(@JsonProperty("winner")
              val winner: String? = null,
              @JsonProperty("runnerup")
@@ -46,6 +49,7 @@ data class E(@JsonProperty("winner")
              val matches: List<MatchesItem>?)
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class F(@JsonProperty("winner")
              val winner: String? = null,
              @JsonProperty("runnerup")
@@ -54,6 +58,7 @@ data class F(@JsonProperty("winner")
              val matches: List<MatchesItem>?)
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class G(@JsonProperty("winner")
              val winner: String? = null,
              @JsonProperty("runnerup")
@@ -62,6 +67,7 @@ data class G(@JsonProperty("winner")
              val matches: List<MatchesItem>?)
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class H(@JsonProperty("winner")
              val winner: String? = null,
              @JsonProperty("runnerup")
@@ -70,6 +76,7 @@ data class H(@JsonProperty("winner")
              val matches: List<MatchesItem>?)
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class MatchesItem(@JsonProperty("date")
                        val date: String = "",
                        @JsonProperty("home_result")
@@ -101,6 +108,7 @@ data class MatchesItem(@JsonProperty("date")
 )
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class Knockout(@JsonProperty("round_8")
                     val round8: Round,
                     @JsonProperty("round_2")
@@ -113,6 +121,7 @@ data class Knockout(@JsonProperty("round_8")
                     val round16: Round)
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class Lsv(@JsonProperty("knockout")
                val knockout: Knockout,
                @JsonProperty("stadiums")
@@ -125,6 +134,7 @@ data class Lsv(@JsonProperty("knockout")
                val groups: Groups)
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class TeamsItem(@JsonProperty("name")
                      val name: String = "",
                      @JsonProperty("id")
@@ -137,6 +147,7 @@ data class TeamsItem(@JsonProperty("name")
                      val emoji: String? = null)
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class Groups(@JsonProperty("a")
                   val a: A,
                   @JsonProperty("b")
@@ -155,12 +166,14 @@ data class Groups(@JsonProperty("a")
                   val h: H)
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class Round(@JsonProperty("name")
                  val name: String = "",
                  @JsonProperty("matches")
                  val matches: List<MatchesItem>?)
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class StadiumsItem(@JsonProperty("lng")
                         val lng: Double = 0.0,
                         @JsonProperty("city")
@@ -173,12 +186,14 @@ data class StadiumsItem(@JsonProperty("lng")
                         val lat: Double = 0.0)
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class RoundLoser(@JsonProperty("name")
                       val name: String = "",
                       @JsonProperty("matches")
                       val matches: List<MatchesItem>?)
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class TvchannelsItem(@JsonProperty("name")
                           val name: String = "",
                           @JsonProperty("icon")

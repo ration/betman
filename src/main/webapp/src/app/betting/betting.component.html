@@ -6,7 +6,6 @@
       <div class="matchDescription">{{game.description}}</div>
       <div class="team homeTeam">{{game.home.name}}</div>
       <span class="flag-icon flag-icon-{{game.home.iso}}"></span>
-
       <input title="Home team goals" type=text class="score" [(ngModel)]="bets[game.id].home"
              (ngModelChange)="onChange($event)" name="{{game.id}}.homeGoals">
       <div class="vs">-</div>

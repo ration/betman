@@ -29,7 +29,10 @@ class SecurityConfig @Autowired constructor(private val jwtTokenProvider: JwtTok
 
     override fun configure(http: HttpSecurity) {
         // Allow api/users (signup) and anything under Angular
-        http.cors().and().csrf().disable().authorizeRequests().antMatchers("/*").permitAll().antMatchers("/api/users/register").permitAll().antMatchers("/api/**").authenticated().and().addFilter(getJWTAuthenticationFilter()).addFilter(getJWTAuthorizationFilter()).sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        http.cors().and().csrf().disable().authorizeRequests().antMatchers("/*").permitAll()
+            .antMatchers("/api/users/register").permitAll().antMatchers("/api/**").authenticated().and()
+            .addFilter(getJWTAuthenticationFilter()).addFilter(getJWTAuthorizationFilter()).sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
     }
 
 

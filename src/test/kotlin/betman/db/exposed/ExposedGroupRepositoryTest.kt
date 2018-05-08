@@ -26,7 +26,7 @@ class ExposedGroupRepositoryTest : DbTest() {
 
     @Test
     fun game() {
-        val game: GameDao = createGame()
+        createGame()
         val group = Group(name = name, description = description, game = "game")
         val groups = repository.create(group, key).blockingGet()!!
         assertNotNull(groups.id)

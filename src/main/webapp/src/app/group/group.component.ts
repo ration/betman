@@ -30,17 +30,6 @@ export class GroupComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.groupId = this.route.snapshot.params.group;
-    if (this.groupId) {
-      this.loadGroup(this.groupId);
-    } else if (this.authService.currentUser().activateGroup) {
-      this.loadGroup(this.authService.currentUser().activateGroup);
-    }
-
-    if (this.authService.currentUser().memberGroups) {
-      this.groupService.getGroups(this.authService.currentUser().memberGroups).subscribe(groups => {
-        this.memberGroups = groups;
-      });
-    }
   }
 
   ngOnDestroy() {
@@ -55,7 +44,6 @@ export class GroupComponent implements OnInit, OnDestroy {
       user.displayNames = {};
     }
     user.displayNames[this.groupId] = this.userDisplayName;
-    this.userService.update(user);
   }
 
   private generateLink() {

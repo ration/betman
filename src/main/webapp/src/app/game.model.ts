@@ -1,5 +1,6 @@
 export class Game {
   id: number;
+  description: string
   home: {
     name: string
     iso: string
@@ -8,5 +9,5 @@ export class Game {
     name: string
     iso: string
   };
-  date: Date;
+  date: string;
 }

@@ -1,12 +1,12 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 import {AppComponent} from './app.component';
 import {BettingComponent} from './betting/betting.component';
 import {GamesService} from './games.service';
-import {FormsModule} from '@angular/forms';
 import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
 
@@ -23,7 +23,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {environment} from 'environments/environment';
 import {NewGroupComponent} from './new-group/new-group.component';
 import {GroupsService} from './groups.service';
-import { JoinComponent } from './join/join.component';
+import {JoinComponent} from './join/join.component';
 
 
 const providers: Array<any> = [
@@ -52,6 +52,7 @@ if (!environment.production) {
   imports: [
     BrowserModule,
     HttpClientModule,
+    ReactiveFormsModule,
     FormsModule,
     routing,
     NgbModule.forRoot()

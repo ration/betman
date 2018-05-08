@@ -8,6 +8,8 @@ buildscript {
     ext.hikari_version = '3.1.0'
     ext.rx_version = '2.1.13'
     ext.rxkotlin_version = '2.2.0'
+    ext.cmd_ext = System.getProperty("os.name").toUpperCase().contains("WINDOWS") ? ".cmd" : ""
+
 
 
     repositories {
@@ -15,18 +17,19 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" // Required for Kotlin integration
-        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version" // See https://kotlinlang.org/docs/reference/compiler-plugins.html#kotlin-spring-compiler-plugin
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
+        // See https://kotlinlang.org/docs/reference/compiler-plugins.html#kotlin-spring-compiler-plugin
         classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
     }
 }
 
-apply plugin: 'kotlin' // Required for Kotlin integration
-apply plugin: "kotlin-spring" // See https://kotlinlang.org/docs/reference/compiler-plugins.html#kotlin-spring-compiler-plugin
+apply plugin: 'kotlin'
+apply plugin: "kotlin-spring"
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 jar {
-    baseName = 'gs-rest-service'
+    baseName = 'betman'
     version = '0.1.0'
 }
 
@@ -61,57 +64,89 @@ dependencies {
     testCompile "com.h2database:h2:$h2_version"
     testCompile group: 'com.nhaarman', name: 'mockito-kotlin', version: '1.5.0'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testRuntime 'org.hamcrest:hamcrest-core:1.3'
+
     compile "com.zaxxer:HikariCP:$hikari_version"
+    testImplementation 'junit:junit:4.12'
+
 
 }
 
-// Angular Webapp stuff
+test {
+    testLogging {
+        showStandardStreams = true
+    }
+}
 
 def webappDir = "$projectDir/src/main/webapp"
 sourceSets {
-	main {
-		resources {
-			srcDirs = ["$webappDir/dist", "$projectDir/src/main/resources"]
-		}
-	}
+    main {
+        resources {
+            srcDirs = ["$webappDir/dist", "$projectDir/src/main/resources"]
+        }
+    }
     integrationTest {
         kotlin {
             compileClasspath += main.output + test.output
             compileClasspath += test.output
             compileClasspath += test.compileClasspath
             runtimeClasspath += main.output + test.output
+
             //noinspection GroovyAssignabilityCheck
             srcDir file('src/integrationTest/kotlin')
         }
     }
 }
- 
+
+// Otherwise integrationTests don't actually get the classpaths
+configurations {
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+task integrationTest(type: Test) {
+
+    // So that Gradle knows where the integration test classes are:
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+
+    // So that Gradle knows which runtime class path to use:
+    classpath = sourceSets.integrationTest.runtimeClasspath
+
+    // Otherwise these don't always run
+    outputs.upToDateWhen { false }
+
+}
+
+
 processResources {
-	dependsOn "buildAngular"
+    dependsOn "buildAngular"
 }
- 
-task buildAngular(type:Exec) {
-	// installAngular should be run prior to this task
-	dependsOn "installAngular"
-	workingDir "$webappDir"
-	inputs.dir "$webappDir"
-	// Add task to the standard build group
-	group = BasePlugin.BUILD_GROUP
-	// ng doesn't exist as a file in windows -> ng.cmd
-	if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
-		commandLine "ng.cmd", "build","--prod", "--environment=prod"
-	} else {
-		commandLine "ng", "build","--prod", "--environment=prod"
-	}
+
+task testAngular(type: Exec) {
+    dependsOn "buildAngular"
+    workingDir "$webappDir"
+    inputs.dir "$webappDir"
+    group = BasePlugin.BUILD_GROUP
+    commandLine "ng${cmd_ext}", "test", "--browsers", "ChromeHeadless", "--single-run"
 }
- 
-task installAngular(type:Exec) {
-	workingDir "$webappDir"
-	inputs.dir "$webappDir"
-	group = BasePlugin.BUILD_GROUP
-	if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
-		commandLine "npm.cmd", "install"
-	} else {
-		commandLine "npm", "install"
-	}
+
+task buildAngular(type: Exec) {
+    dependsOn "installAngular"
+    workingDir "$webappDir"
+    inputs.dir "$webappDir"
+    group = BasePlugin.BUILD_GROUP
+    commandLine "ng${cmd_ext}", "build", "--prod"
 }
+
+task installAngular(type: Exec) {
+    workingDir "$webappDir"
+    inputs.dir "$webappDir"
+    group = BasePlugin.BUILD_GROUP
+    commandLine "npm${cmd_ext}", "install"
+}
+
+jar {
+    dependsOn "testAngular"
+    dependsOn "integrationTest"
+}
+

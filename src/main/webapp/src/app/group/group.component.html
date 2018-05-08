@@ -1,28 +1,21 @@
 <div id="group">
-  <div id="groupSelection" *ngIf="memberGroups">
-    <form #groupSelectionForm="ngForm" novalidate>
-      <label for="memberBox">Change active group</label>
-      <option id="memberBox" *ngFor="let g of memberGroups">{{g.name}}</option>
-    </form>
-  </div>
   <div *ngIf="group">
     <h3>{{group.name}}</h3>
     <div>Share this link to anyone you wish to join:</div>
     <div class="copylink">{{link}}</div>
-
     <p>
     <div id="nameBox">
-      <form #nameForm="ngForm" novalidate (ngSubmit)="nameForm.form.valid && onSubmit()">
-        <div class="input-group mb-3">
-          <label for="nameBox">Your display name in this group</label>
-          <input type="text" class="form-control" placeholder="Display Name" aria-label="Display name"
-                 name="displayName"
-                 aria-describedby="basic-addon2" [(ngModel)]="userDisplayName" value="{{userDisplayName}}">
-          <div class="input-group-append">
-            <input type="submit" class="btn btn-outline-secondary" value="Change">
-          </div>
-        </div>
-      </form>
+      <!-- <form #nameForm="ngForm" novalidate (ngSubmit)="nameForm.form.valid && onSubmit()">
+         <div class="input-group mb-3">
+           <label for="nameBox">Your display name in this group</label>
+           <input type="text" class="form-control" placeholder="Display Name" aria-label="Display name"
+                  name="displayName"
+                  aria-describedby="basic-addon2">
+           <div class="input-group-append">
+             <input type="submit" class="btn btn-outline-secondary" value="Change">
+           </div>
+         </div>
+       </form>-->
     </div>
   </div>
 </div>

@@ -2,6 +2,7 @@ package betman.controller
 
 import betman.db.GroupRepository
 import betman.pojos.Group
+import betman.pojos.Groups
 import io.reactivex.Single
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -36,8 +37,8 @@ class GroupController @Autowired constructor(private val repository: GroupReposi
     }
 
     @GetMapping("/")
-    fun get(principal: Principal): Single<List<Group>> {
-        return repository.get(principal.name)
+    fun get(principal: Principal): Single<Groups> {
+        return repository.get(principal.name).map { Groups(it) }
     }
 
     private fun generateKey(): String {

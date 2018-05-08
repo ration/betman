@@ -21,10 +21,6 @@ export class UsersFilter implements ApiFilter {
       return this.update(request, users);
     }
 
-
-    if (request.url.match(/\/api\/users\/\d+$/) && request.method === 'DELETE') {
-      return this.delete(request, users);
-    }
     return undefined;
   }
 
@@ -32,13 +28,16 @@ export class UsersFilter implements ApiFilter {
     // check for fake auth token in header and return user if valid, this security is implemented server side in a real application
     if (request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
       // find user by id in users array
+      /*
+      TODO something else
       const urlParts = request.url.split('/');
       const id = parseInt(urlParts[urlParts.length - 1], 10);
       const matchedUsers = users.filter((it: User) => {
-        return it.id === id;
+        return it.username === id;
       });
       const user = matchedUsers.length ? matchedUsers[0] : null;
-
+*/
+      const user: User = {username: 'myname'};
       return Observable.of(new HttpResponse({status: 200, body: user}));
     } else {
       // return 401 not authorised if token is null or invalid
@@ -65,36 +64,13 @@ export class UsersFilter implements ApiFilter {
     }
 
     // save new user
-    newUser.id = users.length + 1;
+    // newUser = users.length + 1;
+    // TODO fix this
     users.push(newUser);
     localStorage.setItem('users', JSON.stringify(users));
 
     // respond 200 OK
     return Observable.of(new HttpResponse({status: 200}));
-  }
-
-
-  private delete(request: HttpRequest<any>, users: User[]): Observable<HttpResponse<any>> {
-    if (request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
-      // find user by id in users array
-      const urlParts = request.url.split('/');
-      const id = parseInt(urlParts[urlParts.length - 1], 10);
-      for (let i = 0; i < users.length; i++) {
-        const user = users[i];
-        if (user.id === id) {
-          // delete user
-          users.splice(i, 1);
-          localStorage.setItem('users', JSON.stringify(users));
-          break;
-        }
-      }
-
-      // respond 200 OK
-      return Observable.of(new HttpResponse({status: 200}));
-    } else {
-      // return 401 not authorised if token is null or invalid
-      return Observable.throw('Unauthorised');
-    }
   }
 
 
