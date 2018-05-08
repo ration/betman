@@ -60,6 +60,7 @@ dependencies {
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile "com.h2database:h2:$h2_version"
     testCompile group: 'com.nhaarman', name: 'mockito-kotlin', version: '1.5.0'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
     compile "com.zaxxer:HikariCP:$hikari_version"
 
 }
@@ -73,6 +74,16 @@ sourceSets {
 			srcDirs = ["$webappDir/dist", "$projectDir/src/main/resources"]
 		}
 	}
+    integrationTest {
+        kotlin {
+            compileClasspath += main.output + test.output
+            compileClasspath += test.output
+            compileClasspath += test.compileClasspath
+            runtimeClasspath += main.output + test.output
+            //noinspection GroovyAssignabilityCheck
+            srcDir file('src/integrationTest/kotlin')
+        }
+    }
 }
  
 processResources {
