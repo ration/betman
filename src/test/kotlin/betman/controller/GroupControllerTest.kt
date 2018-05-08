@@ -53,6 +53,7 @@ class GroupControllerTest {
     @Test
     fun getGroups() {
         whenever(principal.name).thenReturn(username)
+        whenever(groupRepository.get(any())).thenReturn(Observable.just(listOf(group)).singleOrError())
         controller.get(principal)
         verify(groupRepository, times(1)).get(eq(username))
     }
