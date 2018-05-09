@@ -32,6 +32,10 @@ object Groups : IntIdTable() {
     val description = varchar("description", 250).nullable()
     val key = varchar("key", 32).uniqueIndex()
     val game = reference("game", Games)
+    val winnerPoints = integer("winner_points")
+    val goalKingPoints = integer("goal_king_points")
+    val teamGoalPoints = integer("team_goal_points")
+    val exactScorePoints = integer("exact_score_points")
 }
 
 object Users : IntIdTable() {

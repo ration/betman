@@ -2,10 +2,10 @@ package betman.db.exposed
 
 import betman.InvalidKeyException
 import betman.InvalidRequestException
+import betman.InvalidUserException
 import betman.UnknownUserException
 import betman.pojos.Group
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.*
 import org.junit.Test
 
 class ExposedGroupRepositoryTest : DbTest() {
@@ -15,6 +15,7 @@ class ExposedGroupRepositoryTest : DbTest() {
     private val key = "key"
     private val displayName = "myDisplayName"
     private val repository = ExposedGroupRepository()
+    val group = Group(name = name, description = description, game = "game", exactScorePoints = 100)
 
 
     @Test(expected = InvalidRequestException::class)
@@ -26,10 +27,15 @@ class ExposedGroupRepositoryTest : DbTest() {
 
     @Test
     fun game() {
-        createGame()
-        val group = Group(name = name, description = description, game = "game")
-        val groups = repository.create(group, key).blockingGet()!!
+        val groups = createGroup()
         assertNotNull(groups.id)
+        assertEquals(100, groups.exactScorePoints)
+    }
+
+    private fun createGroup(): Group {
+        createGame()
+        val groups = repository.create(group, key).blockingGet()!!
+        return groups
     }
 
     @Test(expected = UnknownUserException::class)
@@ -47,8 +53,7 @@ class ExposedGroupRepositoryTest : DbTest() {
     fun join() {
         createUser(userName)
         createGame()
-        val group = Group(name = name, description = description, game = "game")
-        repository.create(group, key)
+        createGroup()
         val ans = repository.join(key, userName, displayName).blockingGet()
         assertNotNull(ans.userDisplayName)
     }
@@ -80,5 +85,25 @@ class ExposedGroupRepositoryTest : DbTest() {
         assertEquals(displayName, db[0].userDisplayName)
     }
 
+    @Test(expected = InvalidUserException::class)
+    fun getGroupWhenUserNotInGroup() {
+        fail()
+    }
+
+    @Test
+    fun updateGroup() {
+        val group = createGroup()
+        assertEquals(1, group.teamGoalPoints)
+        val newGroup = Group(name = name, description = description, game = "game", teamGoalPoints = 33)
+
+        repository.update(newGroup, userName)
+        val saved = repository.get(newGroup.name, userName).blockingGet()
+        assertEquals(33, saved.teamGoalPoints)
+    }
+
+    @Test
+    fun onlyOwnerCanUpdate() {
+        fail()
+    }
 
 }

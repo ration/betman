@@ -5,4 +5,8 @@ data class Group(var id: Int? = null,
                  var description: String? = null,
                  var key: String? = null,
                  var userDisplayName: String? = null,
-                 val game: String)
+                 val game: String,
+                 val winnerPoints: Int = 5,
+                 val goalKingPoints: Int = 5,
+                 val teamGoalPoints: Int = 1,
+                 val exactScorePoints: Int = 5)

@@ -12,6 +12,10 @@ class GroupDao(id: EntityID<Int>) : IntEntity(id) {
     var name by Groups.name
     var key by Groups.key
     var game by Groups.game
+    var winnerPoints by Groups.winnerPoints
+    var goalKingPoints by Groups.goalKingPoints
+    var teamGoalPoints by Groups.teamGoalPoints
+    var exactScorePoints by Groups.exactScorePoints
 }
 
 class GameDao(id: EntityID<Int>) : IntEntity(id) {

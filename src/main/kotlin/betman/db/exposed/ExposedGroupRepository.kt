@@ -10,6 +10,7 @@ import betman.db.exposed.GroupUser.user
 import betman.db.exposed.Groups.key
 import betman.db.exposed.Users.name
 import betman.pojos.Group
+import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -20,6 +21,10 @@ import org.springframework.stereotype.Component
 
 @Component
 class ExposedGroupRepository : GroupRepository {
+    override fun update(group: Group, username: String): Completable {
+        return Completable.complete()
+    }
+
     override fun get(username: String): Single<List<Group>> {
         return Observable.just(transaction {
             val userDao = UserDao.find { name eq username }.firstOrNull() ?: throw UnknownUserException()
@@ -53,7 +58,8 @@ class ExposedGroupRepository : GroupRepository {
     override fun join(inviteKey: String, username: String, displayName: String): Single<Group> {
         return Observable.just(transaction {
             val userDao = UserDao.find { name eq username }.firstOrNull() ?: throw UnknownUserException()
-            val groupDao = GroupDao.find { key eq inviteKey }.firstOrNull() ?: throw InvalidKeyException("Unknown group key")
+            val groupDao = GroupDao.find { key eq inviteKey }.firstOrNull()
+                    ?: throw InvalidKeyException("Unknown group key")
             val dao = GroupUserDao.new {
                 user = userDao.id
                 group = groupDao.id
@@ -73,6 +79,10 @@ class ExposedGroupRepository : GroupRepository {
                 description = newGroup.description
                 key = newKey
                 game = gameDao.id
+                winnerPoints = newGroup.winnerPoints
+                goalKingPoints = newGroup.goalKingPoints
+                teamGoalPoints = newGroup.teamGoalPoints
+                exactScorePoints = newGroup.exactScorePoints
             }
             toGroup(group, gameDao.name)
         }).singleOrError()
@@ -84,7 +94,12 @@ class ExposedGroupRepository : GroupRepository {
                 description = group.description,
                 key = group.key,
                 game = gameName,
-                userDisplayName = userDisplayName)
+                userDisplayName = userDisplayName,
+                winnerPoints = group.winnerPoints,
+                goalKingPoints = group.goalKingPoints,
+                teamGoalPoints = group.teamGoalPoints,
+                exactScorePoints = group.exactScorePoints
+        )
     }
 
 }
