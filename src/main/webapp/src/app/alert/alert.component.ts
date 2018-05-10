@@ -20,6 +20,6 @@ export class AlertComponent implements OnInit {
       if (message && message.clearAfter > 0) {
         setTimeout(() => this.message = null, message.clearAfter);
       }
-    });
+    }, error1 => console.log(error1));
   }
 }

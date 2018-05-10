@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {GroupsService} from '../groups.service';
 import {Group} from '../group.model';
 import {environment} from '../../environments/environment';

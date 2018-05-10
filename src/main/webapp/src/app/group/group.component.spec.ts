@@ -6,9 +6,9 @@ import {GroupsService} from '../groups.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {AuthenticationService} from '../authentication.service';
 import {UserService} from '../user.service';
-import {Observable} from 'rxjs/Observable';
 import {Group} from '../group.model';
 import {User} from '../user';
+import {of} from 'rxjs';
 
 
 describe('GroupComponent', () => {
@@ -35,7 +35,7 @@ describe('GroupComponent', () => {
   it('should create', () => {
     groupService = TestBed.get(GroupsService);
     const group: Group = {name: 'Sample group', description: 'this is a group'};
-    spyOn(groupService, 'get').and.returnValue(Observable.of(group));
+    spyOn(groupService, 'get').and.returnValue(of(group));
     authService = TestBed.get(AuthenticationService);
     const user: User = {username: 'username'};
     spyOn(authService, 'currentUser').and.returnValue(user);

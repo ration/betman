@@ -1,12 +1,9 @@
-﻿import {Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/materialize';
-import 'rxjs/add/operator/dematerialize';
+import {Observable, of} from 'rxjs';
+import {delay, dematerialize, materialize, mergeMap} from 'rxjs/operators'
+
+
 import {AuthenticationFilter} from './AuthenticationFilter';
 import {UsersFilter} from './UsersFilter';
 import {BetsFilter} from './BetsFilter';
@@ -24,13 +21,13 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // wrap in delayed observable to simulate server api call
-    return Observable.of(null).mergeMap(() =>
-      this.filterRequest(request, next)
-    )
-    // call materialize and dematerialize to ensure delay even if an error is thrown (https://github.com/Reactive-Extensions/RxJS/issues/648)
-      .materialize()
-      .delay(500)
-      .dematerialize();
+    return of(null).pipe(mergeMap(() =>
+        this.filterRequest(request, next)
+      ),
+      // call materialize and dematerialize to ensure delay even if an error is thrown (https://github.com/Reactive-Extensions/RxJS/issues/648)
+      materialize()
+      , delay(500)
+      , dematerialize());
   }
 
 

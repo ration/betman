@@ -1,5 +1,5 @@
 import {HttpRequest, HttpResponse} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 
 /**
  * Simple filter chain type interceptor

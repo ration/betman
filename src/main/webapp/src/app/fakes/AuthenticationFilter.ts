@@ -1,6 +1,6 @@
+import {Observable, of, throwError as observableThrowError} from 'rxjs';
 import {ApiFilter} from './ApiFilter';
 import {HttpRequest, HttpResponse} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
 import {User} from '../user';
 
 export class AuthenticationFilter implements ApiFilter {
@@ -28,10 +28,10 @@ export class AuthenticationFilter implements ApiFilter {
         memberGroups: [1]
       };
 
-      return Observable.of(new HttpResponse({status: 200, body: body}));
+      return of(new HttpResponse({status: 200, body: body}));
     } else {
       // else return 400 bad request
-      return Observable.throw('Username or password is incorrect');
+      return observableThrowError('Username or password is incorrect');
     }
   }
 }

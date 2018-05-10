@@ -1,8 +1,9 @@
 import {ApiFilter} from './ApiFilter';
 import {HttpRequest, HttpResponse} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
+import {Observable, of} from 'rxjs';
 import {Group} from '../group.model';
 import {GroupsService} from '../groups.service';
+
 
 export class GroupsFilter implements ApiFilter {
 
@@ -18,10 +19,10 @@ export class GroupsFilter implements ApiFilter {
       const group: Group = request.body;
       group.key = this.makeid();
       this.groups[group.key] = group;
-      return Observable.of(new HttpResponse({status: 200, body: group}));
+      return of(new HttpResponse({status: 200, body: group}));
     }
     if (request.url.match(GroupsService.getGroupUrl) && request.method === 'GET') {
-      return Observable.of(new HttpResponse({status: 200, body: [this.groups[1]]}));
+      return of(new HttpResponse({status: 200, body: [this.groups[1]]}));
     }
     return undefined;
   }

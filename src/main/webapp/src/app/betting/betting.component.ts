@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {Bet} from '../bet.model';
 import {GamesService} from '../games.service';
-import {Subject} from 'rxjs/Subject';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
+import {Subject} from 'rxjs';
+
+
 import {AuthenticationService} from '../authentication.service';
 import {Game} from '../game.model';
 import {AlertService} from '../alert.service';
+import {debounceTime, distinctUntilChanged} from "rxjs/operators";
 
 @Component({
   selector: 'app-betting',
@@ -28,7 +29,7 @@ export class BettingComponent implements OnInit {
       this.getBettingData();
     });
 
-    this.saveSubject.debounceTime(2000).distinctUntilChanged().subscribe(value => {
+    this.saveSubject.pipe(debounceTime(2000), distinctUntilChanged()).subscribe(value => {
       this.onSubmit(value);
     });
     if (this.authService.currentUser() != null) {

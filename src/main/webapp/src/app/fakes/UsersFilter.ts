@@ -1,6 +1,6 @@
+import {Observable, of, throwError as observableThrowError} from 'rxjs';
 import {ApiFilter} from './ApiFilter';
 import {HttpRequest, HttpResponse} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
 import {User} from '../user';
 
 export class UsersFilter implements ApiFilter {
@@ -38,17 +38,17 @@ export class UsersFilter implements ApiFilter {
       const user = matchedUsers.length ? matchedUsers[0] : null;
 */
       const user: User = {username: 'myname'};
-      return Observable.of(new HttpResponse({status: 200, body: user}));
+      return of(new HttpResponse({status: 200, body: user}));
     } else {
       // return 401 not authorised if token is null or invalid
-      return Observable.throw('Unauthorised');
+      return observableThrowError('Unauthorised');
     }
 
   }
 
   private update(request: HttpRequest<any>, users: User[]): Observable<HttpResponse<any>> {
     localStorage.setItem('users', JSON.stringify(users));
-    return Observable.of(new HttpResponse({status: 200}));
+    return of(new HttpResponse({status: 200}));
   }
 
   private add(request: HttpRequest<any>, users: User[]): Observable<HttpResponse<any>> {
@@ -60,7 +60,7 @@ export class UsersFilter implements ApiFilter {
       return user.username === newUser.username;
     }).length;
     if (duplicateUser) {
-      return Observable.throw('Username "' + newUser.username + '" is already taken');
+      return observableThrowError('Username "' + newUser.username + '" is already taken');
     }
 
     // save new user
@@ -70,7 +70,7 @@ export class UsersFilter implements ApiFilter {
     localStorage.setItem('users', JSON.stringify(users));
 
     // respond 200 OK
-    return Observable.of(new HttpResponse({status: 200}));
+    return of(new HttpResponse({status: 200}));
   }
 
 
