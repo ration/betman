@@ -6,7 +6,7 @@ import io.reactivex.Maybe
 import io.reactivex.Single
 
 interface GroupRepository {
-    fun create(newGroup: Group, newKey: String): Single<Group>
+    fun create(newGroup: Group, newKey: String, username: String): Single<Group>
 
     fun update(group: Group, username: String): Completable
 
@@ -20,8 +20,9 @@ interface GroupRepository {
 
     /**
      * Get user related data
+     * @
      */
-    fun get(group: String, username: String): Maybe<Group>
+    fun get(groupKey: String, username: String): Maybe<Group>
 
     fun get(username: String): Single<List<Group>>
 }

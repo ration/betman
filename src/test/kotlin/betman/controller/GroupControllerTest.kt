@@ -39,11 +39,11 @@ class GroupControllerTest {
     fun new() {
         val newGroup = Group(name = group.name, description = group.name, key = "value", game = "game")
         argumentCaptor<String>().apply {
-            whenever(groupRepository.create(any(), any())).thenReturn(Observable.just(newGroup).singleOrError())
+            whenever(groupRepository.create(any(), any(), any())).thenReturn(Observable.just(newGroup).singleOrError())
             whenever(groupRepository.join(any(), any(), any())).thenReturn(Observable.just(newGroup).singleOrError())
 
             val ans = controller.new(newGroup, principal).blockingGet()!!
-            verify(groupRepository, times(1)).create(eq(newGroup), capture())
+            verify(groupRepository, times(1)).create(eq(newGroup), capture(), any())
             assertNotNull(ans.key)
             assertNotNull(firstValue)
             verify(groupRepository, times(1)).join(eq(ans.key!!), eq(username), any())

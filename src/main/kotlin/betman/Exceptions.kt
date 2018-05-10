@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 open class BadRequestException(msg: String) : RuntimeException(msg)
 
 class UnknownUserException : BadRequestException("Unknown user")
-class InvalidUserException : BadRequestException("Invalid user")
+class InvalidUserException(msg: String = "Invalid user") : BadRequestException(msg)
 
 class UnknownGroupException : BadRequestException("Unknown group")
 class InvalidKeyException(msg: String) : BadRequestException(msg)

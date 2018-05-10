@@ -2,6 +2,7 @@ package betman.db.exposed
 
 import betman.config.Settings
 import betman.db.HikariDatabase
+import betman.pojos.Group
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.After
 import org.junit.Before
@@ -43,11 +44,7 @@ open class DbTest {
         }
     }
 
-    protected fun createGroup(groupName: String, groupKey: String, gameDao: GameDao) = transaction {
-        GroupDao.new {
-            name = groupName
-            key = groupKey
-            game = gameDao.id
-        }
+    protected fun createGroup(groupName: String, groupKey: String, gameDao: GameDao, user: String) = transaction {
+        ExposedGroupRepository().create(Group(name = groupName, key = groupKey, game = gameDao.name), groupKey, user)
     }
 }

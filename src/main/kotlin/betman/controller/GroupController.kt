@@ -17,7 +17,7 @@ class GroupController @Autowired constructor(private val repository: GroupReposi
 
     @PostMapping("/new", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun new(@RequestBody group: Group, principal: Principal): Single<Group> {
-        return repository.create(group, generateKey()).flatMap {
+        return repository.create(group, generateKey(), principal.name).flatMap {
             repository.join(it.key!!, principal.name, group.name)
         }
     }

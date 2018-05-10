@@ -3,6 +3,7 @@ package betman.db.exposed
 import betman.UnknownMatchException
 import betman.UnknownUserException
 import betman.pojos.Bet
+import betman.pojos.Group
 import betman.pojos.ScoreBet
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Assert.assertEquals
@@ -16,15 +17,15 @@ class ExposedBettingRepositoryTest : DbTest() {
     private val name = "user"
     private val key = "mykey"
     private lateinit var game: GameDao
-    private lateinit var group: GroupDao
+    private lateinit var group: Group
 
     @Before
     fun init() {
         createUser(name)
         game = createGame()
-        group = createGroup("newGroup", key, game)
+        group = createGroup("newGroup", key, game, name).blockingGet()
         val groupRepo = ExposedGroupRepository()
-        groupRepo.join(group.key, name, "displayName")
+        groupRepo.join(group.key!!, name, "displayName")
     }
 
     @Test(expected = UnknownMatchException::class)
