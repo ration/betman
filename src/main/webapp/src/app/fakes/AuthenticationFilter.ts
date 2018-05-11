@@ -15,15 +15,15 @@ export class AuthenticationFilter implements ApiFilter {
 
   private authenticate(request: HttpRequest<any>, users: User[]): Observable<HttpResponse<any>> {
     // find if any user matches login credentials
-    const filteredUsers = users.filter(user => {
-      return user.username === request.body.username && user.password === request.body.password;
+    const filteredUsers = users.filter((user: User) => {
+      return user.name === request.body.name && user.password === request.body.password;
     });
 
     if (filteredUsers.length) {
       // if login details are valid return 200 OK with user details and fake jwt token
       const user = filteredUsers[0];
       const body = {
-        username: user.username,
+        name: user.name,
         token: 'fake-jwt-token',
         memberGroups: [1]
       };

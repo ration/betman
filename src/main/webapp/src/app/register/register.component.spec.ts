@@ -7,10 +7,13 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {AuthenticationService} from '../authentication.service';
 import {UserService} from '../user.service';
 import {AlertService} from '../alert.service';
+import {User} from '../user';
+import {of} from 'rxjs/internal/observable/of';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
+  let userService: UserService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -26,7 +29,13 @@ describe('RegisterComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('register should create user', () => {
+    userService = TestBed.get(UserService);
+    const registerSpy = spyOn(userService, 'create');
+    registerSpy.and.returnValue(of('OK'));
+    const user: User = {name: 'some', password: 'somePass'};
+    component.model = user;
+    component.register()
+    expect(registerSpy).toHaveBeenCalledWith(user);
   });
 });

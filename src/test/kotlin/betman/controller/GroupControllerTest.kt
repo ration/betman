@@ -3,6 +3,7 @@ package betman.controller
 import betman.db.GroupRepository
 import betman.pojos.Group
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Completable
 import io.reactivex.Observable
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -72,5 +73,13 @@ class GroupControllerTest {
         val displayName = "newDisplayName"
         controller.updateDisplayName(group.name, displayName, principal)
         verify(groupRepository, times(1)).updateDisplayName(eq(group.name), eq(username), eq(displayName))
+    }
+
+    @Test
+    fun updateGroup() {
+        group.name = "new name"
+        whenever(groupRepository.update(eq(group), any())).thenReturn(Completable.complete())
+        controller.update(group, principal).blockingGet()
+        verify(groupRepository, times(1)).update(any(), any())
     }
 }

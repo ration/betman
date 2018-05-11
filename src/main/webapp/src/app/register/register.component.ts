@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import {UserService} from '../user.service';
 import {AlertService} from '../alert.service';
 import {User} from '../user';
+import {HttpErrorResponse} from '@angular/common/http';
 
 
 
@@ -28,8 +29,9 @@ export class RegisterComponent {
           this.alertService.success('Registration successful', true);
           this.router.navigate(['/login']);
         },
-        error => {
-          this.alertService.error(error);
+        (error: HttpErrorResponse) => {
+
+          this.alertService.error(error.message);
           this.loading = false;
         });
   }

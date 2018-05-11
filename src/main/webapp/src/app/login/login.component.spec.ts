@@ -7,6 +7,8 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {AuthenticationService} from '../authentication.service';
 import {UserService} from '../user.service';
 import {AlertService} from '../alert.service';
+import {of} from 'rxjs/internal/observable/of';
+import {HttpResponse} from '@angular/common/http';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -29,5 +31,11 @@ describe('LoginComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it ('login should call backend', () => {
+    //const authService = TestBed.get(AuthenticationService);
+    // spyOn(authService, 'login').and.returnValue(of('ok'));
+    //component.login();
   });
 });

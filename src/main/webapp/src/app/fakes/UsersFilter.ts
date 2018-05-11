@@ -37,7 +37,7 @@ export class UsersFilter implements ApiFilter {
       });
       const user = matchedUsers.length ? matchedUsers[0] : null;
 */
-      const user: User = {username: 'myname'};
+      const user: User = {name: 'myname'};
       return of(new HttpResponse({status: 200, body: user}));
     } else {
       // return 401 not authorised if token is null or invalid
@@ -57,10 +57,10 @@ export class UsersFilter implements ApiFilter {
 
     // validation
     const duplicateUser = users.filter(user => {
-      return user.username === newUser.username;
+      return user.name === newUser.name;
     }).length;
     if (duplicateUser) {
-      return observableThrowError('Username "' + newUser.username + '" is already taken');
+      return observableThrowError('Username "' + newUser.name + '" is already taken');
     }
 
     // save new user

@@ -30,11 +30,12 @@ const providers: Array<any> = [
   GamesService, AlertService, UserService, AuthGuard, AuthenticationService, GroupsService
 ];
 
+/*
 if (!environment.production) {
   providers.push(
     fakeBackendProvider
   );
-}
+}*/
 
 
 @NgModule({

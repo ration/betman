@@ -56,7 +56,7 @@ export class GroupComponent implements OnInit, OnDestroy {
       this.group = ans;
       this.link = this.generateLink();
     });
-    this.userDisplayName = this.authService.currentUser().username;
+    this.userDisplayName = this.authService.currentUser().name;
     if (this.authService.currentUser().displayNames && this.authService.currentUser().displayNames[groupId]) {
       this.userDisplayName = this.authService.currentUser().displayNames[groupId];
     }

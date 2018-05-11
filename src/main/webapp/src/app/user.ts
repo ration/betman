@@ -1,7 +1,8 @@
 export class User {
-  username: string;
+  name: string;
   password?: string;
   displayNames?: {};
+  token?: string;
   activateGroup?: number;
-  memberGroups?: number[] = [1];
+  memberGroups?: number[];
 }

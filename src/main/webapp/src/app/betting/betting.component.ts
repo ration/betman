@@ -33,7 +33,7 @@ export class BettingComponent implements OnInit {
       this.onSubmit(value);
     });
     if (this.authService.currentUser() != null) {
-      this.user = this.authService.currentUser().username;
+      this.user = this.authService.currentUser().name;
     }
   }
 

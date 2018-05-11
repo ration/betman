@@ -3,6 +3,7 @@ package betman.controller
 import betman.db.GroupRepository
 import betman.pojos.Group
 import betman.pojos.Groups
+import io.reactivex.Completable
 import io.reactivex.Single
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -22,8 +23,6 @@ class GroupController @Autowired constructor(private val repository: GroupReposi
         }
     }
 
-
-
     @PostMapping("/join")
     fun join(@RequestParam("key") key: String, @RequestParam displayName: String,
              principal: Principal): Single<Group> {
@@ -31,7 +30,7 @@ class GroupController @Autowired constructor(private val repository: GroupReposi
     }
 
 
-    @PostMapping("/update")
+    @PostMapping("/updateDisplayName")
     fun updateDisplayName(@RequestParam name: String, @RequestParam displayName: String, principal: Principal) {
         return repository.updateDisplayName(name, principal.name, displayName)
     }
@@ -45,6 +44,11 @@ class GroupController @Autowired constructor(private val repository: GroupReposi
         val generator = RandomValueStringGenerator()
         generator.setLength(32)
         return generator.generate()
+    }
+
+    @PostMapping("/update")
+    fun update(@RequestBody group: Group, principal: Principal): Completable {
+        return repository.update(group, principal.name)
     }
 
 }

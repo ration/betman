@@ -37,7 +37,7 @@ describe('GroupComponent', () => {
     const group: Group = {name: 'Sample group', description: 'this is a group'};
     spyOn(groupService, 'get').and.returnValue(of(group));
     authService = TestBed.get(AuthenticationService);
-    const user: User = {username: 'username'};
+    const user: User = {name: 'username'};
     spyOn(authService, 'currentUser').and.returnValue(user);
     expect(component).toBeTruthy();
   });
