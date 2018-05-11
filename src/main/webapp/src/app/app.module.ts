@@ -17,17 +17,16 @@ import {UserService} from './user.service';
 import {AuthGuard} from './auth.guard';
 import {HomeComponent} from './home/home.component';
 import {AuthenticationService} from './authentication.service';
-import {fakeBackendProvider} from './fakes/FakeBackendInterceptor';
 import {GroupComponent} from './group/group.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {environment} from 'environments/environment';
 import {NewGroupComponent} from './new-group/new-group.component';
 import {GroupsService} from './groups.service';
 import {JoinComponent} from './join/join.component';
+import {AuthInterceptorProvider} from './auth.interceptor';
 
 
 const providers: Array<any> = [
-  GamesService, AlertService, UserService, AuthGuard, AuthenticationService, GroupsService
+  GamesService, AlertService, UserService, AuthGuard, AuthenticationService, GroupsService, AuthInterceptorProvider
 ];
 
 /*

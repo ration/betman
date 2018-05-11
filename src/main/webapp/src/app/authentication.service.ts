@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpResponse} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 
 import {User} from './user';
 import {Router} from '@angular/router';
@@ -41,7 +41,10 @@ export class AuthenticationService {
   }
 
   currentUser(): User {
-    return JSON.parse(localStorage.getItem('currentUser'));
+    if (localStorage.getItem('currentUser')) {
+      return JSON.parse(localStorage.getItem('currentUser'));
+    }
+    return null;
   }
 
   logout() {

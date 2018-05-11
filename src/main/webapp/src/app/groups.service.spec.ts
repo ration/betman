@@ -27,4 +27,5 @@ describe('GroupsService', () => {
     req.flush(response);
     httpMock.verify();
   }));
+
 });

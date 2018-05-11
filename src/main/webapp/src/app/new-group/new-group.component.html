@@ -1,4 +1,4 @@
-<form class="needs-validation" [formGroup]="newGroup" (ngSubmit)="onSubmit()">
+<form #newGroupForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
   <div id="new-group" class="col-md-6 col-md-offset-3">
     <h2>Create a new group</h2>
 
@@ -6,17 +6,17 @@
       <div class="form-row">
         <div class="col-md-8 mb-8">
           <label for="name" class="form-control-label">Group Name</label>
-          <input name="name" id="name" formControlName="name"
-                 class="form-control"
+          <input id="name" name="name"
+                 class="form-control" [(ngModel)]="model.name" #name="ngModel" required
                  placeholder="Group Name" aria-label="Group Name" aria-describedby="Group Name">
           <!--
-          div *ngIf="newGroupForm.submitted && !name.valid" class="invalid-feedback">Group name is required</div>
+                TODO validation    <div *ngIf="name.errors.required"  class="invalid-feedback">Group name is required</div>
           -->
         </div>
         <div class="col-md-12">
-          <label for="name" class="form-control-label">Description</label>
-          <input name="name" id="description" formControlName="description" type="text"
-                 class="form-control"
+          <label for="description" class="form-control-label">Description</label>
+          <input name="description" [(ngModel)]="model.description" id="description" type="text"
+                 class="form-control" #description="ngModel" required
                  placeholder="Group Description" aria-label="Description" aria-describedby="Group Description">
         </div>
 
