@@ -4,9 +4,9 @@ import betman.db.GroupRepository
 import betman.pojos.Group
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Observable
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.mockito.InjectMocks
@@ -26,14 +26,13 @@ class GroupControllerTest {
     private lateinit var controller: GroupController
 
     private val group = Group(name = "test", description = "desc", game = "game")
-    val username = "myusername"
+    private val username = "myusername"
 
 
     @Before
     fun init() {
         MockitoAnnotations.initMocks(this)
         whenever(principal.name).thenReturn(username)
-
     }
 
     @Test
@@ -81,5 +80,21 @@ class GroupControllerTest {
         whenever(groupRepository.update(eq(group), any())).thenReturn(Completable.complete())
         controller.update(group, principal).blockingGet()
         verify(groupRepository, times(1)).update(any(), any())
+    }
+
+    @Test
+    fun getSingle() {
+        val key = "key"
+        whenever(groupRepository.get(eq(key), eq(username))).thenReturn(Maybe.just(group))
+        controller.get(key, principal).blockingGet()
+        verify(groupRepository, times(1)).get(any(), any())
+    }
+
+    @Test
+    fun standingsAreCalculated() {
+        val key = "key"
+        whenever(groupRepository.get(eq(key), eq(username))).thenReturn(Maybe.just(group))
+        val ans = controller.get(key, principal).blockingGet()
+        assertTrue(ans.standings?.scores?.size == 1)
     }
 }

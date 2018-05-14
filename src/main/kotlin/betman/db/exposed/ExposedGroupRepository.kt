@@ -18,6 +18,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class ExposedGroupRepository : GroupRepository {
+
+
     override fun update(group: Group, username: String): Completable {
         if (group.key == null) throw InvalidRequestException("Group key required")
 
@@ -46,7 +48,7 @@ class ExposedGroupRepository : GroupRepository {
             val userDao = UserDao.find { name eq username }.firstOrNull() ?: throw UnknownUserException()
             GroupUserDao.find { (user eq userDao.id) }.map {
                 val groupDao = GroupDao.findById(it.group.value)!!
-                toGroup(groupDao, GameDao.findById(groupDao.game.value)!!.name, it.name)
+                Converters.toGroup(groupDao, GameDao.findById(groupDao.game.value)!!.name, it.name)
             }.toList()
         }).single(listOf())
     }
@@ -56,7 +58,7 @@ class ExposedGroupRepository : GroupRepository {
             val userDao = UserDao.find { name eq username }.firstOrNull() ?: throw UnknownUserException()
             val groupDao = GroupDao.find { Groups.key eq groupKey }.firstOrNull() ?: throw UnknownGroupException()
             GroupUserDao.find { (user eq userDao.id) and (GroupUser.group eq groupDao.id) }.map {
-                toGroup(groupDao, GameDao.findById(groupDao.game.value)!!.name, it.name)
+                Converters.toGroup(groupDao, GameDao.findById(groupDao.game.value)!!.name, it.name)
             }.singleOrNull()
         })
     }
@@ -64,7 +66,7 @@ class ExposedGroupRepository : GroupRepository {
     override fun updateDisplayName(group: String, username: String, displayName: String) {
         transaction {
             val userDao = UserDao.find { name eq username }.firstOrNull() ?: throw UnknownUserException()
-            val groupDao = GroupDao.find { Groups.name eq group }.firstOrNull() ?: throw UnknownGroupException()
+            val groupDao = GroupDao.find { Groups.key eq group }.firstOrNull() ?: throw UnknownGroupException()
             val dao = GroupUserDao.find { (user eq userDao.id) and (GroupUser.group eq groupDao.id) }.single()
             dao.name = displayName
             commit()
@@ -82,7 +84,7 @@ class ExposedGroupRepository : GroupRepository {
                 name = displayName
             }
             commit()
-            toGroup(groupDao, GameDao.findById(groupDao.game.value)!!.name, dao.name)
+            Converters.toGroup(groupDao, GameDao.findById(groupDao.game.value)!!.name, dao.name)
         }).singleOrError()
     }
 
@@ -102,22 +104,8 @@ class ExposedGroupRepository : GroupRepository {
                 exactScorePoints = newGroup.exactScorePoints
                 owner = userDao.id
             }
-            toGroup(group, gameDao.name)
+            Converters.toGroup(group, gameDao.name, username)
         }).singleOrError()
-    }
-
-    private fun toGroup(group: GroupDao, gameName: String, userDisplayName: String? = null): Group {
-        return Group(id = group.id.value,
-                name = group.name,
-                description = group.description,
-                key = group.key,
-                game = gameName,
-                userDisplayName = userDisplayName,
-                winnerPoints = group.winnerPoints,
-                goalKingPoints = group.goalKingPoints,
-                teamGoalPoints = group.teamGoalPoints,
-                exactScorePoints = group.exactScorePoints
-        )
     }
 
 }

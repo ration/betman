@@ -24,6 +24,8 @@ class GameDao(id: EntityID<Int>) : IntEntity(id) {
 
     var name by Games.name
     var description by Games.description
+    val goalKing by Games.goalKing
+    val winner by Games.winner
 }
 
 class TeamDao(id: EntityID<Int>) : IntEntity(id) {
@@ -71,5 +73,7 @@ class BetDao(id: EntityID<Int>) : IntEntity(id) {
     var home by Bets.home
     var away by Bets.away
     var group by Bets.group
+    var winner by Bets.winner
+    var goalKing by Bets.goalking
 }
 

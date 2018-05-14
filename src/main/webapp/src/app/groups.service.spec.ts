@@ -3,6 +3,7 @@ import {inject, TestBed} from '@angular/core/testing';
 import {GroupsService} from './groups.service';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {Group} from './group.model';
+import {HttpResponse} from '@angular/common/http';
 
 describe('GroupsService', () => {
   beforeEach(() => {
@@ -12,19 +13,38 @@ describe('GroupsService', () => {
     });
   });
 
-  it('should be created', inject([GroupsService], (service: GroupsService) => {
-    expect(service).toBeTruthy();
+  it('gets group', inject([HttpTestingController, GroupsService], (httpMock: HttpTestingController, service: GroupsService) => {
+    const key = 'mykey';
+    const body: Group = {name: 'name', description: 'description', game: 'game', key: key};
+    service.get(key).subscribe((ans: Group) => {
+      expect(ans).toEqual(body);
+    });
+    const req = httpMock.expectOne(GroupsService.getGroupUrl + key);
+    req.flush(body);
+    httpMock.verify();
   }));
 
   it('crates new group', inject([HttpTestingController, GroupsService], (httpMock: HttpTestingController, service: GroupsService) => {
-    const body: Group = {name: 'name', description: 'description'};
-    const response: Group = {name: 'name', key: 'myKey', description: 'description'};
+    const body: Group = {name: 'name', description: 'description', game: 'game'};
+    const response: Group = {name: 'name', key: 'myKey', description: 'description', game: 'game'};
     service.newGroup(body).subscribe((ans: Group) => {
       expect(ans.key).toEqual('myKey');
     });
     const req = httpMock.expectOne(GroupsService.newGroupUrl);
     expect(req.request.responseType).toEqual('json');
     req.flush(response);
+    httpMock.verify();
+  }));
+
+  it('changes display name in group', inject([HttpTestingController, GroupsService], (httpMock: HttpTestingController, service: GroupsService) => {
+    const key = 'mykey';
+    const displayName = 'newName';
+    service.updateDisplayName(key, displayName).subscribe((res: HttpResponse<void>) => {
+      expect(res.status).toBe(200);
+    });
+    const req = httpMock.expectOne(GroupsService.updateGroupDisplayName +
+      '?groupKey=mykey&displayName=newName');
+    req.flush(new HttpResponse());
     httpMock.verify();
   }));
 

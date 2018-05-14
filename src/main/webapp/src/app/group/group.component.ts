@@ -6,6 +6,8 @@ import {Group} from '../group.model';
 import {environment} from '../../environments/environment';
 import {AuthenticationService} from '../authentication.service';
 import {UserService} from '../user.service';
+import {AlertService} from '../alert.service';
+import {HttpErrorResponse} from '@angular/common/http';
 
 
 @Component({
@@ -18,18 +20,22 @@ export class GroupComponent implements OnInit, OnDestroy {
   private sub: Subscription;
   group: Group;
   link: any;
-  userDisplayName: String;
-  groupId: number;
+  userDisplayName: string;
+  groupId: string;
   memberGroups: Group[];
 
   constructor(private route: ActivatedRoute,
               private groupService: GroupsService,
               private authService: AuthenticationService,
-              private userService: UserService) {
+              private userService: UserService,
+              private alertService: AlertService) {
   }
 
   ngOnInit() {
     this.groupId = this.route.snapshot.params.group;
+    if (this.groupId) {
+      this.loadGroup(this.groupId);
+    }
   }
 
   ngOnDestroy() {
@@ -39,11 +45,11 @@ export class GroupComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    const user = this.authService.currentUser();
-    if (!user.displayNames) {
-      user.displayNames = {};
+    if (this.group.key) {
+      this.groupService.updateDisplayName(this.group.key, this.userDisplayName).subscribe((result) => {
+        this.alertService.success('Saved');
+      }, (error: HttpErrorResponse) => this.alertService.error(error.message));
     }
-    user.displayNames[this.groupId] = this.userDisplayName;
   }
 
   private generateLink() {
@@ -51,14 +57,15 @@ export class GroupComponent implements OnInit, OnDestroy {
   }
 
 
-  private loadGroup(groupId: number) {
+  private loadGroup(groupId: string) {
     this.groupService.get(groupId).subscribe(ans => {
       this.group = ans;
       this.link = this.generateLink();
+      if (this.group.userDisplayName) {
+        this.userDisplayName = this.group.userDisplayName;
+      } else {
+        this.userDisplayName = this.authService.currentUser().name;
+      }
     });
-    this.userDisplayName = this.authService.currentUser().name;
-    if (this.authService.currentUser().displayNames && this.authService.currentUser().displayNames[groupId]) {
-      this.userDisplayName = this.authService.currentUser().displayNames[groupId];
-    }
   }
 }

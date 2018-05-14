@@ -10,7 +10,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.url.match(/(register|login)/)) {
+    if (req.url.match(/(register|login|join)/)) {
       return next.handle(req);
     }
     const user = this.authService.currentUser();

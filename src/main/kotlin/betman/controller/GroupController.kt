@@ -4,6 +4,7 @@ import betman.db.GroupRepository
 import betman.pojos.Group
 import betman.pojos.Groups
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -31,14 +32,20 @@ class GroupController @Autowired constructor(private val repository: GroupReposi
 
 
     @PostMapping("/updateDisplayName")
-    fun updateDisplayName(@RequestParam name: String, @RequestParam displayName: String, principal: Principal) {
-        return repository.updateDisplayName(name, principal.name, displayName)
+    fun updateDisplayName(@RequestParam groupKey: String, @RequestParam displayName: String, principal: Principal) {
+        return repository.updateDisplayName(groupKey, principal.name, displayName)
     }
 
     @GetMapping("/")
     fun get(principal: Principal): Single<Groups> {
         return repository.get(principal.name).map { Groups(it) }
     }
+
+    @GetMapping("/{key}")
+    fun get(@PathVariable key: String, principal: Principal): Maybe<Group> {
+        return repository.get(key, principal.name)
+    }
+
 
     private fun generateKey(): String {
         val generator = RandomValueStringGenerator()

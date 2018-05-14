@@ -5,17 +5,31 @@
     <div class="copylink">{{link}}</div>
     <p>
     <div id="nameBox">
-      <!-- <form #nameForm="ngForm" novalidate (ngSubmit)="nameForm.form.valid && onSubmit()">
-         <div class="input-group mb-3">
-           <label for="nameBox">Your display name in this group</label>
-           <input type="text" class="form-control" placeholder="Display Name" aria-label="Display name"
-                  name="displayName"
-                  aria-describedby="basic-addon2">
-           <div class="input-group-append">
-             <input type="submit" class="btn btn-outline-secondary" value="Change">
-           </div>
-         </div>
-       </form>-->
+      <form #nameForm="ngForm" (ngSubmit)="nameForm.form.valid && onSubmit()">
+        <div class="input-group mb-3">
+          <label for="nameBox">Your display name in this group</label>
+          <input type="text" class="form-control" placeholder="Display Name" aria-label="Display name"
+                 name="displayName" #name="ngModel" [(ngModel)]="userDisplayName" required
+                 aria-describedby="basic-addon2">
+          <div *ngIf="nameForm.submitted && !name.valid" class="invalid-feedback">Name is required</div>
+          <div class="input-group-append">
+            <input type="submit" class="btn btn-outline-secondary" value="Change">
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div id="groupInfo">
+      <table>
+        <thead>
+        <th scope="col">User</th>
+        <th scope="col">Score</th>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of group.users">
+          <td>{{user}}
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

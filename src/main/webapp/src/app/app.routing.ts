@@ -9,7 +9,7 @@ import {GroupComponent} from './group/group.component';
 import {NewGroupComponent} from './new-group/new-group.component';
 import {JoinComponent} from './join/join.component';
 
-const appRoutes: Routes = [
+export const appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },

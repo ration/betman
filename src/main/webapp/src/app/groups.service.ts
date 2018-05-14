@@ -2,12 +2,13 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {environment} from '../environments/environment';
 import {Group} from './group.model';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
 
 @Injectable()
 export class GroupsService {
   public static readonly newGroupUrl = environment.host + '/api/groups/new';
   public static readonly getGroupUrl = environment.host + '/api/groups/';
+  public static readonly updateGroupDisplayName = environment.host + '/api/groups/updateDisplayName';
 
 
   constructor(private http: HttpClient) {
@@ -17,9 +18,8 @@ export class GroupsService {
     return this.http.post<Group>(GroupsService.newGroupUrl, group);
   }
 
-  get(id: number): Observable<Group> {
-    const params = new HttpParams().set('group', id.toString());
-    return this.http.get<Group>(GroupsService.newGroupUrl, {params});
+  get(id: string): Observable<Group> {
+    return this.http.get<Group>(GroupsService.getGroupUrl + id);
   }
 
   getGroups(ids: number[]): Observable<Group[]> {
@@ -27,4 +27,8 @@ export class GroupsService {
     return this.http.get<Group[]>(GroupsService.newGroupUrl + urlParam);
   }
 
+  updateDisplayName(key: string, displayName: string): Observable<HttpResponse<any>> {
+    const params = new HttpParams().set('groupKey', key).set('displayName', displayName);
+    return this.http.post(GroupsService.updateGroupDisplayName, null, {params, observe: 'response'});
+  }
 }

@@ -11,11 +11,8 @@ import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Maybes
-import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Component
-import java.time.Instant
-import java.util.*
 
 
 @Component
@@ -37,12 +34,12 @@ class ExposedGameRepository : GameRepository {
 
                     updateGames(game.matches)
                     commit()
-                    toGame(dao)
+                    Converters.toGame(dao)
                 })
     }
 
-    private fun updateGames(matches: List<Match>) {
-        for (match in matches) {
+    private fun updateGames(matches: Map<Int, Match>) {
+        for (match in matches.values) {
             val dao = MatchDao.find { externalId eq match.id }.limit(1).firstOrNull()
             if (dao != null) {
                 dao.externalId = match.id
@@ -61,7 +58,7 @@ class ExposedGameRepository : GameRepository {
                 name = game.name
                 description = game.description
             }
-            val teams = game.matches.flatMap { listOf(it.home, it.away) }.toSet()
+            val teams = game.matches.values.flatMap { listOf(it.home, it.away) }.toSet()
             createTeams(newGame, teams)
             addMatches(newGame, game.matches)
             commit()
@@ -69,8 +66,8 @@ class ExposedGameRepository : GameRepository {
         }).singleOrError()
     }
 
-    private fun addMatches(gameDao: GameDao, matches: List<Match>) {
-        for (match in matches) {
+    private fun addMatches(gameDao: GameDao, matches: Map<Int, Match>) {
+        for (match in matches.values) {
             MatchDao.new {
                 externalId = match.id
                 game = gameDao
@@ -104,34 +101,10 @@ class ExposedGameRepository : GameRepository {
     override fun get(game: String): Maybe<Game> {
         return Maybes.maybeNull(transaction {
             GameDao.find { name eq game }.limit(1).map {
-                toGame(it)
+                converter.toGame(it)
             }.firstOrNull()
         })
     }
 
-    private fun toGame(it: GameDao?): Game? {
-        if (it != null) {
-            return Game(it.id.value,
-                    it.name,
-                    it.description,
-                    matches = getMatches(it.id))
-        }
-        return null
-    }
-
-    private fun getMatches(id: EntityID<Int>): List<Match> {
-        return MatchDao.find { Matches.game eq id }.map {
-            Match(id = it.externalId,
-                    home = getTeam(it.home),
-                    away = getTeam(it.away), description = "some text",
-                    date = Date.from(Instant.ofEpochMilli(it.date)),
-                    homeGoals = it.homeGoals,
-                    awayGoals = it.awayGoals)
-        }
-    }
-
-    private fun getTeam(team: TeamDao): Team {
-        return Team(id = team.externalId, name = team.name, iso = team.iso)
-    }
 
 }

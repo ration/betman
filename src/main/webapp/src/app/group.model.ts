@@ -3,4 +3,6 @@ export class Group {
   key?: string;
   description: string;
   game: string;
+  userDisplayName?: string;
+  users?: string[];
 }

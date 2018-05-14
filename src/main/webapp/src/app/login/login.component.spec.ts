@@ -7,8 +7,6 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {AuthenticationService} from '../authentication.service';
 import {UserService} from '../user.service';
 import {AlertService} from '../alert.service';
-import {of} from 'rxjs/internal/observable/of';
-import {HttpResponse} from '@angular/common/http';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -17,10 +15,11 @@ describe('LoginComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [LoginComponent],
-      imports: [HttpClientTestingModule, ReactiveFormsModule, FormsModule, RouterTestingModule.withRoutes([])],
+      imports: [HttpClientTestingModule, ReactiveFormsModule, FormsModule, RouterTestingModule.withRoutes([
+        {path: 'login', component: LoginComponent}])],
       providers: [UserService, AuthenticationService, AlertService]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -33,9 +32,9 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it ('login should call backend', () => {
-    //const authService = TestBed.get(AuthenticationService);
+  it('login should call backend', () => {
+    // const authService = TestBed.get(AuthenticationService);
     // spyOn(authService, 'login').and.returnValue(of('ok'));
-    //component.login();
+    // component.login();
   });
 });

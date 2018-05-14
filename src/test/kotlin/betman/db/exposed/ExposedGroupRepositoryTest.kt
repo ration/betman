@@ -72,12 +72,12 @@ class ExposedGroupRepositoryTest : DbTest() {
     }
 
     @Test
-    fun update() {
+    fun updateDisplayName() {
         join()
         val db = repository.get(key, userName).blockingGet()
         assertEquals(displayName, db.userDisplayName)
         val newName = "myNewname"
-        repository.updateDisplayName(name, userName, newName)
+        repository.updateDisplayName(key, userName, newName)
         val db2 = repository.get(key, userName).blockingGet()
         assertEquals(newName, db2.userDisplayName)
     }
@@ -107,6 +107,14 @@ class ExposedGroupRepositoryTest : DbTest() {
         createUser("another")
         val ans = repository.update(group, "another").blockingGet()
         assertEquals(InvalidUserException::class, ans::class)
+    }
+
+    @Test
+    fun standings() {
+        join()
+        val ans = repository.get(key, userName).blockingGet()
+        assertEquals(displayName, ans.standings?.scores?.get(0)?.user)
+        assertEquals(0, ans.standings?.scores?.get(0)?.points)
     }
 
 }

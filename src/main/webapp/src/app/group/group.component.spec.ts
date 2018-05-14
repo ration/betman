@@ -7,21 +7,26 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {AuthenticationService} from '../authentication.service';
 import {UserService} from '../user.service';
 import {Group} from '../group.model';
-import {User} from '../user';
 import {of} from 'rxjs';
+import {FormsModule} from '@angular/forms';
+import {AlertService} from '../alert.service';
+import {ActivatedRoute} from '@angular/router';
 
 
 describe('GroupComponent', () => {
   let component: GroupComponent;
   let fixture: ComponentFixture<GroupComponent>;
   let groupService: GroupsService;
-  let authService: AuthenticationService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [GroupComponent],
-      imports: [RouterTestingModule.withRoutes([]), HttpClientTestingModule],
-      providers: [GroupsService, AuthenticationService, UserService]
+      imports: [FormsModule, RouterTestingModule.withRoutes([]), HttpClientTestingModule],
+      providers: [GroupsService, UserService, AlertService, AuthenticationService,
+        [GroupComponent, {
+          provide: ActivatedRoute,
+          useValue: {snapshot: {params: {'group': '123'}}}
+        }]]
     }).compileComponents();
 
   }));
@@ -32,14 +37,18 @@ describe('GroupComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should load user', () => {
     groupService = TestBed.get(GroupsService);
-    const group: Group = {name: 'Sample group', description: 'this is a group'};
+    const saveName = 'saved name';
+    const group: Group = {
+      name: 'Sample group',
+      description: 'this is a group',
+      game: 'Some',
+      userDisplayName: saveName
+    };
     spyOn(groupService, 'get').and.returnValue(of(group));
-    authService = TestBed.get(AuthenticationService);
-    const user: User = {name: 'username'};
-    spyOn(authService, 'currentUser').and.returnValue(user);
-    expect(component).toBeTruthy();
+    component.ngOnInit();
+    expect(component.userDisplayName).toBe(saveName);
   });
 })
 ;

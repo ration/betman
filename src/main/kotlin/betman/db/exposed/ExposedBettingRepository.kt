@@ -27,30 +27,54 @@ class ExposedBettingRepository : BettingRepository {
             val groupDao = GroupDao.find { Groups.key eq groupId }.singleOrNull() ?: throw UnknownGroupException()
             val gameDao = GameDao.findById(groupDao.game.value) ?: throw UnknownGameException()
 
-            val bets = BetDao.wrapRows(Bets.innerJoin(Matches).innerJoin(Games).select {
-                (Bets.user eq userDao.id) and (gameName eq gameDao.name) and (Bets.group eq groupDao.id)
-            }).map {
-                val matchDao = MatchDao.findById(it.match)
-                ScoreBet(matchId = matchDao!!.externalId, home = it.home, away = it.away)
-            }
-            Bet(groupId = groupDao.name, scores = bets)
+            val bets = getMatchBets(userDao, gameDao, groupDao)
+            val winner: TeamDao? = getWinnerBet(userDao, gameDao, groupDao)
+            val goalking: String? = getGoalKingBet(userDao, gameDao, groupDao)
+
+            Bet(groupKey = groupDao.name, scores = bets, winner = winner?.externalId, goalKing = goalking)
         })
+    }
+
+    private fun getGoalKingBet(userDao: UserDao, gameDao: GameDao, groupDao: GroupDao): String? {
+        return BetDao.wrapRows(Bets.innerJoin(Matches).innerJoin(Games).select {
+            (Bets.goalking.isNotNull()) and (Bets.user eq userDao.id) and (gameName eq gameDao.name) and (Bets.group eq groupDao.id)
+        }).map { it.goalKing }.firstOrNull()
+    }
+
+    private fun getWinnerBet(userDao: UserDao, gameDao: GameDao, groupDao: GroupDao): TeamDao? {
+        return BetDao.wrapRows(Bets.innerJoin(Matches).innerJoin(Games).select {
+            (Bets.winner.isNotNull()) and (Bets.user eq userDao.id) and (gameName eq gameDao.name) and (Bets.group eq groupDao.id)
+        }).map { it.winner }.mapNotNull { TeamDao.findById(it!!.value) }.firstOrNull()
+    }
+
+    private fun getMatchBets(userDao: UserDao, gameDao: GameDao, groupDao: GroupDao): Map<Int, ScoreBet> {
+        return BetDao.wrapRows(Bets.innerJoin(Matches).innerJoin(Games).select {
+            (Bets.match.isNotNull()) and (Bets.user eq userDao.id) and (gameName eq gameDao.name) and (Bets.group eq groupDao.id)
+        }).map {
+            val matchDao = MatchDao.findById(it.match!!)
+            Pair(matchDao!!.externalId, ScoreBet(matchId = matchDao!!.externalId, home = it.home, away = it.away))
+        }.toMap()
     }
 
     override fun bet(groupId: String, bet: Bet, username: String) {
         return transaction {
             val userDao = UserDao.find { name eq username }.singleOrNull() ?: throw UnknownUserException()
-            for (score in bet.scores) {
+            for (score in bet.scores.values) {
                 val matchDao = MatchDao.find { externalId eq score.matchId }.singleOrNull()
                         ?: throw UnknownMatchException(String.format("Unkown match id: %s", score.matchId))
                 val groupDao = GroupDao.find { Groups.key eq groupId }.singleOrNull() ?: throw UnknownGroupException()
                 val gameDao = GameDao.findById(groupDao.game.value) ?: throw UnknownGameException()
+
+                val teamDao: TeamDao? = if (bet.winner != null) TeamDao.find { Teams.externalId eq bet.winner }.firstOrNull() else null
+
                 val old = BetDao.wrapRows(Bets.innerJoin(Matches).innerJoin(Games).select {
                     (Bets.user eq userDao.id) and (gameName eq gameDao.name) and (Bets.group eq groupDao.id)
                 }).singleOrNull()
                 if (old != null) {
                     old.away = score.away
                     old.home = score.home
+                    old.winner = teamDao?.id
+                    old.goalKing = bet.goalKing
                 } else {
                     BetDao.new {
                         match = matchDao.id
@@ -58,6 +82,8 @@ class ExposedBettingRepository : BettingRepository {
                         home = score.home
                         away = score.away
                         group = groupDao.id
+                        winner = teamDao?.id
+                        goalKing = bet.goalKing
                     }
                 }
             }

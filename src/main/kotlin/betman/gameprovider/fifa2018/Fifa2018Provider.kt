@@ -42,7 +42,7 @@ class Fifa2018Provider : GameDataProvider {
         return listOf()
     }
 
-    override fun matches(): List<Match> {
+    override fun matches(): Map<Int, Match> {
         val data = loadData()
         if (data.teams != null) {
             return (mapGames("Group A", data.groups.a.matches) +
@@ -57,25 +57,25 @@ class Fifa2018Provider : GameDataProvider {
                     mapGames("Quarter Finals", data.knockout.round8.matches) +
                     mapGames("Semi Finals", data.knockout.round4.matches) +
                     mapGames("Bronze Game", data.knockout.round2Loser.matches) +
-                    mapGames("Final", data.knockout.round2.matches)).sortedBy { it.id }
+                    mapGames("Final", data.knockout.round2.matches))
         }
-        return listOf()
+        return mapOf()
     }
 
 
-    private fun mapGames(description: String, matches: List<MatchesItem>?): List<Match> {
+    private fun mapGames(description: String, matches: List<MatchesItem>?): Map<Int, Match> {
         if (matches == null) {
-            return listOf()
+            return mapOf()
         }
-        return matches.mapNotNull { match -> asGame(description, match) }
+        return matches.mapNotNull { match -> asGame(description, match) }.toMap()
     }
 
-    private fun asGame(description: String, match: MatchesItem?): Match? {
+    private fun asGame(description: String, match: MatchesItem?): Pair<Int, Match>? {
         if (match != null && data.teams != null) {
             val home = asTeam(match.homeTeam)
             val away = asTeam(match.awayTeam)
             val df = StdDateFormat()
-            return Match(id = match.name, home = home, away = away, description = description, date = df.parse(match.date))
+            return Pair(match.name, Match(id = match.name, home = home, away = away, description = description, date = df.parse(match.date)))
         }
         return null
     }

@@ -6,8 +6,9 @@ import org.jetbrains.exposed.dao.IntIdTable
 object Games : IntIdTable() {
     val name = varchar("name", 50).uniqueIndex()
     val description = varchar("description", 1024)
+    val winner = reference("team", Teams).nullable()
+    val goalKing = varchar("goal_king", 1024).nullable()
 }
-
 
 
 object Matches : IntIdTable() {
@@ -52,7 +53,9 @@ object GroupUser : IntIdTable(name = "users_groups") {
 
 
 object Bets : IntIdTable() {
-    val match = reference("match", Matches).primaryKey(2)
+    val match = reference("match", Matches).nullable()
+    val winner = reference("team", Teams).nullable()
+    val goalking = varchar("goal_king", 1024).nullable()
     val user = reference("user", Users)
     val home = integer("home")
     val away = integer("away")
