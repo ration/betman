@@ -95,6 +95,6 @@ class GroupControllerTest {
         val key = "key"
         whenever(groupRepository.get(eq(key), eq(username))).thenReturn(Maybe.just(group))
         val ans = controller.get(key, principal).blockingGet()
-        assertTrue(ans.standings?.scores?.size == 1)
+        assertTrue(ans.standings.size == 1)
     }
 }

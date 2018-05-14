@@ -101,7 +101,7 @@ class ExposedGameRepository : GameRepository {
     override fun get(game: String): Maybe<Game> {
         return Maybes.maybeNull(transaction {
             GameDao.find { name eq game }.limit(1).map {
-                converter.toGame(it)
+                Converters.toGame(it)
             }.firstOrNull()
         })
     }

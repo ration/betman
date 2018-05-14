@@ -113,8 +113,8 @@ class ExposedGroupRepositoryTest : DbTest() {
     fun standings() {
         join()
         val ans = repository.get(key, userName).blockingGet()
-        assertEquals(displayName, ans.standings?.scores?.get(0)?.user)
-        assertEquals(0, ans.standings?.scores?.get(0)?.points)
+        assertEquals(displayName, ans.standings.get(0).user)
+        assertEquals(0, ans.standings.get(0).points)
     }
 
 }

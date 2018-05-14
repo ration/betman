@@ -7,6 +7,9 @@ import java.time.Instant
 import java.util.*
 
 object Converters {
+
+    val bettingRepository = ExposedBettingRepository()
+
     fun toGroup(group: GroupDao, gameName: String, userDisplayName: String? = null): Group {
         val group = Group(id = group.id.value,
                 name = group.name,
@@ -34,16 +37,23 @@ object Converters {
         return null
     }
 
-    private fun getStandings(group: Group): Standings? {
+    private fun getStandings(group: Group): List<Score> {
         val users = GroupUserDao.find { GroupUser.group eq group.id }
         val game = GameDao.find { Games.name eq group.game }.firstOrNull()
-        if (game != null) {
+        if (game != null && group.key != null) {
             val winner: Int? = game.winner.let { cur ->
                 val team: TeamDao? = TeamDao.findById(cur!!)
                 team?.externalId
             }
-            users.map { Score(points = PointCalculator.calculate(group, toGame(game)!!, winner, game.goalKing, bet)) }
+
+            // Maybe later unblock and streamize this entire build process
+            return users.map {
+                Score(points = PointCalculator.calculate(group,
+                        toGame(game)!!, winner, game.goalKing, bettingRepository.get(group.key!!, it.name).blockingGet()),
+                        user = it.name)
+            }
         }
+        return listOf()
     }
 
 

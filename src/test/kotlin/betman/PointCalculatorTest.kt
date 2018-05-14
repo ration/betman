@@ -20,28 +20,28 @@ class PointCalculatorTest {
     @Test
     fun noBets() {
         val user1Bet = Bet(groupKey = group.key!!)
-        val score: Int = PointCalculator().calculate(group, game, null, null, user1Bet)
+        val score: Int = PointCalculator.calculate(group, game, null, null, user1Bet)
         assertEquals(0, score)
     }
 
     @Test
     fun correctHome() {
         val user1Bet = Bet(groupKey = group.key!!, scores = mapOf(Pair(1, ScoreBet(1, home = 5, away = 5))))
-        val score: Int = PointCalculator().calculate(group, game, null, null, user1Bet)
+        val score: Int = PointCalculator.calculate(group, game, null, null, user1Bet)
         assertEquals(group.teamGoalPoints, score)
     }
 
     @Test
     fun correctAway() {
         val user1Bet = Bet(groupKey = group.key!!, scores = mapOf(Pair(1, ScoreBet(1, home = 0, away = 0))))
-        val score: Int = PointCalculator().calculate(group, game, null, null, user1Bet)
+        val score: Int = PointCalculator.calculate(group, game, null, null, user1Bet)
         assertEquals(group.teamGoalPoints, score)
     }
 
     @Test
     fun exact() {
         val user1Bet = Bet(groupKey = group.key!!, scores = mapOf(Pair(1, ScoreBet(1, home = 5, away = 0))))
-        val score: Int = PointCalculator().calculate(group, game, null, null, user1Bet)
+        val score: Int = PointCalculator.calculate(group, game, null, null, user1Bet)
         assertEquals(group.exactScorePoints, score)
     }
 
@@ -49,21 +49,21 @@ class PointCalculatorTest {
     fun exactAndSingle() {
         val user1Bet = Bet(groupKey = group.key!!, scores = mapOf(Pair(1, ScoreBet(1, home = 5, away = 0)),
                 Pair(2, ScoreBet(1, home = 3, away = 2))))
-        val score: Int = PointCalculator().calculate(group, game, null, null, user1Bet)
+        val score: Int = PointCalculator.calculate(group, game, null, null, user1Bet)
         assertEquals(group.exactScorePoints + group.teamGoalPoints, score)
     }
 
     @Test
     fun winner() {
         val bet = Bet(groupKey = group.key!!, scores = mapOf(), winner = team1.id)
-        val score: Int = PointCalculator().calculate(group, game, team1.id, null, bet)
+        val score: Int = PointCalculator.calculate(group, game, team1.id, null, bet)
         assertEquals(group.winnerPoints, score)
     }
 
     @Test
     fun goalKing() {
         val bet = Bet(groupKey = group.key!!, scores = mapOf(), winner = team1.id, goalKing = "Some King")
-        val score: Int = PointCalculator().calculate(group, game, null, "Some King", bet)
+        val score: Int = PointCalculator.calculate(group, game, null, "Some King", bet)
         assertEquals(group.goalKingPoints, score)
     }
 }
