@@ -14,7 +14,7 @@ object PointCalculator {
                   winnerId: Int?,
                   goalKing: String?,
                   bet: Bet): Int {
-        return game.matches.values.map { toPoints(it, bet, group) }.sum() +
+        return game.matches.map { toPoints(it, bet, group) }.sum() +
                 winnerPoints(group, bet, winnerId) +
                 goalKing(group, bet, goalKing)
     }

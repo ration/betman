@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Bet} from './bet.model';
 import {environment} from '../environments/environment';
+import {Observable} from 'rxjs/internal/Observable';
+import {Game} from './game.model';
 
 @Injectable()
 export class GamesService {
@@ -12,7 +14,7 @@ export class GamesService {
   constructor(private http: HttpClient) {
   }
 
-  all(game: string) {
+  all(game: string): Observable<Game> {
     return this.http.get(this.apiAllUrl + '/' + game);
   }
 

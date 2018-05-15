@@ -42,7 +42,7 @@ object Converters {
         val users = GroupUserDao.find { GroupUser.group eq group.id }
         val game = GameDao.find { Games.name eq group.game }.firstOrNull()
         if (game != null && group.key != null) {
-            val winner = if (game.winner != null) TeamDao.find { Teams.id eq game.winner }.map { it.externalId }.firstOrNull() else null
+            val winner = if (game.winner != null) TeamDao.find { Teams.id eq game.winner!! }.map { it.externalId }.firstOrNull() else null
 
 
             // Maybe later unblock and streamize this entire build process
@@ -59,15 +59,15 @@ object Converters {
             ?: throw InvalidUserException()
 
 
-    private fun getMatches(id: EntityID<Int>): Map<Int, Match> {
+    private fun getMatches(id: EntityID<Int>): List<Match> {
         return MatchDao.find { Matches.game eq id }.map {
-            Pair(it.externalId, Match(id = it.externalId,
+             Match(id = it.externalId,
                     home = getTeam(it.home),
                     away = getTeam(it.away), description = "some text",
                     date = Date.from(Instant.ofEpochMilli(it.date)),
                     homeGoals = it.homeGoals,
-                    awayGoals = it.awayGoals))
-        }.toMap()
+                    awayGoals = it.awayGoals)
+        }
     }
 
     private fun getTeam(team: TeamDao): Team {

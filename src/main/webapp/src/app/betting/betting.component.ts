@@ -7,7 +7,9 @@ import {Subject} from 'rxjs';
 import {AuthenticationService} from '../authentication.service';
 import {Game} from '../game.model';
 import {AlertService} from '../alert.service';
-import {debounceTime, distinctUntilChanged} from "rxjs/operators";
+import {debounceTime, distinctUntilChanged, flatMap, map} from 'rxjs/operators';
+import {GroupsService} from '../groups.service';
+import {Group} from '../group.model';
 
 @Component({
   selector: 'app-betting',
@@ -16,18 +18,26 @@ import {debounceTime, distinctUntilChanged} from "rxjs/operators";
 })
 export class BettingComponent implements OnInit {
 
-  games: Game[] = [];
+  game: Game = null;
   bets: { [id: number]: Bet } = {};
   private saveSubject: Subject<Bet[]> = new Subject<Bet[]>();
   private user = '';
   private game = '';
 
-  constructor(private gamesService: GamesService, private authService: AuthenticationService,
-              private alertService: AlertService) {
-    this.gamesService.all(this.game).subscribe((data: Game[]) => {
-      this.games = data;
-      this.getBettingData();
-    });
+  constructor(private gamesService: GamesService,
+              private authService: AuthenticationService,
+              private alertService: AlertService,
+              private groupService: GroupsService) {
+    const key = this.groupService.getActive();
+    if (key) {
+      this.groupService.get(key).pipe(
+        flatMap((group: Group) => this.gamesService.all(group.game))
+      ).subscribe((data: Game) => {
+        this.game = data;
+        this.getBettingData();
+      });
+
+    }
 
     this.saveSubject.pipe(debounceTime(2000), distinctUntilChanged()).subscribe(value => {
       this.onSubmit(value);
@@ -38,7 +48,8 @@ export class BettingComponent implements OnInit {
   }
 
   private getBettingData() {
-    for (const game of this.games) {
+
+    for (const game of this.game.matches) {
       this.bets[game.id] = new Bet(game.id, 0, 0);
     }
     this.gamesService.bets(this.game, this.user).subscribe((value: Bet[]) => {

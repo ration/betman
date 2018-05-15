@@ -1,6 +1,6 @@
 <form #bettingForm="ngForm">
   <button class="btn btn-primary" (click)="guess()">I know nothing, guess for me</button>
-    <div *ngFor="let game of games">
+    <div *ngFor="let game of game.matches">
     <div class="match">
       <div class="matchNumber">{{game.id}}</div>
       <div class="matchDescription">{{game.description}}</div>

@@ -18,7 +18,7 @@
         <input title="invite key" id="invite" type="text" placeholder="Enter key here"/>
       </form>
     </div>
-    <div id="oldGroups">
+    <div *ngIf="groups.length > 0" id="oldGroups">
       <p>
         Your groups:
       </p>
