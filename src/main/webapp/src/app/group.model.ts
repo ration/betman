@@ -1,3 +1,9 @@
+import {Score} from './score.model';
+
+export interface Groups {
+  groups: Group[];
+}
+
 export class Group {
   name: string;
   key?: string;
@@ -5,4 +11,5 @@ export class Group {
   game: string;
   userDisplayName?: string;
   users?: string[];
+  standings?: Score[];
 }

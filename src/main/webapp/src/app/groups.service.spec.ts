@@ -24,6 +24,17 @@ describe('GroupsService', () => {
     httpMock.verify();
   }));
 
+  it('gets all groups', inject([HttpTestingController, GroupsService], (httpMock: HttpTestingController, service: GroupsService) => {
+    const key = 'mykey';
+    const body: Group = {name: 'name', description: 'description', game: 'game', key: key};
+    service.all().subscribe((ans: Group[]) => {
+      expect(ans[0]).toEqual(body);
+    });
+    const req = httpMock.expectOne(GroupsService.getGroupUrl);
+    req.flush({groups: [body]});
+    httpMock.verify();
+  }));
+
   it('crates new group', inject([HttpTestingController, GroupsService], (httpMock: HttpTestingController, service: GroupsService) => {
     const body: Group = {name: 'name', description: 'description', game: 'game'};
     const response: Group = {name: 'name', key: 'myKey', description: 'description', game: 'game'};
@@ -46,6 +57,12 @@ describe('GroupsService', () => {
       '?groupKey=mykey&displayName=newName');
     req.flush(new HttpResponse());
     httpMock.verify();
+  }));
+
+  it('set active', inject([HttpTestingController, GroupsService], (httpMock: HttpTestingController, service: GroupsService) => {
+    service.setActive('some');
+    const active = service.getActive();
+    expect(active).toBe('some');
   }));
 
 });

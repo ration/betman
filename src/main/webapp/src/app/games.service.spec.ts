@@ -39,7 +39,7 @@ describe('GamesService', () => {
       gamesService.all('1').subscribe((res: Game[]) => {
         expect(res).toEqual(mockGames);
       });
-      const req = httpMock.expectOne(gamesService.apiAllUrl + '?game=1');
+      const req = httpMock.expectOne(gamesService.apiAllUrl + '/1');
       expect(req.request.responseType).toEqual('json');
       req.flush(mockGames);
       httpMock.verify();

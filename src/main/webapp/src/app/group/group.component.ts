@@ -32,7 +32,7 @@ export class GroupComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.groupId = this.route.snapshot.params.group;
+    this.groupId = this.route.snapshot.params.group || this.groupService.getActive();
     if (this.groupId) {
       this.loadGroup(this.groupId);
     }
@@ -47,7 +47,10 @@ export class GroupComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (this.group.key) {
       this.groupService.updateDisplayName(this.group.key, this.userDisplayName).subscribe((result) => {
-        this.alertService.success('Saved');
+        this.alertService.success('Saved', false, 1000);
+        if (this.groupId) {
+          this.loadGroup(this.groupId);
+        }
       }, (error: HttpErrorResponse) => this.alertService.error(error.message));
     }
   }

@@ -116,7 +116,6 @@ class ExposedGroupRepositoryTest : DbTest() {
         assertEquals(0, ans.standings.get(0).points)
     }
 
-
     @Test
     fun standingsAreCalculated() {
         join()

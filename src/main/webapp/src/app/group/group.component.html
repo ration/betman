@@ -6,8 +6,8 @@
     <p>
     <div id="nameBox">
       <form #nameForm="ngForm" (ngSubmit)="nameForm.form.valid && onSubmit()">
-        <div class="input-group mb-3">
-          <label for="nameBox">Your display name in this group</label>
+        <div class="input-group">
+          <label for="nameBox">Your name in this group </label>
           <input type="text" class="form-control" placeholder="Display Name" aria-label="Display name"
                  name="displayName" #name="ngModel" [(ngModel)]="userDisplayName" required
                  aria-describedby="basic-addon2">
@@ -19,15 +19,19 @@
       </form>
     </div>
 
+
     <div id="groupInfo">
-      <table>
+      <h2>Standings</h2>
+      <table class="table table-striped">
         <thead>
         <th scope="col">User</th>
         <th scope="col">Score</th>
         </thead>
         <tbody>
-        <tr *ngFor="let user of group.users">
-          <td>{{user}}
+        <tr *ngFor="let user of group.standings; index as i">
+          <td>{{i+1}}.</td>
+          <td>{{user.user}}</td>
+          <td>{{user.points}}</td>
         </tbody>
       </table>
     </div>

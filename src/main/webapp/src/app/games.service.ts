@@ -5,7 +5,7 @@ import {environment} from '../environments/environment';
 
 @Injectable()
 export class GamesService {
-  public apiAllUrl = environment.host + '/api/all';
+  public apiAllUrl = environment.host + '/api/games';
   public saveBetUrl = environment.host + '/api/bets/update';
   public betsUrl = environment.host + '/api/bets';
 
@@ -13,8 +13,7 @@ export class GamesService {
   }
 
   all(game: string) {
-    const params = new HttpParams().set('game', game);
-    return this.http.get(this.apiAllUrl, {params});
+    return this.http.get(this.apiAllUrl + '/' + game);
   }
 
   saveBet(game: string, user: string, bets: Bet[]) {
