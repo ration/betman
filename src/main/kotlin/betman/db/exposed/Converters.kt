@@ -1,5 +1,6 @@
 package betman.db.exposed
 
+import betman.InvalidUserException
 import betman.PointCalculator
 import betman.pojos.*
 import org.jetbrains.exposed.dao.EntityID
@@ -10,18 +11,18 @@ object Converters {
 
     val bettingRepository = ExposedBettingRepository()
 
-    fun toGroup(group: GroupDao, gameName: String, userDisplayName: String? = null): Group {
-        val group = Group(id = group.id.value,
-                name = group.name,
-                description = group.description,
-                key = group.key,
+    fun toGroup(groupDao: GroupDao, gameName: String, userDisplayName: String? = null): Group {
+        val group = Group(id = groupDao.id.value,
+                name = groupDao.name,
+                description = groupDao.description,
+                key = groupDao.key,
                 game = gameName,
 
                 userDisplayName = userDisplayName,
-                winnerPoints = group.winnerPoints,
-                goalKingPoints = group.goalKingPoints,
-                teamGoalPoints = group.teamGoalPoints,
-                exactScorePoints = group.exactScorePoints
+                winnerPoints = groupDao.winnerPoints,
+                goalKingPoints = groupDao.goalKingPoints,
+                teamGoalPoints = groupDao.teamGoalPoints,
+                exactScorePoints = groupDao.exactScorePoints
         )
         group.standings = getStandings(group)
         return group
@@ -41,20 +42,21 @@ object Converters {
         val users = GroupUserDao.find { GroupUser.group eq group.id }
         val game = GameDao.find { Games.name eq group.game }.firstOrNull()
         if (game != null && group.key != null) {
-            val winner: Int? = game.winner.let { cur ->
-                val team: TeamDao? = TeamDao.findById(cur!!)
-                team?.externalId
-            }
+            val winner = if (game.winner != null) TeamDao.find { Teams.id eq game.winner }.map { it.externalId }.firstOrNull() else null
+
 
             // Maybe later unblock and streamize this entire build process
             return users.map {
                 Score(points = PointCalculator.calculate(group,
-                        toGame(game)!!, winner, game.goalKing, bettingRepository.get(group.key!!, it.name).blockingGet()),
+                        toGame(game)!!, winner, game.goalKing, bettingRepository.get(group.key!!, getUserName(it)).blockingGet()),
                         user = it.name)
             }
         }
         return listOf()
     }
+
+    private fun getUserName(dao: GroupUserDao): String = UserDao.findById(dao.user)?.name
+            ?: throw InvalidUserException()
 
 
     private fun getMatches(id: EntityID<Int>): Map<Int, Match> {

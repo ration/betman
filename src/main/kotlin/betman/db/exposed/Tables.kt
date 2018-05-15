@@ -6,7 +6,7 @@ import org.jetbrains.exposed.dao.IntIdTable
 object Games : IntIdTable() {
     val name = varchar("name", 50).uniqueIndex()
     val description = varchar("description", 1024)
-    val winner = reference("team", Teams).nullable()
+    val winner = integer("winner").nullable() // <- cyclic reference not possible
     val goalKing = varchar("goal_king", 1024).nullable()
 }
 

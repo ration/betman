@@ -5,8 +5,7 @@ import betman.InvalidRequestException
 import betman.InvalidUserException
 import betman.UnknownUserException
 import betman.pojos.Group
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
@@ -115,6 +114,14 @@ class ExposedGroupRepositoryTest : DbTest() {
         val ans = repository.get(key, userName).blockingGet()
         assertEquals(displayName, ans.standings.get(0).user)
         assertEquals(0, ans.standings.get(0).points)
+    }
+
+
+    @Test
+    fun standingsAreCalculated() {
+        join()
+        val ans = repository.get(key, userName).blockingGet()
+        assertTrue(ans.standings.size == 1)
     }
 
 }

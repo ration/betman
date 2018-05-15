@@ -6,7 +6,8 @@ import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.mockito.InjectMocks
@@ -90,11 +91,4 @@ class GroupControllerTest {
         verify(groupRepository, times(1)).get(any(), any())
     }
 
-    @Test
-    fun standingsAreCalculated() {
-        val key = "key"
-        whenever(groupRepository.get(eq(key), eq(username))).thenReturn(Maybe.just(group))
-        val ans = controller.get(key, principal).blockingGet()
-        assertTrue(ans.standings.size == 1)
-    }
 }
