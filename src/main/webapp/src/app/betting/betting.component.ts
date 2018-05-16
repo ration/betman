@@ -22,7 +22,6 @@ export class BettingComponent implements OnInit {
   bets: { [id: number]: Bet } = {};
   private saveSubject: Subject<Bet[]> = new Subject<Bet[]>();
   private user = '';
-  private game = '';
 
   constructor(private gamesService: GamesService,
               private authService: AuthenticationService,
@@ -36,7 +35,6 @@ export class BettingComponent implements OnInit {
         this.game = data;
         this.getBettingData();
       });
-
     }
 
     this.saveSubject.pipe(debounceTime(2000), distinctUntilChanged()).subscribe(value => {
@@ -52,7 +50,7 @@ export class BettingComponent implements OnInit {
     for (const game of this.game.matches) {
       this.bets[game.id] = new Bet(game.id, 0, 0);
     }
-    this.gamesService.bets(this.game, this.user).subscribe((value: Bet[]) => {
+    this.gamesService.bets(this.game.name, this.user).subscribe((value: Bet[]) => {
       for (const game of value) {
         this.bets[game.id] = game;
       }
@@ -77,7 +75,7 @@ export class BettingComponent implements OnInit {
   }
 
   onSubmit(value: Bet[]) {
-    this.gamesService.saveBet(this.game, this.user, value).subscribe(res => {
+    this.gamesService.saveBet(this.game.name, this.user, value).subscribe(res => {
       this.alertService.success('Saved', false, 2000);
     });
   }

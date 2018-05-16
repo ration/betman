@@ -15,7 +15,7 @@ export class GamesService {
   }
 
   all(game: string): Observable<Game> {
-    return this.http.get(this.apiAllUrl + '/' + game);
+    return this.http.get<Game>(this.apiAllUrl + '/' + game);
   }
 
   saveBet(game: string, user: string, bets: Bet[]) {

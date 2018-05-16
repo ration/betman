@@ -42,7 +42,7 @@ export class GroupsService {
     return this.http.post(GroupsService.updateGroupDisplayName, null, {params, observe: 'response'});
   }
 
-  getActive(): String {
+  getActive(): string {
     return localStorage.getItem('activeGroup');
   }
 }
