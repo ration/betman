@@ -29,10 +29,10 @@ class ExposedGameRepositoryTest : DbTest() {
         val db = repo.get(ans.name).blockingGet()
 
         assertNotNull(db)
-        assertEquals(germany, ans.matches[1]?.home)
-        assertEquals(1, ans.matches[1]?.homeGoals)
-        assertEquals(germany, db!!.matches[1]?.home)
-        assertNotNull(ans.matches[1]?.date)
+        assertEquals(germany, ans.matches[0].home)
+        assertEquals(1, ans.matches[0].homeGoals)
+        assertEquals(germany, db!!.matches[0].home)
+        assertNotNull(ans.matches[0].date)
     }
 
     @Test
@@ -55,21 +55,21 @@ class ExposedGameRepositoryTest : DbTest() {
         assertNotNull(db)
         assertEquals(description, updated?.description)
         assertEquals(description, db.description)
-        assertEquals(3, db.matches[1]?.homeGoals)
+        assertEquals(3, db.matches[0]?.homeGoals)
 
     }
 
-    private fun matches(): Map<Int, Match> {
-        return mutableMapOf(Pair(1, Match(id = 1, home = germany, away = england, description = "round1", date = Date.from(Instant.now()),
-                homeGoals = 1, awayGoals = 2)),
-                Pair(2, Match(id = 2, home = england, away = germany, description = "round1", date = Date.from(Instant.now()))))
+    private fun matches(): List<Match> {
+        return listOf(Match(id = 1, home = germany, away = england, description = "round1", date = Date.from(Instant.now()),
+                homeGoals = 1, awayGoals = 2),
+                Match(id = 2, home = england, away = germany, description = "round1", date = Date.from(Instant.now())))
 
     }
 
-    private fun matches2(): Map<Int, Match> {
-        return mutableMapOf(Pair(1, Match(id = 1, home = germany, away = england, description = "round1", date = Date.from(Instant.now()),
-                homeGoals = 3, awayGoals = 4)),
-                Pair(2, Match(id = 2, home = england, away = germany, description = "round1", date = Date.from(Instant.now()))))
+    private fun matches2(): List<Match> {
+        return listOf(Match(id = 1, home = germany, away = england, description = "round1", date = Date.from(Instant.now()),
+                homeGoals = 3, awayGoals = 4),
+                Match(id = 2, home = england, away = germany, description = "round1", date = Date.from(Instant.now())))
 
     }
 

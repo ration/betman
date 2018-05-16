@@ -38,8 +38,8 @@ class ExposedGameRepository : GameRepository {
                 })
     }
 
-    private fun updateGames(matches: Map<Int, Match>) {
-        for (match in matches.values) {
+    private fun updateGames(matches: List<Match>) {
+        for (match in matches) {
             val dao = MatchDao.find { externalId eq match.id }.limit(1).firstOrNull()
             if (dao != null) {
                 dao.externalId = match.id
@@ -58,7 +58,7 @@ class ExposedGameRepository : GameRepository {
                 name = game.name
                 description = game.description
             }
-            val teams = game.matches.values.flatMap { listOf(it.home, it.away) }.toSet()
+            val teams = game.matches.flatMap { listOf(it.home, it.away) }.toSet()
             createTeams(newGame, teams)
             addMatches(newGame, game.matches)
             commit()
@@ -66,8 +66,8 @@ class ExposedGameRepository : GameRepository {
         }).singleOrError()
     }
 
-    private fun addMatches(gameDao: GameDao, matches: Map<Int, Match>) {
-        for (match in matches.values) {
+    private fun addMatches(gameDao: GameDao, matches: List<Match>) {
+        for (match in matches) {
             MatchDao.new {
                 externalId = match.id
                 game = gameDao

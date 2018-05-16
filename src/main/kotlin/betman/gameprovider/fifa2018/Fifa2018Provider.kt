@@ -42,7 +42,7 @@ class Fifa2018Provider : GameDataProvider {
         return listOf()
     }
 
-    override fun matches(): Map<Int, Match> {
+    override fun matches(): List<Match> {
         val data = loadData()
         if (data.teams != null) {
             return (mapGames("Group A", data.groups.a.matches) +
@@ -59,23 +59,23 @@ class Fifa2018Provider : GameDataProvider {
                     mapGames("Bronze Game", data.knockout.round2Loser.matches) +
                     mapGames("Final", data.knockout.round2.matches))
         }
-        return mapOf()
+        return listOf()
     }
 
 
-    private fun mapGames(description: String, matches: List<MatchesItem>?): Map<Int, Match> {
+    private fun mapGames(description: String, matches: List<MatchesItem>?): List<Match> {
         if (matches == null) {
-            return mapOf()
+            return listOf()
         }
-        return matches.mapNotNull { match -> asGame(description, match) }.toMap()
+        return matches.mapNotNull { match -> asGame(description, match) }.toList()
     }
 
-    private fun asGame(description: String, match: MatchesItem?): Pair<Int, Match>? {
+    private fun asGame(description: String, match: MatchesItem?): Match? {
         if (match != null && data.teams != null) {
             val home = asTeam(match.homeTeam)
             val away = asTeam(match.awayTeam)
             val df = StdDateFormat()
-            return Pair(match.name, Match(id = match.name, home = home, away = away, description = description, date = df.parse(match.date)))
+            return Match(id = match.name, home = home, away = away, description = description, date = df.parse(match.date))
         }
         return null
     }

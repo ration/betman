@@ -9,7 +9,7 @@ interface GameDataProvider {
         return Duration.ofHours(1)
     }
 
-    fun matches(): Map<Int, Match>
+    fun matches(): List<Match>
     fun others(): List<Other>
     val name: String
     val description: String /* TODO change to this
