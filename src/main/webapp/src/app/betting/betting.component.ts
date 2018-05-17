@@ -7,7 +7,7 @@ import {Subject} from 'rxjs';
 import {AuthenticationService} from '../authentication.service';
 import {Game} from '../game.model';
 import {AlertService} from '../alert.service';
-import {debounceTime, distinctUntilChanged, flatMap, map} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, flatMap} from 'rxjs/operators';
 import {GroupsService} from '../groups.service';
 import {Group} from '../group.model';
 
@@ -18,9 +18,9 @@ import {Group} from '../group.model';
 })
 export class BettingComponent implements OnInit {
 
-  game: Game = null;
-  bets: { [id: number]: Bet } = {};
-  private saveSubject: Subject<Bet[]> = new Subject<Bet[]>();
+  game: Game = {id: -1, name: '', matches: [], description: ''};
+  bets: Bet = {scores: []};
+  private saveSubject: Subject<Bet> = new Subject<Bet>();
   private user = '';
 
   constructor(private gamesService: GamesService,
@@ -29,6 +29,7 @@ export class BettingComponent implements OnInit {
               private groupService: GroupsService) {
     const key = this.groupService.getActive();
     if (key) {
+      this.bets.groupKey = key;
       this.groupService.get(key).pipe(
         flatMap((group: Group) => this.gamesService.all(group.game))
       ).subscribe((data: Game) => {
@@ -45,38 +46,38 @@ export class BettingComponent implements OnInit {
     }
   }
 
-  private getBettingData() {
-
-    for (const game of this.game.matches) {
-      this.bets[game.id] = new Bet(game.id, 0, 0);
-    }
-    this.gamesService.bets(this.game.name, this.user).subscribe((value: Bet[]) => {
-      for (const game of value) {
-        this.bets[game.id] = game;
-      }
-    });
+  private static getRandomGoals(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   guess() {
     if (confirm('Are you sure? This will overwrite all of your choices?')) {
       for (const bet of Object.values(this.bets)) {
-        bet.home = this.getRandomGoals(1, 5);
-        bet.away = this.getRandomGoals(1, 5);
+        bet.home = BettingComponent.getRandomGoals(1, 5);
+        bet.away = BettingComponent.getRandomGoals(1, 5);
       }
     }
   }
 
-  private getRandomGoals(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
   onChange(change) {
-    this.saveSubject.next(Object.values(this.bets));
+    this.saveSubject.next(this.bets);
   }
 
-  onSubmit(value: Bet[]) {
+  onSubmit(value: Bet) {
     this.gamesService.saveBet(this.game.name, this.user, value).subscribe(res => {
       this.alertService.success('Saved', false, 2000);
+    });
+  }
+
+  private getBettingData() {
+
+    for (const game of this.game.matches) {
+      this.bets.scores.push({id: game.id, home: 0, away: 0});
+    }
+    this.gamesService.bets(this.game.name, this.user).subscribe((value: Bet) => {
+      for (const game of value.scores) {
+        this.bets[game.id] = game;
+      }
     });
   }
 

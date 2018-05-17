@@ -57,7 +57,7 @@ class Fifa2018Provider : GameDataProvider {
                     mapGames("Quarter Finals", data.knockout.round8.matches) +
                     mapGames("Semi Finals", data.knockout.round4.matches) +
                     mapGames("Bronze Game", data.knockout.round2Loser.matches) +
-                    mapGames("Final", data.knockout.round2.matches))
+                    mapGames("Final", data.knockout.round2.matches)).sortedBy { it.id }
         }
         return listOf()
     }

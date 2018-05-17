@@ -30,7 +30,7 @@ describe('GamesService', () => {
         name: 'Fifa2018',
         description: 'Fifa2018',
         id: 1,
-        matches: {'1': match1}
+        matches: [match1]
       };
 
 
@@ -46,11 +46,15 @@ describe('GamesService', () => {
   it('gets bets', inject(
     [HttpTestingController, GamesService],
     (httpMock: HttpTestingController, gamesService: GamesService) => {
-      const bets = [new Bet(1, 2, 3)];
+      const bets: Bet = {
+        groupKey: 'key',
+        id: 1,
+        scores: [{id: 1, home: 1, away: 2}]
+      };
       gamesService.bets('1', '2').subscribe((res: Object) => {
         expect(res).toBe(bets);
       });
-      const req = httpMock.expectOne(gamesService.betsUrl + '?game=1&user=2');
+      const req = httpMock.expectOne(gamesService.betsUrl + '/1');
       req.flush(bets);
       httpMock.verify();
     }));
@@ -58,7 +62,11 @@ describe('GamesService', () => {
   it('stores bets', inject(
     [HttpTestingController, GamesService],
     (httpMock: HttpTestingController, gamesService: GamesService) => {
-      const bets = [new Bet(1, 2, 3)];
+      const bets: Bet = {
+        groupKey: 'key',
+        id: 1,
+        scores: [{id: 1, home: 1, away: 2}]
+      };
       gamesService.saveBet('1', '2', bets).subscribe((res: Object) => {
         expect(res).toBe(null);
       });

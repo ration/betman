@@ -18,7 +18,7 @@ class ExposedBettingRepositoryTest : DbTest() {
     private val key = "mykey"
     private lateinit var game: GameDao
     private lateinit var group: Group
-    val bet = Bet(key, scores = mapOf(Pair(1, ScoreBet(1, 1, 2))))
+    val bet = Bet(key, scores = listOf(ScoreBet(1, 1, 2)))
 
 
     @Before
@@ -56,11 +56,11 @@ class ExposedBettingRepositoryTest : DbTest() {
     fun update() {
         val match = makeBet(game)
         assertEquals("Jack", repository.get(group.key!!, name).blockingGet().goalKing)
-        val bet = Bet(key, scores = mapOf(Pair(1, ScoreBet(match.externalId, 56, 2))),
+        val bet = Bet(key, scores = listOf(ScoreBet(match.externalId, 56, 2)),
                 goalKing = "John")
         repository.bet(key, bet, name)
         val update = repository.get(key, name).blockingGet()
-        assertEquals(56, update.scores[1]?.home)
+        assertEquals(56, update.scores[0].home)
         assertEquals("John", update.goalKing)
     }
 
@@ -69,14 +69,14 @@ class ExposedBettingRepositoryTest : DbTest() {
     fun getBet() {
         makeBet(game)
         val bet = repository.get(key, name).blockingGet()
-        assertEquals(44, bet.scores[1]?.home)
+        assertEquals(44, bet.scores[0].home)
     }
 
     private fun makeBet(game: GameDao): MatchDao {
         val team = createTeam(game, "germany", 1)
         val match: MatchDao = createMatch(game, createTeam(game, "england", 2),
                 team, 1)
-        val bet = Bet(key, scores = mapOf(Pair(1, ScoreBet(match.externalId, 44, 2))),
+        val bet = Bet(key, scores = listOf(ScoreBet(match.externalId, 44, 2)),
                 winner = team.externalId, goalKing = "Jack")
         repository.bet(key, bet, name)
         return match

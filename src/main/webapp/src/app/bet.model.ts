@@ -1,11 +1,11 @@
-export class Bet {
-  id: number;
+export interface Bet {
+  groupKey?: String;
+  scores: ScoreBet[];
+  id?: number;
+}
+
+export interface ScoreBet {
   home: number;
   away: number;
-
-  constructor(id: number, home: number, away: number) {
-    this.id = id;
-    this.home = home;
-    this.away = away;
-  }
+  id: number;
 }

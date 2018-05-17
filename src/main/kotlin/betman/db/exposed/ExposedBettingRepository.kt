@@ -47,19 +47,19 @@ class ExposedBettingRepository : BettingRepository {
         }).map { it.winner }.mapNotNull { TeamDao.findById(it!!.value) }.firstOrNull()
     }
 
-    private fun getMatchBets(userDao: UserDao, gameDao: GameDao, groupDao: GroupDao): Map<Int, ScoreBet> {
+    private fun getMatchBets(userDao: UserDao, gameDao: GameDao, groupDao: GroupDao): List<ScoreBet> {
         return BetDao.wrapRows(Bets.innerJoin(Matches).innerJoin(Games).select {
             (Bets.match.isNotNull()) and (Bets.user eq userDao.id) and (gameName eq gameDao.name) and (Bets.group eq groupDao.id)
         }).map {
             val matchDao = MatchDao.findById(it.match!!)
-            Pair(matchDao!!.externalId, ScoreBet(matchId = matchDao!!.externalId, home = it.home, away = it.away))
-        }.toMap()
+            ScoreBet(matchId = matchDao!!.externalId, home = it.home, away = it.away)
+        }
     }
 
     override fun bet(groupId: String, bet: Bet, username: String) {
         return transaction {
             val userDao = UserDao.find { name eq username }.singleOrNull() ?: throw UnknownUserException()
-            for (score in bet.scores.values) {
+            for (score in bet.scores) {
                 val matchDao = MatchDao.find { externalId eq score.matchId }.singleOrNull()
                         ?: throw UnknownMatchException(String.format("Unkown match id: %s", score.matchId))
                 val groupDao = GroupDao.find { Groups.key eq groupId }.singleOrNull() ?: throw UnknownGroupException()
