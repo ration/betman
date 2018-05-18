@@ -65,4 +65,16 @@ describe('GroupsService', () => {
     expect(active).toBe('some');
   }));
 
+  it('monitor active', inject([HttpTestingController, GroupsService], (httpMock: HttpTestingController, service: GroupsService) => {
+    const body: Group = {name: 'name', description: 'description', game: 'game'};
+
+    service.setActive('some');
+    const req = httpMock.expectOne(GroupsService.getGroupUrl + 'some');
+    req.flush(body);
+    service.active().subscribe(value => expect(value).toBe(body));
+
+    httpMock.verify();
+
+  }));
+
 });

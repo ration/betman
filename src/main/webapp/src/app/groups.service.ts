@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {environment} from '../environments/environment';
 import {Group, Groups} from './group.model';
 import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
@@ -10,14 +10,19 @@ export class GroupsService {
   public static readonly newGroupUrl = environment.host + '/api/groups/new';
   public static readonly getGroupUrl = environment.host + '/api/groups/';
   public static readonly updateGroupDisplayName = environment.host + '/api/groups/updateDisplayName';
-
+  private activeSubject: BehaviorSubject<Group> = new BehaviorSubject(null);
 
 
   constructor(private http: HttpClient) {
   }
 
+  active(): Observable<Group> {
+      return this.activeSubject.asObservable();
+  }
+
   setActive(key: string) {
     localStorage.setItem('activeGroup', key);
+    this.get(key).subscribe(value => this.activeSubject.next(value));
   }
 
   newGroup(group: Group): Observable<Group> {

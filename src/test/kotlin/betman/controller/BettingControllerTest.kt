@@ -55,4 +55,13 @@ class BettingControllerTest {
     }
 
 
+    @Test
+    fun bets() {
+        whenever(bettingRepository.get(eq(game), eq("name"))).thenReturn(Maybe.just(Bet(groupKey = game)))
+        val ans = betting.bets(game, principal.name).blockingGet()
+        verify(bettingRepository, times(1)).get(eq(game), eq("name"))
+        assertEquals(game, ans.groupKey)
+    }
+
+
 }

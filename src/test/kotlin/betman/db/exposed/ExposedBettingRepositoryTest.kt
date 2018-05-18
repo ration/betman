@@ -69,15 +69,18 @@ class ExposedBettingRepositoryTest : DbTest() {
     fun getBet() {
         makeBet(game)
         val bet = repository.get(key, name).blockingGet()
+        assertEquals(2, bet.scores.size)
         assertEquals(44, bet.scores[0].home)
     }
 
     private fun makeBet(game: GameDao): MatchDao {
-        val team = createTeam(game, "germany", 1)
-        val match: MatchDao = createMatch(game, createTeam(game, "england", 2),
-                team, 1)
-        val bet = Bet(key, scores = listOf(ScoreBet(match.externalId, 44, 2)),
-                winner = team.externalId, goalKing = "Jack")
+        val germany = createTeam(game, "germany", 1)
+        val england = createTeam(game, "england", 2)
+        val match: MatchDao = createMatch(game, germany, england, 2)
+        val match2: MatchDao = createMatch(game, england, germany, 3)
+        val bet = Bet(key, scores = listOf(ScoreBet(match.externalId, 44, 2),
+                ScoreBet(match2.externalId, 22, 21)),
+                winner = germany.externalId, goalKing = "Jack")
         repository.bet(key, bet, name)
         return match
     }
@@ -101,6 +104,7 @@ class ExposedBettingRepositoryTest : DbTest() {
             home = homeDao
             away = awayDao
             date = Instant.now().toEpochMilli()
+            description = "some"
         }
     }
 

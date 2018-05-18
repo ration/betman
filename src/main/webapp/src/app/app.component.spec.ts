@@ -8,15 +8,17 @@ import {AlertService} from './alert.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AlertComponent} from './alert/alert.component';
 import {AuthenticationService} from './authentication.service';
+import {GroupsService} from './groups.service';
 
 describe('AppComponent', () => {
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent, AlertComponent
       ],
       imports: [HttpClientTestingModule, ReactiveFormsModule, FormsModule, RouterTestingModule.withRoutes([])],
-      providers: [GamesService, UserService, AlertService, AuthenticationService]
+      providers: [GamesService, UserService, AlertService, AuthenticationService, GroupsService ]
     }).compileComponents();
   }));
   it('should create the Betman', async(() => {
@@ -29,5 +31,6 @@ describe('AppComponent', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app.title).toEqual('Betman');
   }));
+
 
 });

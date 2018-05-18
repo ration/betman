@@ -1,5 +1,5 @@
 export interface Bet {
-  groupKey?: String;
+  groupKey?: string;
   scores: ScoreBet[];
   id?: number;
 }

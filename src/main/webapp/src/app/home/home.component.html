@@ -1,38 +1,36 @@
 <div id="homePage">
-  <h2>What's Betman?</h2>
-  <p>
-    Betman is a betting game on scores for tournaments such as the World Cup. Each player guesses the score of each
-    match and the guesses
-    can be scored such for example:
-  <ul>
-    <li>1 point for correct amount of goals per team</li>
-    <li>1 point if winner is correct</li>
-    <li>3 points if score is exactly right</li>
-  </ul>
+  <div class="form-group">
+    <h2>What's Betman?</h2>
+    <p>
+      Betman is a betting game on scores for tournaments such as the World Cup. Each player guesses the score of each
+      match and the guesses
+      can be scored such for example:
+    <ul>
+      <li>1 point for correct amount of goals per team</li>
+      <li>1 point if winner is correct</li>
+      <li>3 points if score is exactly right</li>
+    </ul>
+  </div>
 
-  <div id="groups">
+  <div id="groups" class="form-group">
     <h3>Groups</h3>
-    <div id="inviteBox">
-      <form #inviteForm="ngForm">
-        <label for="invite">Do you have a group invite?</label>
-        <input title="invite key" id="invite" type="text" placeholder="Enter key here"/>
-      </form>
-    </div>
+
     <div *ngIf="groups.length > 0" id="oldGroups">
       <p>
         Your groups:
       </p>
-      <form >
+      <form>
         <select class="form-control" (change)="groupSelect($event.target.value)">
           <option *ngFor="let group of groups" [value]="group.key"
-                  [attr.selected]="group.key == active ? true: null">{{group.name}}</option>
+                  [attr.selected]="group.key == active ? true: null">{{group.name}}
+          </option>
         </select>
       </form>
     </div>
-    <div id="createGroup">
-      <p>
+    <div id="createGroup" class="form-group">
+
         <a [routerLink]="['/new-group']">Create new group</a>
-      </p>
+
     </div>
   </div>
 

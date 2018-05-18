@@ -18,13 +18,12 @@ export class GamesService {
     return this.http.get<Game>(this.apiAllUrl + '/' + game);
   }
 
-  saveBet(game: string, user: string, bets: Bet) {
-    const params = new HttpParams().set('game', game).set('user', user);
+  saveBet(group: string, bets: Bet) {
+    const params = new HttpParams().set('group', group);
     return this.http.post(this.saveBetUrl, bets, {params});
   }
 
-  bets(game: string, user: string): Observable<Bet> {
-    const params = new HttpParams().set('game', game).set('user', user);
-    return this.http.get<Bet>(this.betsUrl + '/' + game, {params});
+  bets(game: string): Observable<Bet> {
+    return this.http.get<Bet>(this.betsUrl + '/' + game);
   }
 }

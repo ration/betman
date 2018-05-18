@@ -1,6 +1,7 @@
 import {AfterViewChecked, Component, OnInit} from '@angular/core';
 import {AuthenticationService} from './authentication.service';
 import {Observable} from 'rxjs';
+import {GroupsService} from './groups.service';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +10,11 @@ import {Observable} from 'rxjs';
 })
 export class AppComponent implements OnInit, AfterViewChecked {
   title = 'Betman';
+  active = 'group';
 
   isLoggedIn: Observable<boolean>;
 
-  constructor(private authService: AuthenticationService) {
+  constructor(private authService: AuthenticationService, groupService: GroupsService) {
 
   }
 

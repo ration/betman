@@ -7,7 +7,7 @@
     <div class="navbar-nav">
       <a class="nav-item nav-link" [routerLink]=" ['./'] "
          routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">Home</a>
-      <a class="nav-item nav-link" routerLink="group">Group</a>
+      <a class="nav-item nav-link" routerLink="group">{{active}}</a>
       <a class="nav-item nav-link" routerLink="betting">Betting</a>
       <a class="nav-item nav-link" (click)="logout()">Logout</a>
 

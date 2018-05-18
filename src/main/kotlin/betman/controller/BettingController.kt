@@ -36,6 +36,15 @@ class BettingController {
         return repository.get(group, user.name)
     }
 
+    /**
+     * @param group game key
+     */
+    @GetMapping("/{group}/{user}", produces = [MediaType.APPLICATION_JSON_UTF8_VALUE])
+    fun bets(@PathVariable group: String,
+             @PathVariable user: String): Maybe<Bet> {
+        return repository.get(group, user)
+    }
+
 
 }
 

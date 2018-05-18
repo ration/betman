@@ -27,6 +27,7 @@ export class NewGroupComponent implements OnInit {
 
   onSubmit() {
     this.groupService.newGroup(this.model).subscribe((saved: Group) => {
+      this.groupService.setActive(saved.key);
       this.router.navigate(['/group', saved.key]);
     }, (error: HttpErrorResponse) => this.alertService.error(error.message));
   }

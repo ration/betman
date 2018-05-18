@@ -76,6 +76,7 @@ class ExposedGameRepository : GameRepository {
                 date = match.date.toInstant().toEpochMilli()
                 homeGoals = match.homeGoals
                 awayGoals = match.awayGoals
+                description = match.description
             }
         }
     }

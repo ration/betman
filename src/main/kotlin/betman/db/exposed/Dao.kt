@@ -47,6 +47,7 @@ class MatchDao(id: EntityID<Int>) : IntEntity(id) {
     var awayGoals by Matches.awayGoals
     var homeGoals by Matches.homeGoals
     var date by Matches.date
+    var description by Matches.description
 }
 
 class UserDao(id: EntityID<Int>) : IntEntity(id) {

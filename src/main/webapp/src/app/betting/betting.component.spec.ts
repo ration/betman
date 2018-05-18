@@ -7,6 +7,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {GamesService} from '../games.service';
 import {AuthenticationService} from '../authentication.service';
 import {AlertService} from '../alert.service';
+import {GroupsService} from '../groups.service';
 
 describe('BettingComponent', () => {
   let component: BettingComponent;
@@ -16,7 +17,7 @@ describe('BettingComponent', () => {
     TestBed.configureTestingModule({
       declarations: [BettingComponent],
       imports: [HttpClientTestingModule, ReactiveFormsModule, FormsModule, RouterTestingModule.withRoutes([])],
-      providers: [GamesService, AuthenticationService, AlertService]
+      providers: [GamesService, AuthenticationService, AlertService, GroupsService]
     })
     .compileComponents();
   }));

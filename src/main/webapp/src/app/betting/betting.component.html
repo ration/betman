@@ -1,20 +1,22 @@
 <form #bettingForm="ngForm">
   <button class="btn btn-primary" (click)="guess()">I know nothing, guess for me</button>
-  <div *ngFor="let match of game.matches">
-    <div class="match">
-      <div class="matchNumber">{{match.id}}</div>
-      <div class="matchDescription">{{match.description}}</div>
-      <div class="team homeTeam">{{match.home.name}}</div>
-      <span class="flag-icon flag-icon-{{match.home.iso}}"></span>
-      <input title="Home team goals" type=text class="score" [(ngModel)]="bets[match.id].home"
-             (ngModelChange)="onChange($event)" name="{{match.id}}.homeGoals">
-      <div class="vs">-</div>
-      <input title="Away team goals" type=text class="score" [(ngModel)]="bets[match.id].away"
-             (ngModelChange)="onChange($event)" name="{{match.id}}.awayGoals">
+  <div *ngIf="game.matches.length == bets.scores.length">
+    <div *ngFor="let match of game.matches; let i = index">
+      <div class="match">
+        <div class="matchNumber">{{match.id}}</div>
+        <div class="matchDescription">{{match.description}}</div>
+        <div class="team homeTeam">{{match.home.name}}</div>
+        <span class="flag-icon flag-icon-{{match.home.iso}}"></span>
+        <input title="Home team goals" type=text class="score" [(ngModel)]="bets.scores[i].home"
+               (ngModelChange)="onChange($event)" name="{{match.id}}.homeGoals">
+        <div class="vs">-</div>
+        <input title="Away team goals" type=text class="score" [(ngModel)]="bets.scores[i].away"
+               (ngModelChange)="onChange($event)" name="{{match.id}}.awayGoals">
 
-      <span class="flag-icon flag-icon-{{match.away.iso}}"></span>
-      <div class="team awayTeam">{{match.away.name}}</div>
-      <div class="gameDate">{{match.date | date:'yyyy-MM-dd HH:mm'}}</div>
+        <span class="flag-icon flag-icon-{{match.away.iso}}"></span>
+        <div class="team awayTeam">{{match.away.name}}</div>
+        <div class="gameDate">{{match.date | date:'yyyy-MM-dd HH:mm'}}</div>
+      </div>
     </div>
   </div>
 </form>

@@ -51,7 +51,7 @@ describe('GamesService', () => {
         id: 1,
         scores: [{id: 1, home: 1, away: 2}]
       };
-      gamesService.bets('1', '2').subscribe((res: Object) => {
+      gamesService.bets('1').subscribe((res: Object) => {
         expect(res).toBe(bets);
       });
       const req = httpMock.expectOne(gamesService.betsUrl + '/1');
@@ -67,10 +67,10 @@ describe('GamesService', () => {
         id: 1,
         scores: [{id: 1, home: 1, away: 2}]
       };
-      gamesService.saveBet('1', '2', bets).subscribe((res: Object) => {
+      gamesService.saveBet('1', bets).subscribe((res: Object) => {
         expect(res).toBe(null);
       });
-      const req = httpMock.expectOne(gamesService.saveBetUrl + '?game=1&user=2');
+      const req = httpMock.expectOne(gamesService.saveBetUrl + '?group=1');
       req.flush(null);
       httpMock.verify();
     }));

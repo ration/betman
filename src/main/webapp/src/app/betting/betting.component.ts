@@ -38,7 +38,7 @@ export class BettingComponent implements OnInit {
       });
     }
 
-    this.saveSubject.pipe(debounceTime(2000), distinctUntilChanged()).subscribe(value => {
+    this.saveSubject.pipe(debounceTime(2000)).subscribe(value => {
       this.onSubmit(value);
     });
     if (this.authService.currentUser() != null) {
@@ -64,7 +64,7 @@ export class BettingComponent implements OnInit {
   }
 
   onSubmit(value: Bet) {
-    this.gamesService.saveBet(this.game.name, this.user, value).subscribe(res => {
+    this.gamesService.saveBet(this.bets.groupKey, value).subscribe(res => {
       this.alertService.success('Saved', false, 2000);
     });
   }
@@ -74,9 +74,9 @@ export class BettingComponent implements OnInit {
     for (const game of this.game.matches) {
       this.bets.scores.push({id: game.id, home: 0, away: 0});
     }
-    this.gamesService.bets(this.game.name, this.user).subscribe((value: Bet) => {
-      for (const game of value.scores) {
-        this.bets[game.id] = game;
+    this.gamesService.bets(this.bets.groupKey).subscribe((value: Bet) => {
+      if (this.bets.scores.length === value.scores.length) {
+        this.bets.scores = value.scores;
       }
     });
   }
