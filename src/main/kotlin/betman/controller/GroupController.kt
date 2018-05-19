@@ -8,6 +8,9 @@ import io.reactivex.Maybe
 import io.reactivex.Single
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.User
 import org.springframework.security.oauth2.common.util.RandomValueStringGenerator
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
@@ -41,9 +44,12 @@ class GroupController @Autowired constructor(private val repository: GroupReposi
         return repository.get(principal.name).map { Groups(it) }
     }
 
-    @GetMapping("/{key}")
-    fun get(@PathVariable key: String, principal: Principal): Maybe<Group> {
-        return repository.get(key, principal.name)
+    @GetMapping("/info/{key}")
+    fun get(@PathVariable key: String): Maybe<Group> {
+        val authentication: Authentication = SecurityContextHolder.getContext().authentication
+
+        val user: String? = if (authentication.principal != "anonymousUser") (authentication.principal as User).username else null
+        return repository.get(key, user)
     }
 
 

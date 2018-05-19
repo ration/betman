@@ -9,6 +9,8 @@ import {map} from 'rxjs/operators';
 export class GroupsService {
   public static readonly newGroupUrl = environment.host + '/api/groups/new';
   public static readonly getGroupUrl = environment.host + '/api/groups/';
+  public static readonly getGroupInfo = environment.host + '/api/groups/info/';
+
   public static readonly updateGroupDisplayName = environment.host + '/api/groups/updateDisplayName';
   private activeSubject: BehaviorSubject<Group> = new BehaviorSubject(null);
 
@@ -34,7 +36,7 @@ export class GroupsService {
   }
 
   get(id: string): Observable<Group> {
-    return this.http.get<Group>(GroupsService.getGroupUrl + id);
+    return this.http.get<Group>(GroupsService.getGroupInfo + id);
   }
 
   getGroups(ids: number[]): Observable<Group[]> {

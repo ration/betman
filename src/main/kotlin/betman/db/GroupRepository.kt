@@ -18,7 +18,7 @@ interface GroupRepository {
      */
     fun updateDisplayName(group: String, username: String, displayName: String)
 
-    fun get(groupKey: String, username: String): Maybe<Group>
+    fun get(groupKey: String, username: String?): Maybe<Group>
 
     fun get(username: String): Single<List<Group>>
 

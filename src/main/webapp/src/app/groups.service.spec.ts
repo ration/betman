@@ -19,7 +19,7 @@ describe('GroupsService', () => {
     service.get(key).subscribe((ans: Group) => {
       expect(ans).toEqual(body);
     });
-    const req = httpMock.expectOne(GroupsService.getGroupUrl + key);
+    const req = httpMock.expectOne(GroupsService.getGroupInfo + key);
     req.flush(body);
     httpMock.verify();
   }));
@@ -69,7 +69,7 @@ describe('GroupsService', () => {
     const body: Group = {name: 'name', description: 'description', game: 'game'};
 
     service.setActive('some');
-    const req = httpMock.expectOne(GroupsService.getGroupUrl + 'some');
+    const req = httpMock.expectOne(GroupsService.getGroupInfo  + 'some');
     req.flush(body);
     service.active().subscribe(value => expect(value).toBe(body));
 

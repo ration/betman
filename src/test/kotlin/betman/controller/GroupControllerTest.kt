@@ -13,6 +13,8 @@ import org.junit.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
 import java.security.Principal
 
 class GroupControllerTest {
@@ -22,6 +24,10 @@ class GroupControllerTest {
 
     @Mock
     private lateinit var principal: Principal
+
+
+    @Mock
+    private lateinit var auth: Authentication
 
     @InjectMocks
     private lateinit var controller: GroupController
@@ -84,11 +90,14 @@ class GroupControllerTest {
     }
 
     @Test
-    fun getSingle() {
+    fun getSingleAnonymous() {
         val key = "key"
-        whenever(groupRepository.get(eq(key), eq(username))).thenReturn(Maybe.just(group))
-        controller.get(key, principal).blockingGet()
-        verify(groupRepository, times(1)).get(any(), any())
+        SecurityContextHolder.getContext().authentication = auth;
+        whenever(auth.principal).thenReturn("anonymousUser")
+
+        whenever(groupRepository.get(eq(key), eq(null))).thenReturn(Maybe.just(group))
+        controller.get(key).blockingGet()
+        verify(groupRepository, times(1)).get(any(), eq(null))
     }
 
 }

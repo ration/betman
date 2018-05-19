@@ -53,13 +53,17 @@ class ExposedGroupRepository : GroupRepository {
         }).single(listOf())
     }
 
-    override fun get(groupKey: String, username: String): Maybe<Group> {
+    override fun get(groupKey: String, username: String?): Maybe<Group> {
         return Maybes.maybeNull(transaction {
-            val userDao = UserDao.find { name eq username }.firstOrNull() ?: throw UnknownUserException()
             val groupDao = GroupDao.find { Groups.key eq groupKey }.firstOrNull() ?: throw UnknownGroupException()
-            GroupUserDao.find { (user eq userDao.id) and (GroupUser.group eq groupDao.id) }.map {
-                Converters.toGroup(groupDao, GameDao.findById(groupDao.game.value)!!.name, it.name)
-            }.singleOrNull()
+            var displayName: String? = null
+            if (username != null) {
+                val userDao = UserDao.find { name eq username }.firstOrNull() ?: throw UnknownUserException()
+                displayName = GroupUserDao.find { (user eq userDao.id) and (GroupUser.group eq groupDao.id) }
+                    .map { it.name }.firstOrNull()
+            }
+            Converters.toGroup(groupDao, GameDao.findById(groupDao.game.value)!!.name, displayName)
+
         })
     }
 
