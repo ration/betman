@@ -16,13 +16,14 @@ const KEY = 'somekey';
 describe('JoinComponent', () => {
   let component: JoinComponent;
   let fixture: ComponentFixture<JoinComponent>;
+  const group: Group = {name: 'name', description: 'description', game: 'game', key: KEY};
 
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [JoinComponent],
       imports: [FormsModule, RouterTestingModule.withRoutes([{path: 'join/:key', component: JoinComponent}]), HttpClientTestingModule],
-      providers: [GroupsService, AuthenticationService
+      providers: [GroupsService, AuthenticationService,
         {
           provide: ActivatedRoute,
           useValue: {
@@ -43,7 +44,6 @@ describe('JoinComponent', () => {
 
   it('should fetch game data on link', () => {
     const groupService = TestBed.get(GroupsService);
-    const group: Group = {name: 'name', description: 'description', game: 'game', key: KEY};
     expect(component.key).toBe(KEY);
     spyOn(groupService, 'all').and.returnValue(of([]));
 
@@ -51,4 +51,14 @@ describe('JoinComponent', () => {
     component.ngOnInit();
     expect(spy).toHaveBeenCalledWith(KEY);
   });
+
+
+  it('join should send ', () => {
+    const groupService = TestBed.get(GroupsService);
+    const spy = spyOn(groupService, 'join').and.returnValue(of(this.group));
+    component.join();
+    expect(spy).toHaveBeenCalled();
+  });
+
+
 });

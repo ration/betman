@@ -30,5 +30,4 @@ describe('NewGroupComponent', () => {
     expect(component).toBeTruthy();
   });
 
-
 });

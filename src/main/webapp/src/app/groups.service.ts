@@ -10,6 +10,8 @@ export class GroupsService {
   public static readonly newGroupUrl = environment.host + '/api/groups/new';
   public static readonly getGroupUrl = environment.host + '/api/groups/';
   public static readonly getGroupInfo = environment.host + '/api/groups/info/';
+  public static readonly joinGroupUrl = environment.host + '/api/groups/join';
+
 
   public static readonly updateGroupDisplayName = environment.host + '/api/groups/updateDisplayName';
   private activeSubject: BehaviorSubject<Group> = new BehaviorSubject(null);
@@ -19,7 +21,7 @@ export class GroupsService {
   }
 
   active(): Observable<Group> {
-      return this.activeSubject.asObservable();
+    return this.activeSubject.asObservable();
   }
 
   setActive(key: string) {
@@ -51,5 +53,10 @@ export class GroupsService {
 
   getActive(): string {
     return localStorage.getItem('activeGroup');
+  }
+
+  join(key: string, displayName: string): Observable<Group> {
+    const params = new HttpParams().set('key', key).set('displayName', displayName);
+    return this.http.post<Group>(GroupsService.joinGroupUrl, null, {params});
   }
 }

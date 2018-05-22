@@ -13,6 +13,7 @@ import {AuthenticationService} from '../authentication.service';
 export class JoinComponent implements OnInit {
   key = null;
   group = null;
+  name: string = null;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -33,8 +34,16 @@ export class JoinComponent implements OnInit {
           this.router.navigate(['/group', this.group.key]);
         }
       });
+    } else if (this.authService.currentUser()) {
+      // TODO login/register here
     } else if (this.key) {
       this.groupService.get(this.key).subscribe(v => this.group = v);
+    }
+  }
+
+  join() {
+    if (this.key) {
+      this.groupService.join(this.key, this.name).subscribe(v => this.router.navigate(['/group', v.key]));
     }
   }
 
