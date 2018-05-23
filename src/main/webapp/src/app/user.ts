@@ -3,6 +3,6 @@ export class User {
   password?: string;
   displayNames?: {};
   token?: string;
-  activateGroup?: number;
+  activateGroup?: string;
   memberGroups?: number[];
 }

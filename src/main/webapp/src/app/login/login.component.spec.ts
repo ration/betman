@@ -7,6 +7,9 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {AuthenticationService} from '../authentication.service';
 import {UserService} from '../user.service';
 import {AlertService} from '../alert.service';
+import {ActivatedRoute} from '@angular/router';
+
+const KEY = 'somekey';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -17,7 +20,16 @@ describe('LoginComponent', () => {
       declarations: [LoginComponent],
       imports: [HttpClientTestingModule, ReactiveFormsModule, FormsModule, RouterTestingModule.withRoutes([
         {path: 'login', component: LoginComponent}])],
-      providers: [UserService, AuthenticationService, AlertService]
+      providers: [UserService, AuthenticationService, AlertService,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              params: {key: KEY},
+              queryParams: {returnUrl: ''}
+            }
+          }
+        }]
     })
       .compileComponents();
   }));
@@ -32,9 +44,8 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('login should call backend', () => {
-    // const authService = TestBed.get(AuthenticationService);
-    // spyOn(authService, 'login').and.returnValue(of('ok'));
-    // component.login();
+  it('login with given key', () => {
+    component.ngOnInit();
+    expect(component.key).toBe(KEY);
   });
 });

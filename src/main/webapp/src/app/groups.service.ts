@@ -18,6 +18,9 @@ export class GroupsService {
 
 
   constructor(private http: HttpClient) {
+    if (this.getActive()) {
+      this.get(this.getActive()).subscribe(value => this.activeSubject.next(value));
+    }
   }
 
   active(): Observable<Group> {

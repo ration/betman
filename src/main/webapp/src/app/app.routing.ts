@@ -18,6 +18,8 @@ export const appRoutes: Routes = [
   {path: 'group', component: GroupComponent, canActivate: [AuthGuard]},
   {path: 'new-group', component: NewGroupComponent, canActivate: [AuthGuard]},
   {path: 'join/:key', component: JoinComponent},
+  {path: 'login/:key', component: LoginComponent},
+  {path: 'register/:key', component: RegisterComponent},
 
 
   // otherwise redirect to home

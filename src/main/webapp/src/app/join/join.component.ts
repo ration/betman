@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {GroupsService} from '../groups.service';
-import {filter, find, map} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 import {Group} from '../group.model';
 import {AuthenticationService} from '../authentication.service';
 
@@ -11,7 +11,7 @@ import {AuthenticationService} from '../authentication.service';
   styleUrls: ['./join.component.css']
 })
 export class JoinComponent implements OnInit {
-  key = null;
+  key: string = null;
   group = null;
   name: string = null;
 
@@ -34,16 +34,18 @@ export class JoinComponent implements OnInit {
           this.router.navigate(['/group', this.group.key]);
         }
       });
-    } else if (this.authService.currentUser()) {
-      // TODO login/register here
+    } else if (!this.authService.currentUser()) {
+      this.router.navigate(['/login', this.key]);
     } else if (this.key) {
       this.groupService.get(this.key).subscribe(v => this.group = v);
     }
   }
 
   join() {
-    if (this.key) {
-      this.groupService.join(this.key, this.name).subscribe(v => this.router.navigate(['/group', v.key]));
+    if (this.key && this.name) {
+      this.groupService.join(this.key, this.name).subscribe(v => {
+        this.router.navigate(['/group', v.key]);
+      });
     }
   }
 

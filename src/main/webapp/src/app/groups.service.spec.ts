@@ -80,10 +80,10 @@ describe('GroupsService', () => {
   it('joins group', inject([HttpTestingController, GroupsService], (httpMock: HttpTestingController, service: GroupsService) => {
     const key = 'mykey';
     const body: Group = {name: 'name', description: 'description', game: 'game', key: key};
+    const displayName = 'awesome';
 
-
-    service.join(key, 'name').subscribe(value => expect(value).toBe(body));
-    const req = httpMock.expectOne(GroupsService.joinGroupUrl + '?key=' + key);
+    service.join(key, displayName).subscribe(value => expect(value).toBe(body));
+    const req = httpMock.expectOne(GroupsService.joinGroupUrl + '?key=' + key + '&displayName=' + displayName);
     req.flush(body);
     httpMock.verify();
   }));

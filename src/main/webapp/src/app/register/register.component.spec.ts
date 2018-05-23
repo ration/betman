@@ -9,6 +9,7 @@ import {UserService} from '../user.service';
 import {AlertService} from '../alert.service';
 import {User} from '../user';
 import {of} from 'rxjs/internal/observable/of';
+import {LoginComponent} from '../login/login.component';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -17,8 +18,11 @@ describe('RegisterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [RegisterComponent],
-      imports: [HttpClientTestingModule, FormsModule, RouterTestingModule.withRoutes([])],
+      declarations: [RegisterComponent, LoginComponent],
+      imports: [HttpClientTestingModule, FormsModule, RouterTestingModule.withRoutes([{
+        path: 'login',
+        component: LoginComponent
+      }])],
       providers: [UserService, AuthenticationService, AlertService]
     }).compileComponents();
   }));
