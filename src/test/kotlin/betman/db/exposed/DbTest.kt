@@ -30,9 +30,9 @@ open class DbTest {
         factory.close()
     }
 
-    protected fun createGame(): GameDao = transaction {
+    protected fun createGame(gameName: String = "game"): GameDao = transaction {
         GameDao.new {
-            name = "game"
+            name = gameName
             description = "description"
         }
     }

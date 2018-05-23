@@ -60,12 +60,13 @@ class ExposedBettingRepository : BettingRepository {
         return transaction {
             val userDao = UserDao.find { name eq username }.singleOrNull() ?: throw UnknownUserException()
             for (score in bet.scores) {
-                val matchDao = MatchDao.find { externalId eq score.matchId }.singleOrNull()
-                        ?: throw UnknownMatchException(String.format("Unkown match id: %s", score.matchId))
                 val groupDao = GroupDao.find { Groups.key eq groupId }.singleOrNull() ?: throw UnknownGroupException()
                 val gameDao = GameDao.findById(groupDao.game.value) ?: throw UnknownGameException()
 
-                val teamDao: TeamDao? = if (bet.winner != null) TeamDao.find { Teams.externalId eq bet.winner }.firstOrNull() else null
+                val matchDao = MatchDao.find { (externalId eq score.matchId) and (Matches.game eq gameDao.id) }.singleOrNull()
+                        ?: throw UnknownMatchException("Unknown match id: ${score.matchId}")
+
+                val teamDao: TeamDao? = if (bet.winner != null) TeamDao.find { Teams.externalId eq bet.winner!! }.firstOrNull() else null
 
                 val old = BetDao.wrapRows(Bets.innerJoin(Matches).innerJoin(Games).select {
                     (Bets.user eq userDao.id) and (gameName eq gameDao.name) and (Bets.group eq groupDao.id) and (Matches.externalId eq score.matchId)

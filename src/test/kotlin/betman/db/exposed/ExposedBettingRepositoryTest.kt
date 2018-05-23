@@ -64,6 +64,21 @@ class ExposedBettingRepositoryTest : DbTest() {
         assertEquals("John", update.goalKing)
     }
 
+    @Test
+    fun multipleGames() {
+        makeBet(game)
+        val game2 = createGame("other")
+        val germany = createTeam(game2, "germany", 1)
+        val england = createTeam(game2, "england", 2)
+        val match: MatchDao = createMatch(game2, germany, england, 2)
+        val match2: MatchDao = createMatch(game2, england, germany, 3)
+        val bet = Bet(key, scores = listOf(ScoreBet(match.externalId, 44, 2),
+                ScoreBet(match2.externalId, 22, 21)),
+                winner = germany.externalId, goalKing = "Jack")
+        repository.bet(key, bet, name)
+
+    }
+
 
     @Test
     fun getBet() {

@@ -5,9 +5,9 @@ import {Subject} from 'rxjs';
 
 
 import {AuthenticationService} from '../authentication.service';
-import {Game} from '../game.model';
+import {Game, Match} from '../game.model';
 import {AlertService} from '../alert.service';
-import {debounceTime, distinctUntilChanged, flatMap} from 'rxjs/operators';
+import {debounceTime, flatMap} from 'rxjs/operators';
 import {GroupsService} from '../groups.service';
 import {Group} from '../group.model';
 
@@ -67,6 +67,11 @@ export class BettingComponent implements OnInit {
     this.gamesService.saveBet(this.bets.groupKey, value).subscribe(res => {
       this.alertService.success('Saved', false, 2000);
     });
+  }
+
+  canBet(match: Match): boolean {
+    const now = new Date();
+    return new Date(Date.parse(match.date)) >= now;
   }
 
   private getBettingData() {

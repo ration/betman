@@ -1,7 +1,7 @@
 package betman.pojos
 
-data class Bet(val groupKey: String,
-               val scores: List<ScoreBet> = listOf(),
-               val places: List<PlaceBet> = listOf(),
-               val goalKing: String? = null,
-               val winner: Int? = null)
+data class Bet(var groupKey: String,
+               var scores: List<ScoreBet> = listOf(),
+               var places: List<PlaceBet> = listOf(),
+               var goalKing: String? = null,
+               var winner: Int? = null)

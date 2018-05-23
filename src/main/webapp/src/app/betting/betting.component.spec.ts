@@ -8,6 +8,7 @@ import {GamesService} from '../games.service';
 import {AuthenticationService} from '../authentication.service';
 import {AlertService} from '../alert.service';
 import {GroupsService} from '../groups.service';
+import {Match, Team} from '../game.model';
 
 describe('BettingComponent', () => {
   let component: BettingComponent;
@@ -19,7 +20,7 @@ describe('BettingComponent', () => {
       imports: [HttpClientTestingModule, ReactiveFormsModule, FormsModule, RouterTestingModule.withRoutes([])],
       providers: [GamesService, AuthenticationService, AlertService, GroupsService]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -31,4 +32,30 @@ describe('BettingComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('allow edit', () => {
+    const germany: Team = {id: 1, iso: 'ge', name: 'Germany'};
+    const england: Team = {id: 2, iso: 'gb', name: 'England'};
+    const date1 = new Date();
+    date1.setHours(date1.getHours() - 2);
+    const match1: Match = {
+      'id': 1,
+      home: germany,
+      away: england,
+      date: date1.toISOString(),
+      description: 'preliminary'
+    };
+    expect(component.canBet(match1)).toBe(false);
+    date1.setHours(date1.getHours() + 4);
+    const match2: Match = {
+      'id': 1,
+      home: germany,
+      away: england,
+      date: date1.toISOString(),
+      description: 'preliminary'
+    };
+    expect(component.canBet(match2)).toBe(true);
+
+  });
+
 });

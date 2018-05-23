@@ -1,15 +1,11 @@
 package betman
 
-import betman.pojos.Bet
-import betman.pojos.Group
-import betman.pojos.Groups
-import betman.pojos.User
-import io.netty.handler.codec.http.HttpHeaderNames
-import org.junit.Assert.*
+import betman.pojos.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runners.MethodSorters
-import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.FluxExchangeResult
 import org.springframework.test.web.reactive.server.WebTestClient
@@ -22,9 +18,12 @@ class ApiTest : IntegrationTest() {
     private val user = User(name = "name", password = "password")
     private val authHeader = "Authorization"
 
+
     companion object {
         var session: String? = null
         var group: Group? = null
+        var bet: Bet? = null
+        var matches: List<Match> = listOf()
     }
 
 
@@ -66,8 +65,21 @@ class ApiTest : IntegrationTest() {
 
     @Test
     fun test06Bets() {
-        val result: Bet = get("/api/bets/${group?.key}")
+        bet = get("/api/bets/${group?.key}")
+        assertNotNull(bet)
+    }
+
+    @Test
+    fun test08Games() {
+        val result: Game = get("/api/games/Fifa2018")
         assertNotNull(result)
+        matches = result.matches
+    }
+
+    @Test
+    fun test09UpdateBets() {
+        bet?.scores = listOf(ScoreBet(matchId = matches[0].id, home = 10, away = 11))
+        post("/api/bets/update?group=${group?.key}", bet)
     }
 
     private fun <T> post(uri: String, body: T): WebTestClient.ResponseSpec {
@@ -78,9 +90,8 @@ class ApiTest : IntegrationTest() {
      * Just the body of any get request
      */
     private inline fun <reified T> get(uri: String): T {
-        return client.get().uri(uri).
-            header(authHeader, session).accept(MediaType.APPLICATION_JSON).exchange().
-            expectStatus().isOk.returnResult(T::class.java).responseBody.blockFirst() ?: throw InvalidRequestException("get failed")
+        return client.get().uri(uri).header(authHeader, session).accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk.returnResult(T::class.java).responseBody.blockFirst()
+                ?: throw InvalidRequestException("get failed")
     }
 
 }

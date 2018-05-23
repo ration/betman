@@ -1,10 +1,8 @@
 @import "~flag-icon-css/css/flag-icon.css";
 
 .match {
-  display: inline-block;
   margin: 1px;
   background-color: aliceblue;
-  padding: 5px;
 }
 .vs {
   display: inline-block;
@@ -44,6 +42,5 @@
 }
 
 .gameDate {
-  display: inline-block;
-  padding: 10px 10px 10px 10px;
+  white-space: nowrap;
 }

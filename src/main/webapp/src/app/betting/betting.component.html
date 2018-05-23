@@ -1,22 +1,50 @@
 <form #bettingForm="ngForm">
   <button class="btn btn-primary" (click)="guess()">I know nothing, guess for me</button>
   <div *ngIf="game.matches.length == bets.scores.length">
-    <div *ngFor="let match of game.matches; let i = index">
-      <div class="match">
-        <div class="matchNumber">{{match.id}}</div>
-        <div class="matchDescription">{{match.description}}</div>
-        <div class="team homeTeam">{{match.home.name}}</div>
-        <span class="flag-icon flag-icon-{{match.home.iso}}"></span>
-        <input title="Home team goals" type=text class="score" [(ngModel)]="bets.scores[i].home"
-               (ngModelChange)="onChange($event)" name="{{match.id}}.homeGoals">
-        <div class="vs">-</div>
-        <input title="Away team goals" type=text class="score" [(ngModel)]="bets.scores[i].away"
-               (ngModelChange)="onChange($event)" name="{{match.id}}.awayGoals">
+    <table class="table table-striped match">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Group/Stage</th>
+        <th scope="col">Home</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+        <th scope="col"></th>
 
-        <span class="flag-icon flag-icon-{{match.away.iso}}"></span>
-        <div class="team awayTeam">{{match.away.name}}</div>
-        <div class="gameDate">{{match.date | date:'yyyy-MM-dd HH:mm'}}</div>
-      </div>
-    </div>
+        <th scope="col"></th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+        <th scope="col">Away</th>
+        <th scope="col">Date</th>
+      </tr>
+
+      </thead>
+      <tbody>
+      <tr *ngFor="let match of game.matches; let i = index">
+        <td>{{match.id}}</td>
+        <td>{{match.description}}</td>
+
+        <td>{{match.home.name}}</td>
+        <td><span class="right flag-icon flag-icon-{{match.home.iso}}"></span></td>
+
+        <td><input [disabled]="!canBet(match)" title="Home team goals" type=text class="score"
+                   [(ngModel)]="bets.scores[i].home"
+                   (ngModelChange)="onChange($event)" name="{{match.id}}.homeGoals"></td>
+        <td>{{match.homeGoals}}</td>
+        <td>-</td>
+        <td>{{match.awayGoals}}</td>
+
+        <td><input [disabled]="!canBet(match)" title="Away team goals" type=text class="score"
+                   [(ngModel)]="bets.scores[i].away"
+                   (ngModelChange)="onChange($event)" name="{{match.id}}.awayGoals">
+        </td>
+        <td><span class="flag-icon flag-icon-{{match.away.iso}}"></span></td>
+
+        <td>{{match.away.name}}</td>
+        <td class="gameDate">{{match.date | date:'yyyy-MM-dd HH:mm'}}</td>
+      </tbody>
+    </table>
+
   </div>
 </form>
