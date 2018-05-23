@@ -3,26 +3,40 @@ package betman.gameprovider.fifa2018
 import betman.api.JsonLoader
 import betman.api.provider.GameDataProvider
 import betman.pojos.Match
-import betman.pojos.Other
 import betman.pojos.Team
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
+import mu.KotlinLogging
 import org.codehaus.jackson.map.util.StdDateFormat
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
+import java.util.concurrent.TimeUnit
 
 /**
  * Provider for  WorldCup data via LSV "https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json"
  */
 @Component("Fifa2018")
-class Fifa2018Provider : GameDataProvider {
+class Fifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") private val remote: JsonLoader) : GameDataProvider {
+
+    private final val logger = KotlinLogging.logger {}
+
+
+    private val gameSubject: BehaviorSubject<List<Match>> = BehaviorSubject.create()
+    private val winnerSubject: BehaviorSubject<Team> = BehaviorSubject.create() // TODO ??
+    private val goalKingSubject: BehaviorSubject<String> = BehaviorSubject.create() // TODO ??
+
+
+
     override val name: String
         get() = "Fifa2018"
     override val description: String
         get() = "Fifa 2018 World Cup"
 
-    @Autowired
-    @Qualifier("FileJsonLoader")
-    private lateinit var remote: JsonLoader
+
+    init {
+        Observable.interval(0, 1, TimeUnit.HOURS).subscribe { loadMatches() }
+    }
 
     private val data: Lsv by lazy {
         loadData()
@@ -38,14 +52,25 @@ class Fifa2018Provider : GameDataProvider {
         const val PLAYOFF_GAMES = 16
     }
 
-    override fun others(): List<Other> {
-        return listOf()
+
+    override fun winner(): Observable<Team> {
+        return winnerSubject.hide()
     }
 
-    override fun matches(): List<Match> {
+    override fun goalKing(): Observable<String> {
+        return goalKingSubject.hide()
+    }
+
+
+    override fun matches(): Observable<List<Match>> {
+        return gameSubject.hide().distinctUntilChanged()
+    }
+
+    private fun loadMatches() {
+        logger.info("Loading Fifa data")
         val data = loadData()
         if (data.teams != null) {
-            return (mapGames("Group A", data.groups.a.matches) +
+            val list = (mapGames("Group A", data.groups.a.matches) +
                     mapGames("Group B", data.groups.b.matches) +
                     mapGames("Group C", data.groups.c.matches) +
                     mapGames("Group D", data.groups.d.matches) +
@@ -58,8 +83,8 @@ class Fifa2018Provider : GameDataProvider {
                     mapGames("Semi Finals", data.knockout.round4.matches) +
                     mapGames("Bronze Game", data.knockout.round2Loser.matches) +
                     mapGames("Final", data.knockout.round2.matches)).sortedBy { it.id }
+            gameSubject.onNext(list)
         }
-        return listOf()
     }
 
 

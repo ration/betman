@@ -10,7 +10,6 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import java.time.Duration
 
 class GameDataUpdaterTest {
 
@@ -32,7 +31,6 @@ class GameDataUpdaterTest {
     fun init() {
         MockitoAnnotations.initMocks(this)
         whenever(database.datasource).thenReturn(dataSource)
-        whenever(provider.updateInterval()).thenReturn(Duration.ofSeconds(1))
         updater = GameDataUpdater(listOf(provider), repo, database)
     }
 

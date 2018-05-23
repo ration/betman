@@ -30,22 +30,23 @@ class DataLoaderTest {
         whenever(gameRepository.create(any())).thenReturn(Observable.just(game).singleOrError())
         whenever(provider.name).thenReturn("name")
         whenever(provider.description).thenReturn("description")
+        whenever(provider.matches()).thenReturn(Observable.just(listOf()))
+
     }
 
     @Test
     fun loadNew() {
         whenever(gameRepository.get(any())).thenReturn(Maybe.empty())
-        DataLoader().load(provider, gameRepository)
+        DataLoader().subscribe(provider, gameRepository)
         verify(gameRepository, times(1)).get(eq(game.name))
         verify(gameRepository, times(1)).create(any())
         verify(provider, times(1)).matches()
-        verify(provider, times(1)).others()
     }
 
     @Test
     fun loadExisting() {
         whenever(gameRepository.get(any())).thenReturn(single)
-        DataLoader().load(provider, gameRepository)
+        DataLoader().subscribe(provider, gameRepository)
         verify(gameRepository, times(1)).get(eq(game.name))
         verify(gameRepository, times(0)).create(any())
         verify(gameRepository, times(1)).update(any())

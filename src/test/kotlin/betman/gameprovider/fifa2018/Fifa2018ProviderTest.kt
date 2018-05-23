@@ -37,10 +37,9 @@ class Fifa2018ProviderTest {
 
     @Test
     fun matches() {
-        val games = provider.matches()
-        Assert.assertEquals(Fifa2018Provider.REGULAR_GAMES + Fifa2018Provider.PLAYOFF_GAMES, games.size)
-        Assert.assertEquals("Russia", games[0].home.name)
+        provider.matches().subscribe { games ->
+            Assert.assertEquals(Fifa2018Provider.REGULAR_GAMES + Fifa2018Provider.PLAYOFF_GAMES, games.size)
+            Assert.assertEquals("Russia", games[0].home.name)
+        }
     }
-
-
 }
