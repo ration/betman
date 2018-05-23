@@ -3,12 +3,15 @@ package betman
 import betman.api.provider.GameDataProvider
 import betman.db.GameRepository
 import betman.pojos.Game
+import betman.pojos.Match
 import io.reactivex.disposables.CompositeDisposable
 import mu.KotlinLogging
+import org.springframework.stereotype.Component
 
 /**
  * Loads data from game repository
  */
+@Component
 class DataLoader {
     private val logger = KotlinLogging.logger {}
     private val subscriptions = CompositeDisposable()
@@ -18,25 +21,27 @@ class DataLoader {
                   gameRepository: GameRepository) {
         try {
             subscriptions.add(provider.matches().subscribe { matches ->
-                logger.info("Got list of matches")
+                logger.info("Got list of matches from ${provider.name}")
                 gameRepository.get(provider.name).subscribe({ _ ->
                     logger.info("Updating database")
-                    gameRepository.update(Game(name = provider.name, description = provider.description,
-                            matches = matches))
+                    gameRepository.update(toGame(provider, matches))
 
                     logger.info("Db sync done")
                 }, { e ->
                     logger.error("Error in subscriber", e)
                 }, {
                     logger.info("Game did not exist. Creating")
-                    gameRepository.create(Game(name = provider.name, description = provider.description,
-                            matches = matches))
+                    gameRepository.create(toGame(provider, matches))
                 })
             })
         } catch (e: Exception) {
             logger.error("Error during sync", e)
         }
     }
+
+    private fun toGame(provider: GameDataProvider, matches: List<Match>) =
+            Game(name = provider.name, description = provider.description,
+                    matches = matches)
 
 
 }
