@@ -4,11 +4,15 @@
     <div>Share this link to anyone you wish to join:</div>
     <div class="copylink">{{link}}</div>
     <p>
+    <div id="adminBox" *ngIf="isAdmin()">
+      <h2 class="flex-lg-column">Admin settings</h2>
+    </div>
+
     <div id="nameBox">
       <form #nameForm="ngForm" (ngSubmit)="nameForm.form.valid && onSubmit()">
         <div class="input-group">
-          <label for="nameBox">Your name in this group </label>
-          <input type="text" class="form-control" placeholder="Display Name" aria-label="Display name"
+          <label class="col-sm-4 col-form-label" for="nameBox">Your name in this group </label>
+          <input type="text" class="form-control" placeholder="Your name in this group" aria-label="Display name"
                  name="displayName" #name="ngModel" [(ngModel)]="userDisplayName" required
                  aria-describedby="basic-addon2">
           <div *ngIf="nameForm.submitted && !name.valid" class="invalid-feedback">Name is required</div>

@@ -2,7 +2,7 @@
 
 .match {
   margin: 1px;
-  background-color: aliceblue;
+  background-color: white;
 }
 .vs {
   display: inline-block;
@@ -25,6 +25,7 @@
 .score {
   width: 25px;
   min-width: 25px;
+  text-align: center;
 }
 .team {
   padding: 10px;
@@ -43,4 +44,16 @@
 
 .gameDate {
   white-space: nowrap;
+}
+
+.correct {
+  font-weight: bolder;
+}
+
+.exact {
+  background-color: cornflowerblue;
+}
+
+.partial {
+  background-color: aquamarine;
 }

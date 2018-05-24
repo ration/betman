@@ -43,7 +43,7 @@ class ApiTest : IntegrationTest() {
 
     @Test
     fun test03newGroup() {
-        val newGroup = Group(game = "Fifa2018", name = "My Group", description = "My Description", userDisplayName = "myName")
+        val newGroup = Group(game = "Fifa2018", name = "My Group", description = "My Description", userDisplayName = "myName", admin = user.name)
         val groupFlex: FluxExchangeResult<Group> = client.post().uri("/api/groups/new").header(authHeader, session)
             .syncBody(newGroup).exchange()
             .expectStatus().isOk.returnResult(Group::class.java)

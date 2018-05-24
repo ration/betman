@@ -9,10 +9,7 @@
         <th scope="col">Home</th>
         <th scope="col"></th>
         <th scope="col"></th>
-        <th scope="col"></th>
-        <th scope="col"></th>
-
-        <th scope="col"></th>
+        <th colspan="3" scope="colgroup">Result</th>
         <th scope="col"></th>
         <th scope="col"></th>
         <th scope="col">Away</th>
@@ -21,22 +18,24 @@
 
       </thead>
       <tbody>
-      <tr *ngFor="let match of game.matches; let i = index">
+      <tr *ngFor="let match of game.matches; let i = index" [class]="style(match)">
         <td>{{match.id}}</td>
         <td>{{match.description}}</td>
 
         <td>{{match.home.name}}</td>
         <td><span class="right flag-icon flag-icon-{{match.home.iso}}"></span></td>
 
-        <td><input [disabled]="!canBet(match)" title="Home team goals" type=text class="score"
-                   [(ngModel)]="bets.scores[i].home"
+        <td><input [class]="getScore(match.id).home == match.homeGoals ? 'score correct' : 'score'"
+                   [disabled]="!canBet(match)" title="Home team goals" type=text class="score"
+                   [(ngModel)]="getScore(match.id).home"
                    (ngModelChange)="onChange($event)" name="{{match.id}}.homeGoals"></td>
         <td>{{match.homeGoals}}</td>
         <td>-</td>
         <td>{{match.awayGoals}}</td>
 
-        <td><input [disabled]="!canBet(match)" title="Away team goals" type=text class="score"
-                   [(ngModel)]="bets.scores[i].away"
+        <td><input [disabled]="!canBet(match)" title="Away team goals" type=text
+                   [class]="getScore(match.id).away == match.awayGoals ? 'score correct' : 'score'"
+                   [(ngModel)]="getScore(match.id).away"
                    (ngModelChange)="onChange($event)" name="{{match.id}}.awayGoals">
         </td>
         <td><span class="flag-icon flag-icon-{{match.away.iso}}"></span></td>

@@ -10,6 +10,7 @@ export class Group {
   description: string;
   game: string;
   userDisplayName?: string;
+  admin?: string;
   users?: string[];
   standings?: Score[];
 }

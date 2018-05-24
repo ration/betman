@@ -18,7 +18,7 @@ export class AuthenticationService {
     this.loggedIn.next(localStorage.getItem('currentUser') != null);
   }
 
-  login(username: string, password: string) {
+  login(username: string, password: string): Observable<User> {
     const sendUser: User = {
       name: username,
       password: password
@@ -42,6 +42,7 @@ export class AuthenticationService {
 
   currentUser(): User {
     if (localStorage.getItem('currentUser')) {
+      // TODO expiry
       return JSON.parse(localStorage.getItem('currentUser'));
     }
     return null;

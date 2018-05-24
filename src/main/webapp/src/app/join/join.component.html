@@ -4,6 +4,6 @@
 <form #joinForm="ngForm" (ngSubmit)="join()">
   <input name="name" id="description" type="text"
          class="form-control" [(ngModel)]="name" #description="ngModel"
-         placeholder="name" aria-label="Join as" aria-describedby="Join as">
+         placeholder="Your name in this group" aria-label="Join as" aria-describedby="Join as">
   <input [disabled]="name == null" class="btn btn-primary" type="submit" value="Join">
 </form>

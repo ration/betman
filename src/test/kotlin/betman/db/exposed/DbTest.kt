@@ -45,6 +45,6 @@ open class DbTest {
     }
 
     protected fun createGroup(groupName: String, groupKey: String, gameDao: GameDao, user: String) = transaction {
-        ExposedGroupRepository().create(Group(name = groupName, key = groupKey, game = gameDao.name), groupKey, user)
+        ExposedGroupRepository().create(Group(name = groupName, key = groupKey, game = gameDao.name, admin = "user"), groupKey, user)
     }
 }

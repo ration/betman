@@ -4,12 +4,14 @@ import {GroupsService} from './groups.service';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {Group} from './group.model';
 import {HttpResponse} from '@angular/common/http';
+import {AuthenticationService} from './authentication.service';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('GroupsService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [GroupsService]
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+      providers: [GroupsService, AuthenticationService]
     });
   });
 

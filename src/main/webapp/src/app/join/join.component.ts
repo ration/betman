@@ -39,6 +39,7 @@ export class JoinComponent implements OnInit {
     } else if (this.key) {
       this.groupService.get(this.key).subscribe(v => this.group = v);
     }
+    this.name = this.authService.currentUser().name
   }
 
   join() {
@@ -48,5 +49,6 @@ export class JoinComponent implements OnInit {
       });
     }
   }
+
 
 }

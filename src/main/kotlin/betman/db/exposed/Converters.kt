@@ -12,12 +12,13 @@ object Converters {
     val bettingRepository = ExposedBettingRepository()
 
     fun toGroup(groupDao: GroupDao, gameName: String, userDisplayName: String? = null): Group {
+        val userDao = UserDao.findById(groupDao.owner)!!
         val group = Group(id = groupDao.id.value,
                 name = groupDao.name,
                 description = groupDao.description,
                 key = groupDao.key,
                 game = gameName,
-
+                admin = userDao.name,
                 userDisplayName = userDisplayName,
                 winnerPoints = groupDao.winnerPoints,
                 goalKingPoints = groupDao.goalKingPoints,
@@ -50,7 +51,7 @@ object Converters {
                 Score(points = PointCalculator.calculate(group,
                         toGame(game)!!, winner, game.goalKing, bettingRepository.get(group.key!!, getUserName(it)).blockingGet()),
                         user = it.name)
-            }
+            }.sortedByDescending { it.points }
         }
         return listOf()
     }
@@ -68,7 +69,7 @@ object Converters {
                     date = Date.from(Instant.ofEpochMilli(it.date)),
                     homeGoals = it.homeGoals,
                     awayGoals = it.awayGoals)
-        }
+        }.sortedBy { it.id }
     }
 
     private fun getTeam(team: TeamDao): Team {

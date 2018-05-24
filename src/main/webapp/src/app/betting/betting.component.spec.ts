@@ -10,6 +10,9 @@ import {AlertService} from '../alert.service';
 import {GroupsService} from '../groups.service';
 import {Match, Team} from '../game.model';
 
+const germany: Team = {id: 1, iso: 'ge', name: 'Germany'};
+const england: Team = {id: 2, iso: 'gb', name: 'England'};
+
 describe('BettingComponent', () => {
   let component: BettingComponent;
   let fixture: ComponentFixture<BettingComponent>;
@@ -34,8 +37,6 @@ describe('BettingComponent', () => {
   });
 
   it('allow edit', () => {
-    const germany: Team = {id: 1, iso: 'ge', name: 'Germany'};
-    const england: Team = {id: 2, iso: 'gb', name: 'England'};
     const date1 = new Date();
     date1.setHours(date1.getHours() - 2);
     const match1: Match = {
@@ -57,5 +58,24 @@ describe('BettingComponent', () => {
     expect(component.canBet(match2)).toBe(true);
 
   });
+
+  it('style change', () => {
+
+    const match: Match = {
+      id: 1,
+      home: germany,
+      away: england,
+      date: Date(),
+      description: 'preliminary',
+      homeGoals: 0,
+      awayGoals: 1,
+    };
+    component.bets.scores.push({id: 1, home: 0, away: 0});
+    component.updateLookup();
+    expect(component.style(match)).toBe('partial');
+    match.awayGoals = 0;
+    expect(component.style(match)).toBe('exact');
+  });
+
 
 });

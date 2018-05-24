@@ -31,6 +31,10 @@ export class GroupComponent implements OnInit, OnDestroy {
               private alertService: AlertService) {
   }
 
+  isAdmin() {
+    return this.group.admin === this.authService.currentUser().name;
+  }
+
   ngOnInit() {
     this.groupId = this.route.snapshot.params.group || this.groupService.getActive();
     if (this.groupId) {

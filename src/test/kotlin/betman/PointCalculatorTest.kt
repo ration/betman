@@ -13,7 +13,7 @@ class PointCalculatorTest {
     private final val match1 = Match(id = 1, home = team1, away = team2, homeGoals = 5, awayGoals = 0, description = "1", date = Date())
     private val match2 = Match(id = 2, home = team2, away = team1, homeGoals = 3, awayGoals = 3, description = "2", date = Date())
     private val game = Game(name = "game", description = "description", matches = listOf(match1, match2))
-    private val group = Group(name = "x", game = "game", key = "somekey")
+    private val group = Group(name = "x", game = "game", key = "somekey", admin = "user")
 
 
     @Test

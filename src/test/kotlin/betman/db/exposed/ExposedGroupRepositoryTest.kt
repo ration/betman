@@ -16,7 +16,8 @@ class ExposedGroupRepositoryTest : DbTest() {
     private val key = "key"
     private val displayName = "myDisplayName"
     private val repository = ExposedGroupRepository()
-    private val group = Group(name = name, key = key, description = description, game = "game", exactScorePoints = 100)
+    private val group = Group(name = name, key = key, description = description, game = "game", exactScorePoints = 100,
+            admin = "user")
 
 
     @Before
@@ -26,7 +27,7 @@ class ExposedGroupRepositoryTest : DbTest() {
 
     @Test(expected = InvalidRequestException::class)
     fun missingGame() {
-        val group = Group(name = name, description = description, game = "game")
+        val group = Group(name = name, description = description, game = "game", admin = "user")
         val groups = repository.create(group, key, userName).blockingGet()!!
         assertNotNull(groups.id)
     }
@@ -94,7 +95,7 @@ class ExposedGroupRepositoryTest : DbTest() {
     fun updateGroup() {
         join()
         assertEquals(1, group.teamGoalPoints)
-        val newGroup = Group(name = "new name", key = key, description = "some", teamGoalPoints = 33, game = "game")
+        val newGroup = Group(name = "new name", key = key, description = "some", teamGoalPoints = 33, game = "game", admin = "user")
         repository.update(newGroup, userName)
         val saved = repository.get(group.key!!, userName).blockingGet()
         assertEquals(33, saved.teamGoalPoints)

@@ -6,6 +6,7 @@ import {GroupsService} from '../groups.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AlertService} from '../alert.service';
+import {AuthenticationService} from '../authentication.service';
 
 describe('NewGroupComponent', () => {
   let component: NewGroupComponent;
@@ -15,7 +16,7 @@ describe('NewGroupComponent', () => {
     TestBed.configureTestingModule({
       declarations: [NewGroupComponent],
       imports: [FormsModule, HttpClientTestingModule, RouterTestingModule.withRoutes([])],
-      providers: [GroupsService, AlertService]
+      providers: [GroupsService, AlertService, AuthenticationService]
     })
       .compileComponents();
   }));

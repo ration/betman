@@ -5,6 +5,7 @@ import {UserService} from '../user.service';
 import {AlertService} from '../alert.service';
 import {User} from '../user';
 import {HttpErrorResponse} from '@angular/common/http';
+import {AuthenticationService} from '../authentication.service';
 
 
 @Component({
@@ -21,7 +22,9 @@ export class RegisterComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
-    private alertService: AlertService) {
+    private alertService: AlertService,
+    private authenticationService: AuthenticationService
+  ) {
   }
 
   register() {
@@ -30,15 +33,18 @@ export class RegisterComponent implements OnInit {
       .subscribe(
         data => {
           this.alertService.success('Registration successful', true);
-          if (this.key) {
-            this.router.navigate(['/login', this.key]);
-          } else {
-            this.router.navigate(['/login']);
-          }
+          // I don't understand why I can't do create().pipe(login).subscribe
+          this.authenticationService.login(this.model.name, this.model.password)
+            .subscribe(user => {
+              if (this.key) {
+                this.router.navigate(['/join', this.key]);
+              } else {
+                this.router.navigate(['/']);
+              }
+            });
         },
-        (error: HttpErrorResponse) => {
-
-          this.alertService.error(error.message);
+        (response: HttpErrorResponse) => {
+          this.alertService.error(response.error['message']);
           this.loading = false;
         });
   }

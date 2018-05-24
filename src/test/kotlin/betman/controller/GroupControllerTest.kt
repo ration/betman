@@ -32,7 +32,7 @@ class GroupControllerTest {
     @InjectMocks
     private lateinit var controller: GroupController
 
-    private val group = Group(name = "test", description = "desc", game = "game")
+    private val group = Group(name = "test", description = "desc", game = "game", admin = "user")
     private val username = "myusername"
 
 
@@ -44,7 +44,7 @@ class GroupControllerTest {
 
     @Test
     fun new() {
-        val newGroup = Group(name = group.name, description = group.name, key = "value", game = "game")
+        val newGroup = Group(name = group.name, description = group.name, key = "value", game = "game", admin = "user")
         argumentCaptor<String>().apply {
             whenever(groupRepository.create(any(), any(), any())).thenReturn(Observable.just(newGroup).singleOrError())
             whenever(groupRepository.join(any(), any(), any())).thenReturn(Observable.just(newGroup).singleOrError())

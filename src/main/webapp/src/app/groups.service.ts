@@ -4,6 +4,7 @@ import {environment} from '../environments/environment';
 import {Group, Groups} from './group.model';
 import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
 import {map} from 'rxjs/operators';
+import {AuthenticationService} from './authentication.service';
 
 @Injectable()
 export class GroupsService {
@@ -17,8 +18,8 @@ export class GroupsService {
   private activeSubject: BehaviorSubject<Group> = new BehaviorSubject(null);
 
 
-  constructor(private http: HttpClient) {
-    if (this.getActive()) {
+  constructor(private http: HttpClient, authService: AuthenticationService) {
+    if (this.getActive() && authService.currentUser()) {
       this.get(this.getActive()).subscribe(value => this.activeSubject.next(value));
     }
   }
