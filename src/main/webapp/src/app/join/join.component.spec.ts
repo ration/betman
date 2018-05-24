@@ -51,6 +51,7 @@ describe('JoinComponent', () => {
     const authService = TestBed.get(AuthenticationService);
     const user: User = {name: 'some'};
     spyOn(authService, 'currentUser').and.returnValue(user);
+
     expect(component.key).toBe(KEY);
     spyOn(groupService, 'all').and.returnValue(of([]));
 
@@ -64,6 +65,7 @@ describe('JoinComponent', () => {
     const groupService = TestBed.get(GroupsService);
     component.key = 'somekey';
     component.name = 'myname';
+
     const spy = spyOn(groupService, 'join').and.returnValue(of(group));
     component.join();
     expect(spy).toHaveBeenCalled();

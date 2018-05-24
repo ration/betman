@@ -59,6 +59,10 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
   }
 
+  updateGroup() {
+    // TODO make me
+  }
+
   private generateLink() {
     return environment.host + '/join/' + this.group.key;
   }

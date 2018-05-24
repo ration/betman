@@ -12,6 +12,7 @@ export class GroupsService {
   public static readonly getGroupUrl = environment.host + '/api/groups/';
   public static readonly getGroupInfo = environment.host + '/api/groups/info/';
   public static readonly joinGroupUrl = environment.host + '/api/groups/join';
+  public static readonly updateGroupUrl = environment.host + '/api/groups/update';
 
 
   public static readonly updateGroupDisplayName = environment.host + '/api/groups/updateDisplayName';
@@ -19,8 +20,8 @@ export class GroupsService {
 
 
   constructor(private http: HttpClient, authService: AuthenticationService) {
-    if (this.getActive() && authService.currentUser()) {
-      this.get(this.getActive()).subscribe(value => this.activeSubject.next(value));
+    if (this.getActive() != null && authService.currentUser()) {
+      this.get(this.getActive()).subscribe(value => this.activeSubject.next(value), err => localStorage.removeItem('activeGroup'));
     }
   }
 
@@ -28,9 +29,15 @@ export class GroupsService {
     return this.activeSubject.asObservable();
   }
 
+  update(group: Group): Observable<HttpResponse<any>> {
+      return this.http.post<any>(GroupsService.updateGroupUrl, group, {observe: 'response'});
+  }
+
   setActive(key: string) {
     localStorage.setItem('activeGroup', key);
-    this.get(key).subscribe(value => this.activeSubject.next(value));
+    this.get(key).subscribe(value => this.activeSubject.next(value), err => {
+      localStorage.setItem('activeGroup', null);
+    });
   }
 
   newGroup(group: Group): Observable<Group> {

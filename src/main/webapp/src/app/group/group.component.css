@@ -6,6 +6,7 @@
   width: 700px;
 }
 
-#nameBox {
-  margin: 30px;
+.info-block {
+  margin-bottom: 30px;
+  margin-top: 30px;
 }

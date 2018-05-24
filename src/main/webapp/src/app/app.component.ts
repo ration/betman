@@ -23,6 +23,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
+
     this.active = this.groupService.active().pipe(filter(it => it != null), map(it => it.name));
   }
 

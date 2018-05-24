@@ -13,4 +13,8 @@ export class Group {
   admin?: string;
   users?: string[];
   standings?: Score[];
+  winnerPoints?: number;
+  goalKingPoints?: number;
+  teamGoalPoints?: number;
+  exactScorePoints?: number;
 }

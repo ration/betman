@@ -49,6 +49,17 @@ describe('GroupsService', () => {
     httpMock.verify();
   }));
 
+  it('updates group', inject([HttpTestingController, GroupsService], (httpMock: HttpTestingController, service: GroupsService) => {
+    const body: Group = {name: 'name', description: 'description', game: 'game'};
+    service.update(body).subscribe((ans: HttpResponse<any>) => {
+      expect(ans.status).toBe(204);
+    });
+    const req = httpMock.expectOne(GroupsService.updateGroupUrl);
+    req.flush(null);
+    httpMock.verify();
+  }));
+
+
   it('changes display name in group', inject([HttpTestingController, GroupsService], (httpMock: HttpTestingController, service: GroupsService) => {
     const key = 'mykey';
     const displayName = 'newName';
