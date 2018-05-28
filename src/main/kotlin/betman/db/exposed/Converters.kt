@@ -34,10 +34,14 @@ object Converters {
             return Game(game.id.value,
                     game.name,
                     game.description,
-                    matches = getMatches(game.id))
+                    matches = getMatches(game.id),
+                    teams = getTeams(game.id))
         }
         return null
     }
+
+    private fun getTeams(gameId: EntityID<Int>): List<Team> = TeamDao.find { Teams.game eq gameId }.map { getTeam(it) }
+
 
     private fun getStandings(group: Group): List<Score> {
         val users = GroupUserDao.find { GroupUser.group eq group.id }

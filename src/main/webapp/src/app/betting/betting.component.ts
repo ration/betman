@@ -18,7 +18,7 @@ import {Group} from '../group.model';
 })
 export class BettingComponent implements OnInit {
 
-  game: Game = {id: -1, name: '', matches: [], description: ''};
+  game: Game = {id: -1, name: '', matches: [], description: '', teams: []};
   bets: Bet = {scores: []};
   teams: Map<number, Team> = new Map<number, Team>();
 
@@ -35,13 +35,16 @@ export class BettingComponent implements OnInit {
 
     if (key) {
       this.bets.groupKey = key;
+
+
       this.groupService.get(key).pipe(
         flatMap((group: Group) => this.gamesService.all(group.game))
       ).subscribe((data: Game) => {
-        this.game = data;
-        for (const match of this.game.matches) {
-          this.teams[match.id] = match;
+        for (const team of data.teams) {
+          this.teams[team.id] = team;
         }
+        this.game = data;
+
         this.getBettingData();
       });
     }
@@ -68,23 +71,24 @@ export class BettingComponent implements OnInit {
     }
   }
 
-  onChange(change) {
+  static canBet(match: Match): boolean {
+    const now = new Date();
+    return new Date(Date.parse(match.date)) >= now;
+  }
+
+  onChange() {
     this.saveSubject.next(this.bets);
   }
 
   onSubmit(value: Bet) {
-    this.gamesService.saveBet(this.bets.groupKey, value).subscribe(res => {
+    this.gamesService.saveBet(this.bets.groupKey, value).subscribe(() => {
       this.alertService.success('Saved', false, 2000);
     });
   }
 
   winnerSelect(id: number) {
-    this.saveSubject.next(this.bets);
-  }
-
-  canBet(match: Match): boolean {
-    const now = new Date();
-    return new Date(Date.parse(match.date)) >= now;
+    this.bets.winner = id;
+    this.onSubmit(this.bets);
   }
 
   updateLookup() {
@@ -122,7 +126,7 @@ export class BettingComponent implements OnInit {
     }
     this.gamesService.bets(this.bets.groupKey).subscribe((value: Bet) => {
       if (this.bets.scores.length === value.scores.length) {
-        this.bets.scores = value.scores;
+        this.bets = value;
         this.updateLookup();
       }
 

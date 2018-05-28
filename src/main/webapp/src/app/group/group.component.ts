@@ -22,7 +22,6 @@ export class GroupComponent implements OnInit, OnDestroy {
   link: any;
   userDisplayName: string;
   groupId: string;
-  memberGroups: Group[];
 
   constructor(private route: ActivatedRoute,
               private groupService: GroupsService,
@@ -50,7 +49,7 @@ export class GroupComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (this.group.key) {
-      this.groupService.updateDisplayName(this.group.key, this.userDisplayName).subscribe((result) => {
+      this.groupService.updateDisplayName(this.group.key, this.userDisplayName).subscribe(() => {
         this.alertService.success('Saved', false, 1000);
         if (this.groupId) {
           this.loadGroup(this.groupId);
@@ -60,7 +59,10 @@ export class GroupComponent implements OnInit, OnDestroy {
   }
 
   updateGroup() {
-    // TODO make me
+    this.groupService.update(this.group).subscribe(() => {
+      this.alertService.success('Saved');
+      this.loadGroup(this.groupId);
+    });
   }
 
   private generateLink() {

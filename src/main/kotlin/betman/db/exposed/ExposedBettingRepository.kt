@@ -31,7 +31,7 @@ class ExposedBettingRepository : BettingRepository {
             val winner: TeamDao? = getWinnerBet(userDao, gameDao, groupDao)
             val goalking: String? = getGoalKingBet(userDao, gameDao, groupDao)
 
-            Bet(groupKey = groupDao.name, scores = bets, winner = winner?.externalId, goalKing = goalking)
+            Bet(groupKey = groupDao.key, scores = bets, winner = winner?.externalId, goalKing = goalking)
         })
     }
 

@@ -3,8 +3,7 @@ package betman.db.exposed
 import betman.pojos.Game
 import betman.pojos.Match
 import betman.pojos.Team
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.*
 import org.junit.Test
 import java.time.Instant
 import java.util.*
@@ -33,6 +32,9 @@ class ExposedGameRepositoryTest : DbTest() {
         assertEquals(1, ans.matches[0].homeGoals)
         assertEquals(germany.id, db!!.matches[0].home)
         assertNotNull(ans.matches[0].date)
+        assertTrue(db.teams.contains(germany))
+        assertEquals(2, db.teams.size)
+
     }
 
     @Test

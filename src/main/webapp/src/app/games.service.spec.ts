@@ -25,8 +25,13 @@ describe('GamesService', () => {
     (httpMock: HttpTestingController, gamesService: GamesService) => {
 
 
-
-      const match1: Match = {'id': 1, home: germany, away: england, date: '2018-06-14T15:00:00.000+0000', description: 'preliminary'};
+      const match1: Match = {
+        'id': 1,
+        home: germany.id,
+        away: england.id,
+        date: '2018-06-14T15:00:00.000+0000',
+        description: 'preliminary'
+      };
 
       const mockGame: Game = {
         name: 'Fifa2018',

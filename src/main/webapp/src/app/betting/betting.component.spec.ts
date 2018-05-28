@@ -43,8 +43,8 @@ describe('BettingComponent', () => {
     date1.setHours(date1.getHours() - 2);
     const match1: Match = {
       'id': 1,
-      home: germany,
-      away: england,
+      home: germany.id,
+      away: england.id,
       date: date1.toISOString(),
       description: 'preliminary'
     };
@@ -52,8 +52,8 @@ describe('BettingComponent', () => {
     date1.setHours(date1.getHours() + 4);
     const match2: Match = {
       'id': 1,
-      home: germany,
-      away: england,
+      home: germany.id,
+      away: england.id,
       date: date1.toISOString(),
       description: 'preliminary'
     };
@@ -70,8 +70,8 @@ describe('BettingComponent', () => {
 
     const match: Match = {
       id: 1,
-      home: germany,
-      away: england,
+      home: germany.id,
+      away: england.id,
       date: Date(),
       description: 'preliminary',
       homeGoals: 0,

@@ -3,6 +3,7 @@ export interface Game {
   name: string;
   description: string;
   matches: Match[];
+  teams: Team[];
 }
 
 export interface Match {

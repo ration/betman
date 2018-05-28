@@ -84,8 +84,11 @@ class FakeFifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") p
 
     private fun loadMatches() {
         val r = Random()
-        for (match in matchList) {
+        logger.info("Reloading")
+        for (match in matchList.sortedBy { it.date }) {
+
             if (match.date.before(Date())) {
+                logger.info("Finishing ${match.description}")
                 match.homeGoals = r.nextInt(5)
                 match.awayGoals = r.nextInt(5)
             }
