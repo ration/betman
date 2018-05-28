@@ -9,6 +9,8 @@ import {AuthenticationService} from '../authentication.service';
 import {AlertService} from '../alert.service';
 import {GroupsService} from '../groups.service';
 import {Match, Team} from '../game.model';
+import {of} from 'rxjs/internal/observable/of';
+import {Group} from '../group.model';
 
 const germany: Team = {id: 1, iso: 'ge', name: 'Germany'};
 const england: Team = {id: 2, iso: 'gb', name: 'England'};
@@ -60,6 +62,11 @@ describe('BettingComponent', () => {
   });
 
   it('style change', () => {
+
+    const groupService = TestBed.get(GroupsService);
+    const group: Group = {name: 'some', description: 'description', game: 'somegame'};
+    spyOn(groupService, 'get').and.returnValue(of(group));
+    spyOn(groupService, 'all').and.returnValue(of([group]));
 
     const match: Match = {
       id: 1,

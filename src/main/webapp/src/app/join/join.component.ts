@@ -12,7 +12,7 @@ import {AuthenticationService} from '../authentication.service';
 })
 export class JoinComponent implements OnInit {
   key: string = null;
-  group = null;
+  group: Group = null;
   name: string = null;
 
   constructor(private route: ActivatedRoute,
@@ -22,15 +22,13 @@ export class JoinComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("this.au " + this.authService.currentUser());
+
     this.key = this.route.snapshot.params.key;
     if (this.key && this.authService.currentUser()) {
-      const isMember = this.groupService.all().pipe(map(value => value.find(v => v.key === this.key)));
-      isMember.subscribe((value: Group) => {
+      this.groupService.get(this.key).subscribe((value: Group) => {
         this.group = value;
-
-        if (!this.group) {
-          this.groupService.get(this.key).subscribe(v => this.group = v);
-        } else {
+        if (this.group.userDisplayName) {
           this.router.navigate(['/group', this.group.key]);
         }
       });
@@ -38,9 +36,11 @@ export class JoinComponent implements OnInit {
       this.router.navigate(['/login', this.key]);
     } else if (this.key) {
       this.groupService.get(this.key).subscribe(v => this.group = v);
+    } else if (this.authService.currentUser()) {
+      this.name = this.authService.currentUser().name;
     }
-    this.name = this.authService.currentUser().name;
   }
+
 
   join() {
     if (this.key && this.name) {

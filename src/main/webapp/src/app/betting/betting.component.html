@@ -1,6 +1,16 @@
 <form #bettingForm="ngForm">
   <button class="btn btn-primary" (click)="guess()">I know nothing, guess for me</button>
-  <div *ngIf="game.matches.length == bets.scores.length">
+  <div id="winners" class="info-block">
+    <select name="Winner" class="form-control" (change)="winnerSelect($event.target.value)">
+      <option *ngFor="let team of teams.values()" [value]="team.id"
+                        [attr.selected]="team.id == bets.winner ? true: null">{{team.name}}
+    </option>
+    </select>
+    <label for="goalKing" class="form-control-label">Winner</label>
+    <input name="Goal King" id="goalKing" class="form-control" type="text" [(ngModel)]="bets.goalKing"
+           (ngModelChange)="onChange($event)">
+  </div>
+  <div id="matchBets" *ngIf="game.matches.length == bets.scores.length">
     <table class="table table-striped match">
       <thead>
       <tr>
@@ -42,6 +52,7 @@
 
         <td>{{match.away.name}}</td>
         <td class="gameDate">{{match.date | date:'yyyy-MM-dd HH:mm'}}</td>
+      </tr>
       </tbody>
     </table>
 

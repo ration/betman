@@ -5,7 +5,7 @@ import {Subject} from 'rxjs';
 
 
 import {AuthenticationService} from '../authentication.service';
-import {Game, Match} from '../game.model';
+import {Game, Match, Team} from '../game.model';
 import {AlertService} from '../alert.service';
 import {debounceTime, flatMap} from 'rxjs/operators';
 import {GroupsService} from '../groups.service';
@@ -20,6 +20,7 @@ export class BettingComponent implements OnInit {
 
   game: Game = {id: -1, name: '', matches: [], description: ''};
   bets: Bet = {scores: []};
+  teams: Map<number, Team> = new Map<number, Team>();
 
 
   private saveSubject: Subject<Bet> = new Subject<Bet>();
@@ -74,6 +75,10 @@ export class BettingComponent implements OnInit {
     });
   }
 
+  winnerSelect(id: number) {
+    this.saveSubject.next(this.bets);
+  }
+
   canBet(match: Match): boolean {
     const now = new Date();
     return new Date(Date.parse(match.date)) >= now;
@@ -109,7 +114,7 @@ export class BettingComponent implements OnInit {
 
     for (const game of this.game.matches) {
       const scoreBet = {id: game.id, home: 0, away: 0};
-      this.lookup[game.id] = scoreBet
+      this.lookup[game.id] = scoreBet;
       this.bets.scores.push(scoreBet);
     }
     this.gamesService.bets(this.bets.groupKey).subscribe((value: Bet) => {

@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {environment} from '../environments/environment';
 import {Group, Groups} from './group.model';
@@ -7,7 +7,7 @@ import {map} from 'rxjs/operators';
 import {AuthenticationService} from './authentication.service';
 
 @Injectable()
-export class GroupsService {
+export class GroupsService implements OnInit {
   public static readonly newGroupUrl = environment.host + '/api/groups/new';
   public static readonly getGroupUrl = environment.host + '/api/groups/';
   public static readonly getGroupInfo = environment.host + '/api/groups/info/';
@@ -19,10 +19,8 @@ export class GroupsService {
   private activeSubject: BehaviorSubject<Group> = new BehaviorSubject(null);
 
 
-  constructor(private http: HttpClient, authService: AuthenticationService) {
-    if (this.getActive() != null && authService.currentUser()) {
-      this.get(this.getActive()).subscribe(value => this.activeSubject.next(value), err => localStorage.removeItem('activeGroup'));
-    }
+  constructor(private http: HttpClient, private authService: AuthenticationService) {
+
   }
 
   active(): Observable<Group> {
@@ -69,5 +67,11 @@ export class GroupsService {
   join(key: string, displayName: string): Observable<Group> {
     const params = new HttpParams().set('key', key).set('displayName', displayName);
     return this.http.post<Group>(GroupsService.joinGroupUrl, null, {params});
+  }
+
+  ngOnInit(): void {
+    if (this.getActive() != null && this.authService.currentUser()) {
+      this.get(this.getActive()).subscribe(value => this.activeSubject.next(value), err => localStorage.removeItem('activeGroup'));
+    }
   }
 }
