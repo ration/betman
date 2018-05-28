@@ -5,6 +5,9 @@ import {HttpClientTestingModule, HttpTestingController} from '@angular/common/ht
 import {Bet} from './bet.model';
 import {Game, Match, Team} from './game.model';
 
+const germany: Team = {id: 1, iso: 'ge', name: 'Germany'};
+const england: Team = {id: 2, iso: 'gb', name: 'England'};
+
 describe('GamesService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -21,8 +24,7 @@ describe('GamesService', () => {
     [HttpTestingController, GamesService],
     (httpMock: HttpTestingController, gamesService: GamesService) => {
 
-      const germany: Team = {id: 1, iso: 'ge', name: 'Germany'};
-      const england: Team = {id: 2, iso: 'gb', name: 'England'};
+
 
       const match1: Match = {'id': 1, home: germany, away: england, date: '2018-06-14T15:00:00.000+0000', description: 'preliminary'};
 
@@ -74,4 +76,11 @@ describe('GamesService', () => {
       req.flush(null);
       httpMock.verify();
     }));
+
+  /* TODO make me
+  it('gets teams', inject([HttpTestingController, GamesService],
+    (httpMock: HttpTestingController, gamesService: GamesService) => {
+      const req = httpMock.expectOne(gamesService.getTeamsUrl + '?group=1');
+
+    })); */
 });

@@ -3,7 +3,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../user.service';
 import {AlertService} from '../alert.service';
-import {User} from '../user';
+import {User} from '../user.model';
 import {HttpErrorResponse} from '@angular/common/http';
 import {AuthenticationService} from '../authentication.service';
 

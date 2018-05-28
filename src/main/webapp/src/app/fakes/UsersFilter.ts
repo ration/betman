@@ -1,7 +1,7 @@
 import {Observable, of, throwError as observableThrowError} from 'rxjs';
 import {ApiFilter} from './ApiFilter';
 import {HttpRequest, HttpResponse} from '@angular/common/http';
-import {User} from '../user';
+import {User} from '../user.model';
 
 export class UsersFilter implements ApiFilter {
 

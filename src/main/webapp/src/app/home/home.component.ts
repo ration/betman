@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {User} from '../user';
+import {User} from '../user.model';
 import {UserService} from '../user.service';
 import {Group} from '../group.model';
 import {GroupsService} from '../groups.service';

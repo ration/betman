@@ -58,8 +58,11 @@ class ExposedGameRepository : GameRepository {
                 name = game.name
                 description = game.description
             }
-            val teams = game.matches.flatMap { listOf(it.home, it.away) }.toSet()
-            createTeams(newGame, teams)
+            val teams = game.teams
+            // Teams can only be created once (for now)
+            if (!teams.isEmpty()) {
+                createTeams(newGame, teams)
+            }
             addMatches(newGame, game.matches)
             commit()
             Game(newGame.id.value, newGame.name, newGame.description, matches = game.matches)
@@ -82,11 +85,11 @@ class ExposedGameRepository : GameRepository {
     }
 
 
-    private fun getMatch(team: Team): TeamDao {
-        return TeamDao.find { Teams.externalId eq team.id }.first()
+    private fun getMatch(team: Int): TeamDao {
+        return TeamDao.find { Teams.externalId eq team }.first()
     }
 
-    private fun createTeams(gameDao: GameDao, teams: Set<Team>) {
+    private fun createTeams(gameDao: GameDao, teams: List<Team>) {
         transaction {
             for (team in teams) {
                 TeamDao.new {

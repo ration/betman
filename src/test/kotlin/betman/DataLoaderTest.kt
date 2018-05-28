@@ -31,7 +31,7 @@ class DataLoaderTest {
         whenever(provider.name).thenReturn("name")
         whenever(provider.description).thenReturn("description")
         whenever(provider.matches()).thenReturn(Observable.just(listOf()))
-
+        whenever(provider.teams()).thenReturn(Observable.just(listOf()))
     }
 
     @Test

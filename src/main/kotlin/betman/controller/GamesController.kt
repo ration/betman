@@ -26,4 +26,6 @@ class GamesController @Autowired constructor(private val gameRepository: GameRep
     fun game(@PathVariable game: String): Maybe<Game> {
         return gameRepository.get(game)
     }
+
+
 }

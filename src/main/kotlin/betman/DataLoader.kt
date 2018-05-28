@@ -4,6 +4,7 @@ import betman.api.provider.GameDataProvider
 import betman.db.GameRepository
 import betman.pojos.Game
 import betman.pojos.Match
+import betman.pojos.Team
 import io.reactivex.disposables.CompositeDisposable
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
@@ -31,7 +32,9 @@ class DataLoader {
                     logger.error("Error in subscriber", e)
                 }, {
                     logger.info("Game did not exist. Creating")
-                    gameRepository.create(toGame(provider, matches))
+                    provider.teams().subscribe { teams ->
+                        gameRepository.create(toGame(provider, matches, teams))
+                    }
                 })
             })
         } catch (e: Exception) {
@@ -39,9 +42,9 @@ class DataLoader {
         }
     }
 
-    private fun toGame(provider: GameDataProvider, matches: List<Match>) =
+    private fun toGame(provider: GameDataProvider, matches: List<Match>,  teams: List<Team> = listOf()) =
             Game(name = provider.name, description = provider.description,
-                    matches = matches)
+                    matches = matches, teams = teams)
 
 
 }

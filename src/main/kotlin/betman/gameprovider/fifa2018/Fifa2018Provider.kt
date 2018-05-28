@@ -19,13 +19,17 @@ import java.util.concurrent.TimeUnit
 @Component("XXFifa2018") // TODO back to fifa, fix that by lazy stuff, doesn't work. Should always just reload
 class Fifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") private val remote: JsonLoader) : GameDataProvider {
 
+    override fun teams(): Observable<List<Team>> {
+        return Observable.just(data.teams?.map { Team(it.id, it.name, it.iso) })
+    }
+
+
     private final val logger = KotlinLogging.logger {}
 
 
     private val gameSubject: BehaviorSubject<List<Match>> = BehaviorSubject.create()
     private val winnerSubject: BehaviorSubject<Team> = BehaviorSubject.create() // TODO ??
     private val goalKingSubject: BehaviorSubject<String> = BehaviorSubject.create() // TODO ??
-
 
 
     override val name: String
@@ -100,14 +104,14 @@ class Fifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") priva
             val home = asTeam(match.homeTeam)
             val away = asTeam(match.awayTeam)
             val df = StdDateFormat()
-            return Match(id = match.name, home = home, away = away, description = description, date = df.parse(match.date))
+            return Match(id = match.name, home = home.id, away = away.id, description = description, date = df.parse(match.date))
         }
         return null
     }
 
     private fun asTeam(id: String?): Team {
         return data.teams?.filter { it.id.toString() == id }?.map { Team(it.id, it.name, it.iso) }?.firstOrNull()
-                ?: Team.UNKNOWN_TEAM
+                ?: Team.UNKNOWN_TEAM // We lose the winner from group x type of data here :(
     }
 }
 

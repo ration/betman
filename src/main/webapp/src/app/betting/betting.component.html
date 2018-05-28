@@ -32,8 +32,8 @@
         <td>{{match.id}}</td>
         <td>{{match.description}}</td>
 
-        <td>{{match.home.name}}</td>
-        <td><span class="right flag-icon flag-icon-{{match.home.iso}}"></span></td>
+        <td>{{teams[match.home]}}</td>
+        <td><span class="right flag-icon flag-icon-{{teams[match.home].iso}}"></span></td>
 
         <td><input [class]="getScore(match.id).home == match.homeGoals ? 'score correct' : 'score'"
                    [disabled]="!canBet(match)" title="Home team goals" type=text class="score"
@@ -48,9 +48,9 @@
                    [(ngModel)]="getScore(match.id).away"
                    (ngModelChange)="onChange($event)" name="{{match.id}}.awayGoals">
         </td>
-        <td><span class="flag-icon flag-icon-{{match.away.iso}}"></span></td>
+        <td><span class="flag-icon flag-icon-{{teams[match.away].iso}}"></span></td>
 
-        <td>{{match.away.name}}</td>
+        <td>{{teams[match.away].name}}</td>
         <td class="gameDate">{{match.date | date:'yyyy-MM-dd HH:mm'}}</td>
       </tr>
       </tbody>

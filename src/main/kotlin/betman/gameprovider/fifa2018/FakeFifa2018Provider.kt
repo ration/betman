@@ -20,6 +20,9 @@ import java.util.concurrent.TimeUnit
  */
 @Component("Fifa2018")
 class FakeFifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") private val remote: JsonLoader) : GameDataProvider {
+    override fun teams(): Observable<List<Team>> {
+        return Observable.just(data.teams?.map { Team(it.id, it.name, it.iso) })
+    }
 
     private final val logger = KotlinLogging.logger {}
 
@@ -104,7 +107,7 @@ class FakeFifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") p
             val away = asTeam(match.awayTeam)
             ++counter
             date = date.plus(1, ChronoUnit.MINUTES)
-            return Match(id = match.name, home = home, away = away, description = description, date = Date.from(date))
+            return Match(id = match.name, home = home.id, away = away.id, description = description, date = Date.from(date))
         }
         return null
     }

@@ -5,6 +5,7 @@ import betman.pojos.Team
 import io.reactivex.Observable
 
 interface GameDataProvider {
+    fun teams(): Observable<List<Team>>
     fun matches(): Observable<List<Match>>
     fun winner(): Observable<Team>
     fun goalKing(): Observable<String>

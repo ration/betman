@@ -39,6 +39,9 @@ export class BettingComponent implements OnInit {
         flatMap((group: Group) => this.gamesService.all(group.game))
       ).subscribe((data: Game) => {
         this.game = data;
+        for (const match of this.game.matches) {
+          this.teams[match.id] = match;
+        }
         this.getBettingData();
       });
     }

@@ -7,8 +7,8 @@ export interface Game {
 
 export interface Match {
   id: number;
-  home: Team;
-  away: Team;
+  home: number;
+  away: number;
   date: string;
   description: string;
   homeGoals?: number;

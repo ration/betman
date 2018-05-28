@@ -7,7 +7,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {AuthenticationService} from '../authentication.service';
 import {UserService} from '../user.service';
 import {AlertService} from '../alert.service';
-import {User} from '../user';
+import {User} from '../user.model';
 import {of} from 'rxjs/internal/observable/of';
 import {LoginComponent} from '../login/login.component';
 

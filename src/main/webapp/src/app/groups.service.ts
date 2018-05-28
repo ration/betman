@@ -20,7 +20,9 @@ export class GroupsService implements OnInit {
 
 
   constructor(private http: HttpClient, private authService: AuthenticationService) {
-
+    if (this.getActive() != null && authService.currentUser()) {
+      this.get(this.getActive()).subscribe(value => this.activeSubject.next(value), err => localStorage.removeItem('activeGroup'));
+    }
   }
 
   active(): Observable<Group> {

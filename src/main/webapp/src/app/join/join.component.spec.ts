@@ -9,7 +9,7 @@ import {Group} from '../group.model';
 import {ActivatedRoute} from '@angular/router';
 import {of} from 'rxjs';
 import {AuthenticationService} from '../authentication.service';
-import {User} from '../user';
+import {User} from '../user.model';
 import {LoginComponent} from '../login/login.component';
 import {GroupComponent} from '../group/group.component';
 

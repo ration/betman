@@ -26,4 +26,6 @@ export class GamesService {
   bets(game: string): Observable<Bet> {
     return this.http.get<Bet>(this.betsUrl + '/' + game);
   }
+
+
 }
