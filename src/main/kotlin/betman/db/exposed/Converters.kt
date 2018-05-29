@@ -67,8 +67,8 @@ object Converters {
     private fun getMatches(id: EntityID<Int>): List<Match> {
         return MatchDao.find { Matches.game eq id }.map {
             Match(id = it.externalId,
-                    home = it.home.externalId,
-                    away = it.away.externalId,
+                    home = it.home?.externalId ?: -1,
+                    away = it.away?.externalId ?: -1,
                     description = it.description,
                     date = Date.from(Instant.ofEpochMilli(it.date)),
                     homeGoals = it.homeGoals,

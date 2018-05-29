@@ -32,9 +32,10 @@ class DataLoader {
                     logger.error("Error in subscriber", e)
                 }, {
                     logger.info("Game did not exist. Creating")
-                    provider.teams().subscribe { teams ->
+                    provider.teams().subscribe({ teams ->
                         gameRepository.create(toGame(provider, matches, teams))
-                    }
+                    }, { error -> logger.error("Error fetching teams", error) })
+
                 })
             })
         } catch (e: Exception) {
@@ -42,7 +43,7 @@ class DataLoader {
         }
     }
 
-    private fun toGame(provider: GameDataProvider, matches: List<Match>,  teams: List<Team> = listOf()) =
+    private fun toGame(provider: GameDataProvider, matches: List<Match>, teams: List<Team> = listOf()) =
             Game(name = provider.name, description = provider.description,
                     matches = matches, teams = teams)
 

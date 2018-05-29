@@ -7,7 +7,7 @@
     </select>
     <label for="goalKing" class="form-control-label">Winner</label>
     <input name="Goal King" id="goalKing" class="form-control" type="text" [(ngModel)]="bets.goalKing"
-           (ngModelChange)="onChange($event)">
+           (ngModelChange)="onChange()">
   </div>
   <button class="btn btn-primary" (click)="guess()">I know nothing, guess for me</button>
 

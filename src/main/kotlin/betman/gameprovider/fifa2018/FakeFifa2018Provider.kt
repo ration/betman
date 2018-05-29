@@ -83,6 +83,8 @@ class FakeFifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") p
 
 
     private fun loadMatches() {
+        logger.info("Loading Fake Fifa data")
+
         val r = Random()
         logger.info("Reloading")
         for (match in matchList.sortedBy { it.date }) {

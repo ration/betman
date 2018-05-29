@@ -11,12 +11,16 @@ import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Maybes
+import mu.KotlinLogging
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Component
 
 
 @Component
 class ExposedGameRepository : GameRepository {
+
+    private final val logger = KotlinLogging.logger {}
+
 
     override fun games(): Single<List<String>> {
         return Observable.just(transaction {
@@ -85,8 +89,8 @@ class ExposedGameRepository : GameRepository {
     }
 
 
-    private fun getMatch(team: Int): TeamDao {
-        return TeamDao.find { Teams.externalId eq team }.first()
+    private fun getMatch(team: Int): TeamDao? {
+        return TeamDao.find { Teams.externalId eq team }.firstOrNull()
     }
 
     private fun createTeams(gameDao: GameDao, teams: List<Team>) {

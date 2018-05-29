@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Provider for  WorldCup data via LSV "https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json"
  */
-@Component("XXFifa2018") // TODO back to fifa, fix that by lazy stuff, doesn't work. Should always just reload
+// @Component("XXFifa2018") // TODO back to fifa, fix that by lazy stuff, doesn't work. Should always just reload
 class Fifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") private val remote: JsonLoader) : GameDataProvider {
 
     override fun teams(): Observable<List<Team>> {

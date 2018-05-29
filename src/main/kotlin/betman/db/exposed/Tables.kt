@@ -14,8 +14,8 @@ object Games : IntIdTable() {
 object Matches : IntIdTable() {
     val externalId = integer("external_id")
     val game = reference("game", Games)
-    val home = reference("home", Teams)
-    val away = reference("away", Teams)
+    val home = reference("home", Teams).nullable()
+    val away = reference("away", Teams).nullable()
     val homeGoals = integer("home_goals").nullable()
     val awayGoals = integer("away_goals").nullable()
     val date = long("date")
