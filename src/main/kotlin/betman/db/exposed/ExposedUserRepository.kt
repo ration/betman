@@ -10,6 +10,7 @@ import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Maybes
+import mu.KotlinLogging
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -17,10 +18,24 @@ import org.springframework.stereotype.Component
 
 @Component
 class ExposedUserRepository @Autowired constructor(private val passwordEncoder: PasswordEncoder) : UserRepository {
+    private val eLogger = KotlinLogging.logger {} // Collides with exposed logger
     override fun get(name: String): Maybe<User> {
-        return Maybes.maybeNull(transaction {
-            UserDao.find { Users.name eq name }.map { toUser(it) }.firstOrNull()
-        })
+        try {
+
+            return Maybes.maybeNull(transaction {
+                val user = UserDao.find { Users.name eq name }.map { toUser(it) }.firstOrNull()
+                if (user == null) {
+                    eLogger.info("Did not find user with $name")
+                } else {
+                    eLogger.info("Found user")
+                }
+                commit()
+                user
+            })
+        } catch (e: Exception) {
+            eLogger.error("Error retrieving user: ${e.message}", e)
+            throw e
+        }
     }
 
     override fun register(user: User): Single<User> {
@@ -35,7 +50,9 @@ class ExposedUserRepository @Autowired constructor(private val passwordEncoder: 
                 name = user.name
                 password = encode(user.password)
             }
+            commit()
             toUser(dao)
+
         }).singleOrError()
     }
 

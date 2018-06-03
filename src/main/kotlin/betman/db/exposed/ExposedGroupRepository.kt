@@ -36,6 +36,7 @@ class ExposedGroupRepository : GroupRepository {
                 groupDao.goalKingPoints = group.goalKingPoints
                 groupDao.teamGoalPoints = group.teamGoalPoints
                 groupDao.exactScorePoints = group.exactScorePoints
+                commit()
             }
         } catch (e: Exception) {
             return Completable.error(e)

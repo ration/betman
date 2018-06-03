@@ -1,4 +1,4 @@
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {environment} from '../environments/environment';
 import {Group, Groups} from './group.model';
@@ -7,7 +7,7 @@ import {map} from 'rxjs/operators';
 import {AuthenticationService} from './authentication.service';
 
 @Injectable()
-export class GroupsService implements OnInit {
+export class GroupsService {
   public static readonly newGroupUrl = environment.host + '/api/groups/new';
   public static readonly getGroupUrl = environment.host + '/api/groups/';
   public static readonly getGroupInfo = environment.host + '/api/groups/info/';
@@ -18,10 +18,14 @@ export class GroupsService implements OnInit {
   public static readonly updateGroupDisplayName = environment.host + '/api/groups/updateDisplayName';
   private activeSubject: BehaviorSubject<Group> = new BehaviorSubject(null);
 
+  private GROUP_KEY = 'activeGroup';
 
   constructor(private http: HttpClient, private authService: AuthenticationService) {
     if (this.getActive() != null && authService.currentUser()) {
-      this.get(this.getActive()).subscribe(value => this.activeSubject.next(value), err => localStorage.removeItem('activeGroup'));
+      this.get(this.getActive()).subscribe(value => this.activeSubject.next(value),
+        err => {
+          this.resetGroup();
+        });
     }
   }
 
@@ -30,14 +34,20 @@ export class GroupsService implements OnInit {
   }
 
   update(group: Group): Observable<HttpResponse<any>> {
-      return this.http.post<any>(GroupsService.updateGroupUrl, group, {observe: 'response'});
+    return this.http.post<any>(GroupsService.updateGroupUrl, group, {observe: 'response'});
   }
 
+
   setActive(key: string) {
-    localStorage.setItem('activeGroup', key);
-    this.get(key).subscribe(value => this.activeSubject.next(value), err => {
-      localStorage.setItem('activeGroup', null);
-    });
+    if (key) {
+      localStorage.setItem(this.GROUP_KEY, key);
+
+      this.get(key).subscribe(value => this.activeSubject.next(value), err => {
+        localStorage.setItem(this.GROUP_KEY, null);
+      });
+    } else {
+      this.resetGroup();
+    }
   }
 
   newGroup(group: Group): Observable<Group> {
@@ -71,9 +81,9 @@ export class GroupsService implements OnInit {
     return this.http.post<Group>(GroupsService.joinGroupUrl, null, {params});
   }
 
-  ngOnInit(): void {
-    if (this.getActive() != null && this.authService.currentUser()) {
-      this.get(this.getActive()).subscribe(value => this.activeSubject.next(value), err => localStorage.removeItem('activeGroup'));
-    }
+
+  private resetGroup() {
+    console.log('Resetting group');
+    localStorage.removeItem(this.GROUP_KEY);
   }
 }

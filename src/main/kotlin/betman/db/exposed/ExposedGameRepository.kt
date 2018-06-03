@@ -43,16 +43,21 @@ class ExposedGameRepository : GameRepository {
     }
 
     private fun updateGames(matches: List<Match>) {
-        for (match in matches) {
-            val dao = MatchDao.find { externalId eq match.id }.limit(1).firstOrNull()
-            if (dao != null) {
-                dao.externalId = match.id
-                dao.home = getMatch(match.home)
-                dao.away = getMatch(match.away)
-                dao.date = match.date.toInstant().toEpochMilli()
-                dao.homeGoals = match.homeGoals
-                dao.awayGoals = match.awayGoals
+        transaction {
+            for (match in matches) {
+                val dao = MatchDao.find { externalId eq match.id }.limit(1).firstOrNull()
+                if (dao != null) {
+                    dao.externalId = match.id
+                    dao.home = getMatch(match.home)
+                    dao.away = getMatch(match.away)
+                    dao.date = match.date.toInstant().toEpochMilli()
+                    dao.homeGoals = match.homeGoals
+                    dao.awayGoals = match.awayGoals
+                    dao.homeOdds = match.homeOdds?.toBigDecimal()
+                    dao.awayOdds = match.awayOdds?.toBigDecimal()
+                }
             }
+            commit()
         }
     }
 
@@ -84,6 +89,8 @@ class ExposedGameRepository : GameRepository {
                 homeGoals = match.homeGoals
                 awayGoals = match.awayGoals
                 description = match.description
+                homeOdds = match.homeOdds?.toBigDecimal()
+                awayOdds = match.awayOdds?.toBigDecimal()
             }
         }
     }

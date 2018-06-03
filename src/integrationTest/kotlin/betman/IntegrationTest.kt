@@ -19,4 +19,5 @@ abstract class IntegrationTest {
     @Autowired
     protected lateinit var client: WebTestClient
 
+
 }

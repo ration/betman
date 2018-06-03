@@ -1,9 +1,5 @@
 @import "~flag-icon-css/css/flag-icon.css";
 
-.match {
-  margin: 1px;
-  background-color: white;
-}
 .vs {
   display: inline-block;
   margin-left: 4px;
@@ -24,13 +20,12 @@
 
 .score {
   width: 25px;
-  min-width: 25px;
+  min-width: 30px;
   text-align: center;
 }
 .team {
   padding: 10px;
   width: 100px;
-
 }
 .homeTeam {
   display: inline-block;
@@ -57,3 +52,4 @@
 .partial {
   background-color: aquamarine;
 }
+

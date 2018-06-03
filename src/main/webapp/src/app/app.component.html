@@ -7,8 +7,8 @@
     <div class="navbar-nav">
       <a class="nav-item nav-link" [routerLink]=" ['./'] "
          routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">Home</a>
-      <a class="nav-item nav-link" routerLink="group">{{active | async}}</a>
-      <a class="nav-item nav-link" routerLink="betting">Betting</a>
+      <a class="nav-item nav-link" *ngIf="group" routerLink="group">{{active | async}}</a>
+      <a class="nav-item nav-link" *ngIf="group" routerLink="betting">Betting</a>
       <a class="nav-item nav-link" (click)="logout()">Logout</a>
 
     </div>

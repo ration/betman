@@ -42,4 +42,12 @@ class Fifa2018ProviderTest {
             Assert.assertEquals(1, games[0].home)
         }
     }
+
+    @Test
+    fun odds() {
+        val odds = provider.odds()
+        println("odds = ${odds}")
+    }
+
+
 }

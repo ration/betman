@@ -9,7 +9,6 @@ import io.reactivex.subjects.BehaviorSubject
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.stereotype.Component
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
@@ -18,13 +17,13 @@ import java.util.concurrent.TimeUnit
 /**
  * Provider for  WorldCup data via LSV "https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json"
  */
-@Component("Fifa2018")
+// @Component("Fifa2018")
 class FakeFifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") private val remote: JsonLoader) : GameDataProvider {
     override fun teams(): Observable<List<Team>> {
         return Observable.just(data.teams?.map { Team(it.id, it.name, it.iso) })
     }
 
-    private final val logger = KotlinLogging.logger {}
+    private val logger = KotlinLogging.logger {}
 
 
     private val gameSubject: BehaviorSubject<List<Match>> = BehaviorSubject.create()
@@ -57,7 +56,7 @@ class FakeFifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") p
                 mapGames("Semi Finals", data.knockout.round4.matches) +
                 mapGames("Bronze Game", data.knockout.round2Loser.matches) +
                 mapGames("Final", data.knockout.round2.matches)).sortedBy { it.id }
-        Observable.interval(0, 1, TimeUnit.MINUTES).subscribe { loadMatches() }
+        Observable.interval(0, 1, TimeUnit.HOURS).subscribe { loadMatches() }
 
     }
 

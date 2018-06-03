@@ -1,4 +1,8 @@
 <div class="col-md-6 col-md-offset-3">
+  <app-introduction></app-introduction>
+  <div class="ialert alert-info" *ngIf="group">
+    Login or register to join group {{group.name}}
+  </div>
   <h2>Login</h2>
   <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
     <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">

@@ -82,6 +82,13 @@ class ApiTest : IntegrationTest() {
         post("/api/bets/update?group=${group?.key}", bet)
     }
 
+    @Test
+    fun test10Status() {
+        val res: User = get("/api/users/status")
+        assertNotNull(res)
+
+    }
+
     private fun <T> post(uri: String, body: T): WebTestClient.ResponseSpec {
         return client.post().uri(uri).header(authHeader, session).syncBody(body).exchange().expectStatus().isOk
     }

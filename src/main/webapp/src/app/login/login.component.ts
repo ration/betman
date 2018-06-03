@@ -3,6 +3,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService} from '../authentication.service';
 import {AlertService} from '../alert.service';
 import {HttpErrorResponse} from '@angular/common/http';
+import {Group} from '../group.model';
+import {GroupsService} from '../groups.service';
 
 
 @Component({
@@ -15,12 +17,14 @@ export class LoginComponent implements OnInit {
   loading = false;
   returnUrl: string;
   key: string = null;
+  group: Group = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService,
-    private alertService: AlertService) {
+    private alertService: AlertService,
+    private groupService: GroupsService) {
   }
 
   ngOnInit() {
@@ -31,6 +35,8 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
     this.key = this.route.snapshot.params.key;
+    this.groupService.get(this.key).subscribe((value: Group) =>
+      this.group = value);
   }
 
   login() {

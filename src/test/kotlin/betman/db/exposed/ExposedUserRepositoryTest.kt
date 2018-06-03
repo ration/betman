@@ -5,6 +5,7 @@ import betman.UserAlreadyTakenException
 import betman.pojos.User
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Maybe
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -64,4 +65,14 @@ class ExposedUserRepositoryTest : DbTest() {
         }, { Assert.fail() }, {})
 
     }
+
+    @Test
+    fun multipleUsers() {
+        for (i in 1..100) {
+            val user = User(name = "user$i", password = "some")
+            val fromDb: Maybe<User> = repo.register(user).map { repo.get(it.name) }.blockingGet()
+            assertEquals("user$i", fromDb.blockingGet().name)
+        }
+    }
+
 }

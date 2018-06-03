@@ -1,18 +1,25 @@
 <form #bettingForm="ngForm">
-  <div id="winners" class="info-block">
-    <select title="Select winner" name="Winner" class="form-control" (change)="winnerSelect($event.target.value)">
-      <option *ngFor="let team of game.teams" [value]="team.id"
-              [attr.selected]="team.id == bets.winner ? true: null">{{team.name}}
-    </option>
-    </select>
-    <label for="goalKing" class="form-control-label">Winner</label>
-    <input name="Goal King" id="goalKing" class="form-control" type="text" [(ngModel)]="bets.goalKing"
-           (ngModelChange)="onChange()">
+  <div id="winners" class="container">
+    <div class="input-group mb-4">
+      <div class="input-group-prepend">
+        <label for="winner" class="input-group-text">Goal King</label>
+      </div>
+      <select id="winner" name="winner" title="Select winner" class="form-control"
+              (change)="winnerSelect($event.target.value)">
+        <option *ngFor="let team of game.teams" [value]="team.id"
+                [attr.selected]="team.id == bets.winner ? true: null">{{team.name}}
+        </option>
+      </select>
+      <label for="goalKing" class="input-group-text">Goal King</label>
+      <input name="Goal King" id="goalKing" class="form-control" type="text" [(ngModel)]="bets.goalKing"
+             (ngModelChange)="onChange()" placeholder="Miroslav Klose">
+    </div>
   </div>
-  <button class="btn btn-primary" (click)="guess()">I know nothing, guess for me</button>
 
-  <div id="matchBets" *ngIf="game.matches.length == bets.scores.length">
-    <table class="table table-striped match">
+  <div class="container" id="matchBets" *ngIf="game.matches.length == bets.scores.length && teams">
+    <button class="btn btn-primary m-1" (click)="guess()">I know nothing, guess for me</button>
+
+    <table class="table table-striped">
       <thead>
       <tr>
         <th scope="col">#</th>
@@ -33,8 +40,8 @@
         <td>{{match.id}}</td>
         <td>{{match.description}}</td>
 
-        <td>{{teams[match.home].name}}</td>
-        <td><span class="right flag-icon flag-icon-{{teams[match.home].iso}}"></span></td>
+        <td>{{getTeam(match.home).name}}</td>
+        <td><span class="right flag-icon flag-icon-{{getTeam(match.home).iso}}"></span></td>
 
         <td><input [class]="getScore(match.id).home == match.homeGoals ? 'score correct' : 'score'"
                    [disabled]="!canBet(match)" title="Home team goals" type=text class="score"
@@ -49,9 +56,9 @@
                    [(ngModel)]="getScore(match.id).away"
                    (ngModelChange)="onChange($event)" name="{{match.id}}.awayGoals">
         </td>
-        <td><span class="flag-icon flag-icon-{{teams[match.away].iso}}"></span></td>
+        <td><span class="flag-icon flag-icon-{{getTeam(match.away).iso}}"></span></td>
 
-        <td>{{teams[match.away].name}}</td>
+        <td>{{getTeam(match.away).name}}</td>
         <td class="gameDate">{{match.date | date:'yyyy-MM-dd HH:mm'}}</td>
       </tr>
       </tbody>

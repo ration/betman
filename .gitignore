@@ -2,7 +2,7 @@
 build/
 out/
 !gradle/wrapper/gradle-wrapper.jar
-
+src/main/resources/application-production.yml
 ### Eclipse ###
 .apt_generated
 .classpath

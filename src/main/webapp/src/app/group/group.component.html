@@ -27,7 +27,7 @@
           <div class="col col-10">
             Points per correct amount of goals:
           </div>
-          <div class="col">
+          <div *ngIf="isAdmin()" class="col">
             <input title="Team goal points" class="col points" name="tealGoalPoints" [(ngModel)]="group.teamGoalPoints">
           </div>
           <div class="col" *ngIf="!isAdmin()">{{group.teamGoalPoints}}</div>
@@ -36,7 +36,7 @@
           <div class="col col-10">
             Points if the score is exactly right:
           </div>
-          <div class="col">
+          <div *ngIf="isAdmin()" class="col">
             <input title="Exact score points" class="col points" name="exactScorePoints"
                    [(ngModel)]="group.exactScorePoints">
           </div>
@@ -48,7 +48,7 @@
           <div class="col col-10">
             Points for guessing winner
           </div>
-          <div class="col">
+          <div *ngIf="isAdmin()" class="col">
             <input title="Winner points" class="col points" name="winnnerPoints" [(ngModel)]="group.winnerPoints">
           </div>
           <div class="col" *ngIf="!isAdmin()">
@@ -59,14 +59,14 @@
           <div class="col col-10">
             Points for guessing the goal king
           </div>
-          <div class="col">
+          <div *ngIf="isAdmin()" class="col">
             <input title="Goal king points" class="col points" name="goalKingPoints" [(ngModel)]="group.goalKingPoints">
           </div>
           <div class="col" *ngIf="!isAdmin()">
             {{group.goalKingPoints}}
           </div>
         </div>
-        <div class="row">
+        <div *ngIf="isAdmin()" class="row">
           <div class="col col-10">
           </div>
           <div class="col">

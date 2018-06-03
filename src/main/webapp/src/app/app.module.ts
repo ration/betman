@@ -23,18 +23,12 @@ import {NewGroupComponent} from './new-group/new-group.component';
 import {GroupsService} from './groups.service';
 import {JoinComponent} from './join/join.component';
 import {AuthInterceptorProvider} from './auth.interceptor';
+import {IntroductionComponent} from './introduction/introduction.component';
 
 
 const providers: Array<any> = [
   GamesService, AlertService, UserService, AuthGuard, AuthenticationService, GroupsService, AuthInterceptorProvider
 ];
-
-/*
-if (!environment.production) {
-  providers.push(
-    fakeBackendProvider
-  );
-}*/
 
 
 @NgModule({
@@ -47,7 +41,8 @@ if (!environment.production) {
     HomeComponent,
     GroupComponent,
     NewGroupComponent,
-    JoinComponent
+    JoinComponent,
+    IntroductionComponent
   ],
   imports: [
     BrowserModule,

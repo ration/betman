@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Provider for  WorldCup data via LSV "https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json"
  */
-// @Component("XXFifa2018") // TODO back to fifa, fix that by lazy stuff, doesn't work. Should always just reload
+@Component("Fifa2018")
 class Fifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") private val remote: JsonLoader) : GameDataProvider {
 
     override fun teams(): Observable<List<Team>> {
@@ -33,7 +33,7 @@ class Fifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") priva
 
 
     override val name: String
-        get() = "XXFifa2018"
+        get() = "Fifa2018"
     override val description: String
         get() = "Fifa 2018 World Cup"
 
@@ -104,7 +104,9 @@ class Fifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") priva
             val home = asTeam(match.homeTeam)
             val away = asTeam(match.awayTeam)
             val df = StdDateFormat()
-            return Match(id = match.name, home = home.id, away = away.id, description = description, date = df.parse(match.date))
+            return Match(id = match.name, home = home.id, away = away.id, description = description, date = df.parse(match.date),
+                    homeOdds = odds(home.name, away.name)?.homeOdds,
+                    awayOdds = odds(home.name, away.name)?.awayOdds)
         }
         return null
     }
@@ -113,6 +115,171 @@ class Fifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") priva
         return data.teams?.filter { it.id.toString() == id }?.map { Team(it.id, it.name, it.iso) }?.firstOrNull()
                 ?: Team.UNKNOWN_TEAM // We lose the winner from group x type of data here :(
     }
+
+    fun odds(): List<Odds> {
+        val odds = """
+            Russia 1.39
+Saudi Arabia 9.00
+
+Egypt 6.40
+Uruguay 1.57
+
+Morocco 2.42
+Iran 3.30
+
+Portugal 4.25
+Draw 3.40
+
+France 1.20
+Australia 17.00
+
+Argentina 1.35
+Iceland 11.00
+
+Peru 3.25
+Denmark 2.25
+
+Croatia 1.74
+Nigeria 5.00
+
+Costa Rica 3.95
+Serbia 1.99
+
+Germany 1.42
+Mexico 7.60
+
+Brazil 1.36
+Switzerland 9.00
+
+Sweden 2.08
+South Korea 3.65
+
+Belgium 1.15
+Panama 23.00
+
+Tunisia 10.00
+England 1.34
+
+Colombia 1.70
+Japan 5.20
+
+Poland 2.30
+Senegal 3.25
+
+Russia 1.85
+Egypt 4.40
+
+Portugal 1.52
+Morocco 6.80
+
+Uruguay 1.20
+Saudi Arabia 17.00
+
+Iran 17.00
+Spain 1.18
+
+Denmark 1.68
+Australia 5.30
+
+France 1.41
+Peru 7.40
+
+Argentina 1.92
+Croatia 4.20
+
+Brazil 1.23
+Costa Rica 12.00
+
+Nigeria 2.72
+Iceland 2.76
+
+Serbia 2.84
+Switzerland 2.62
+
+Belgium 1.29
+Tunisia 11.00
+
+South Korea 4.25
+Mexico 1.89
+
+Germany 1.45
+Sweden 7.00
+
+England 1.18
+Panama 17.00
+
+Japan 3.25
+Senegal 2.30
+
+Poland 2.84
+Colombia 2.52
+
+Saudi Arabia 4.90
+Egypt 1.73
+
+Uruguay 2.46
+Russia 2.98
+
+Iran 9.00
+Portugal 1.35
+
+Spain 1.34
+Morocco 9.00
+
+Denmark 5.50
+France 1.64
+
+Australia 3.45
+Peru 2.14
+
+Iceland 4.70
+Croatia 1.78
+
+Nigeria 7.00
+Argentina 1.46
+
+South Korea 11.00
+Germany 1.27
+
+Mexico 2.52
+Sweden 2.88
+
+Switzerland 1.87
+Costa Rica 4.40
+
+Serbia 8.60
+Brazil 1.35
+
+Japan 4.30
+Poland 1.84
+
+Senegal 3.85
+Colombia 1.99
+
+Panama 3.30
+Tunisia 2.25
+
+England 2.88
+Belgium 2.42
+"""
+        val rows = odds.split("\n" +
+                "\n")
+        val list = mutableListOf<Odds>()
+        for (row in rows) {
+            val regex = "(.*?) (\\d+\\.\\d+) (.*?) (\\d+\\.\\d+)".toRegex()
+
+            val match = regex.find(row.trim().replace("\n", " "))
+            if (match != null) {
+                val split = match.groupValues
+                list += Odds(split[1], split[2].toDouble(), split[3], split[4].toDouble())
+            }
+        }
+        return list
+    }
+
+    private fun odds(home: String?, away: String?): Odds? = odds().find { it.home == home && it.away == away }
+
+    data class Odds(val home: String, val homeOdds: Double, val away: String, val awayOdds: Double)
 }
 
 

@@ -6,10 +6,13 @@ import {AuthenticationService} from './authentication.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
+  private checkConnection = true;
+
   constructor(private authService: AuthenticationService) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    this.verifyUser();
     if (req.url.match(/(register|login)/)) {
       return next.handle(req);
     }
@@ -19,6 +22,18 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(cloned);
     }
     return next.handle(req);
+  }
+
+  /**
+   Verify the user on first boot. Backend might've changed under
+   */
+  private verifyUser() {
+    if (this.checkConnection) {
+      this.checkConnection = false;
+      if (this.authService.currentUser()) {
+        this.authService.checkConnection();
+      }
+    }
   }
 }
 

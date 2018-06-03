@@ -59,4 +59,6 @@ class SecurityConfig @Autowired constructor(private val jwtTokenProvider: JwtTok
     fun getJWTAuthorizationFilter(): JwtAuthorizationFilter {
         return JwtAuthorizationFilter(authenticationManager(), jwtTokenProvider)
     }
+
+
 }

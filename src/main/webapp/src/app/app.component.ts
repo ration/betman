@@ -12,8 +12,8 @@ import {of} from 'rxjs/internal/observable/of';
 })
 export class AppComponent implements OnInit, AfterViewChecked {
   title = 'Betman';
-  active: Observable<String> = of('Group');
-
+  active: Observable<string> = of('Group');
+  group: string = null;
   isLoggedIn: Observable<boolean>;
 
   constructor(private authService: AuthenticationService, private groupService: GroupsService) {
@@ -25,6 +25,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
     this.isLoggedIn = this.authService.isLoggedIn();
 
     this.active = this.groupService.active().pipe(filter(it => it != null), map(it => it.name));
+    this.active.subscribe(active => this.group = active);
   }
 
   ngAfterViewChecked() {

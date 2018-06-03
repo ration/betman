@@ -16,3 +16,4 @@ class UnknownMatchException(msg: String) : BadRequestException(msg)
 class InvalidRequestException(reason: String) : BadRequestException(reason)
 class UserAlreadyTakenException : BadRequestException("Username already taken")
 class InvalidTokenException(msg: String) : BadRequestException(msg)
+

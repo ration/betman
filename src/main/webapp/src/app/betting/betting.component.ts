@@ -63,15 +63,14 @@ export class BettingComponent implements OnInit {
 
   guess() {
     if (confirm('Are you sure? This will overwrite all of your choices?')) {
-      for (const bet of Object.values(this.bets.scores)) {
-        bet.home = BettingComponent.getRandomGoals(1, 5);
-        bet.away = BettingComponent.getRandomGoals(1, 5);
-        this.saveSubject.next(this.bets);
-      }
+      this.gamesService.guess(this.bets.groupKey, this.bets).subscribe(value => {
+        this.bets = value;
+        this.updateLookup();
+      });
     }
   }
 
-  static canBet(match: Match): boolean {
+  canBet(match: Match): boolean {
     const now = new Date();
     return new Date(Date.parse(match.date)) >= now;
   }
@@ -117,6 +116,15 @@ export class BettingComponent implements OnInit {
     return this.lookup[id];
   }
 
+  getTeam(id: number): Team {
+    if (this.teams[id]) {
+      return this.teams[id];
+    } else {
+      return {name: '???', iso: 'xx', id: -1};
+    }
+
+  }
+
   private getBettingData() {
 
     for (const game of this.game.matches) {
@@ -132,5 +140,6 @@ export class BettingComponent implements OnInit {
 
     });
   }
+
 
 }

@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {GroupsService} from '../groups.service';
-import {map} from 'rxjs/operators';
 import {Group} from '../group.model';
 import {AuthenticationService} from '../authentication.service';
 
@@ -22,8 +21,6 @@ export class JoinComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("this.au " + this.authService.currentUser());
-
     this.key = this.route.snapshot.params.key;
     if (this.key && this.authService.currentUser()) {
       this.groupService.get(this.key).subscribe((value: Group) => {

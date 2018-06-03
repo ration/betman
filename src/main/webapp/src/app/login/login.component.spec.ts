@@ -8,6 +8,7 @@ import {AuthenticationService} from '../authentication.service';
 import {UserService} from '../user.service';
 import {AlertService} from '../alert.service';
 import {ActivatedRoute} from '@angular/router';
+import {GroupsService} from '../groups.service';
 
 const KEY = 'somekey';
 
@@ -20,7 +21,7 @@ describe('LoginComponent', () => {
       declarations: [LoginComponent],
       imports: [HttpClientTestingModule, ReactiveFormsModule, FormsModule, RouterTestingModule.withRoutes([
         {path: 'login', component: LoginComponent}])],
-      providers: [UserService, AuthenticationService, AlertService,
+      providers: [UserService, AuthenticationService, AlertService, GroupsService,
         {
           provide: ActivatedRoute,
           useValue: {

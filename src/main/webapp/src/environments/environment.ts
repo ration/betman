@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  host: 'http://localhost:8090'
+  host: 'http://localhost:8080',
+  joinLink: 'http://localhost:4200'
 };

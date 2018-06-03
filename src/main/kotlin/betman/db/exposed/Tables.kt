@@ -20,6 +20,8 @@ object Matches : IntIdTable() {
     val awayGoals = integer("away_goals").nullable()
     val date = long("date")
     val description = varchar("description", 2048)
+    val homeOdds = decimal("home_odds", 4, 2).nullable()
+    val awayOdds = decimal("away_odds", 4, 2).nullable()
 }
 
 object Teams : IntIdTable() {

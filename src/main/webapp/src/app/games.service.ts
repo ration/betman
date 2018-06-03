@@ -11,6 +11,9 @@ export class GamesService {
   public saveBetUrl = environment.host + '/api/bets/update';
   public betsUrl = environment.host + '/api/bets';
 
+  public guessUrl = environment.host + '/api/bets/guess';
+
+
   constructor(private http: HttpClient) {
   }
 
@@ -27,5 +30,8 @@ export class GamesService {
     return this.http.get<Bet>(this.betsUrl + '/' + game);
   }
 
+  guess(group: string, bets: Bet): Observable<Bet> {
+    return this.http.post<Bet>(this.guessUrl + '/' + group, bets);
+  }
 
 }

@@ -54,7 +54,6 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" // Required for Kotlin integration
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-security'
-    // compile 'org.springframework.boot:spring-boot-devtools'
     compile "org.springframework.boot:spring-boot-configuration-processor"
     compile 'org.springframework.boot:spring-boot-starter-webflux'
     compile "org.postgresql:postgresql:$postgresql_version"
@@ -69,8 +68,9 @@ dependencies {
     compile "org.springframework.security:spring-security-jwt:$jwt_version"
     compile "org.springframework.security.oauth:spring-security-oauth2:$oauth_version"
     compile 'org.jetbrains.exposed:exposed:0.10.2'
+    compile 'com.google.cloud.sql:postgres-socket-factory:1.0.8'
 
-
+    compile 'org.apache.commons:commons-math3:3.6.1'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile "com.h2database:h2:$h2_version"
@@ -171,7 +171,7 @@ bootJar {
 docker {
     // dependsOn build
     name "${bootJar.baseName}"
-    dockerfile file("Dockerfile")
+    dockerfile file("Dockerfile.plain")
     files bootJar.archivePath
     buildArgs(['JAR_FILE':"${bootJar.archiveName}"])
 }

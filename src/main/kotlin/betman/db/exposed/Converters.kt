@@ -72,7 +72,10 @@ object Converters {
                     description = it.description,
                     date = Date.from(Instant.ofEpochMilli(it.date)),
                     homeGoals = it.homeGoals,
-                    awayGoals = it.awayGoals)
+                    awayGoals = it.awayGoals,
+                    homeOdds = it.homeOdds?.toDouble(),
+                    awayOdds = it.awayOdds?.toDouble()
+            )
         }.sortedBy { it.id }
     }
 

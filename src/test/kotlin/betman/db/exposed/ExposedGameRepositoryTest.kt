@@ -34,6 +34,7 @@ class ExposedGameRepositoryTest : DbTest() {
         assertNotNull(ans.matches[0].date)
         assertTrue(db.teams.contains(germany))
         assertEquals(2, db.teams.size)
+        assertEquals(db.matches[0].homeOdds, matches()[0].homeOdds)
 
     }
 
@@ -63,7 +64,7 @@ class ExposedGameRepositoryTest : DbTest() {
 
     private fun matches(): List<Match> {
         return listOf(Match(id = 1, home = germany.id, away = england.id, description = "round1", date = Date.from(Instant.now()),
-                homeGoals = 1, awayGoals = 2),
+                homeGoals = 1, awayGoals = 2, homeOdds = 1.2, awayOdds = 2.3),
                 Match(id = 2, home = england.id, away = germany.id, description = "round1", date = Date.from(Instant.now())))
 
     }

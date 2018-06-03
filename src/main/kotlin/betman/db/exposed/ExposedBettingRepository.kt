@@ -11,6 +11,8 @@ import betman.db.exposed.Users.name
 import betman.pojos.Bet
 import betman.pojos.ScoreBet
 import io.reactivex.Maybe
+import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.rxkotlin.Maybes
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
@@ -56,8 +58,8 @@ class ExposedBettingRepository : BettingRepository {
         }
     }
 
-    override fun bet(groupId: String, bet: Bet, username: String) {
-        return transaction {
+    override fun bet(groupId: String, bet: Bet, username: String): Single<Bet> {
+        return Observable.just(transaction {
             val userDao = UserDao.find { name eq username }.singleOrNull() ?: throw UnknownUserException()
             for (score in bet.scores) {
                 val groupDao = GroupDao.find { Groups.key eq groupId }.singleOrNull() ?: throw UnknownGroupException()
@@ -88,7 +90,10 @@ class ExposedBettingRepository : BettingRepository {
                     }
                 }
             }
-        }
+            commit()
+            bet
+
+        }).singleOrError()
     }
 
 
