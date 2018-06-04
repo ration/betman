@@ -13,7 +13,7 @@
                 [attr.selected]="team.id == bets.winner ? true: null">{{team.name}}
         </option>
       </select>
-      <label for="goalKing" class="input-group-text">erGoal King</label>
+      <label for="goalKing" class="input-group-text">Goal King</label>
       <input name="Goal King" id="goalKing" class="form-control" type="text" [(ngModel)]="bets.goalKing"
              (ngModelChange)="onChange()" placeholder="Miroslav Klose">
     </div>

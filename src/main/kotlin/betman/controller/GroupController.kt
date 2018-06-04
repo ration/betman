@@ -6,6 +6,7 @@ import betman.pojos.Groups
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
+import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.security.core.Authentication
@@ -20,8 +21,12 @@ import java.security.Principal
 @RequestMapping("/api/groups")
 class GroupController @Autowired constructor(private val repository: GroupRepository) {
 
+    private val logger = KotlinLogging.logger {}
+
+
     @PostMapping("/new", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun new(@RequestBody group: Group, principal: Principal): Single<Group> {
+        logger.info("Creating new group ${group.name}")
         return repository.create(group, generateKey(), principal.name).flatMap {
             repository.join(it.key!!, principal.name, principal.name)
         }

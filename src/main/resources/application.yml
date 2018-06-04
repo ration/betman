@@ -21,7 +21,7 @@ spring:
 
 
 db:
-  url:  jdbc:h2:mem:test
+  url:  jdbc:h2:mem:test;DB_CLOSE_ON_EXIT=FALSE
   username: betman
   password: manbet
   driverClassName: org.h2.Driver

@@ -4,9 +4,9 @@
   <div id="groups" class="form-group">
     <h3>Groups</h3>
 
-    <div *ngIf="groups.length > 0" class="container" id="oldGroups">
+    <div class="container" id="oldGroups">
       <form>
-        <div class="input-group mb-5">
+        <div *ngIf="groups.length > 0" class="input-group mb-5">
           <label for="groupSelect" class="input-group-text">Your groups</label>
           <select id="groupSelect" class="form-control" (change)="groupSelect($event.target.value)">
             <option *ngFor="let group of groups" [value]="group.key"

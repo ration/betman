@@ -39,6 +39,18 @@ class ApiTest : IntegrationTest() {
             .exists(authHeader).returnResult(Unit::class.java)
         session = result.responseHeaders[authHeader]?.get(0)
         assertNotNull(session)
+
+
+    }
+
+    @Test
+    fun test02_1_waitForGame() {
+        var g = ""
+        while (!g.contains("Fifa")) {
+            g = get("/api/games/")
+            Thread.sleep(100)
+        }
+
     }
 
     @Test
