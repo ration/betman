@@ -9,16 +9,17 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {AlertComponent} from './alert/alert.component';
 import {AuthenticationService} from './authentication.service';
 import {GroupsService} from './groups.service';
+import {FooterComponent} from './footer/footer.component';
 
 describe('AppComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent, AlertComponent
+        AppComponent, AlertComponent, FooterComponent
       ],
       imports: [HttpClientTestingModule, ReactiveFormsModule, FormsModule, RouterTestingModule.withRoutes([])],
-      providers: [GamesService, UserService, AlertService, AuthenticationService, GroupsService ]
+      providers: [GamesService, UserService, AlertService, AuthenticationService, GroupsService]
     }).compileComponents();
   }));
   it('should create the Betman', async(() => {

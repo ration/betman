@@ -4,23 +4,25 @@
   <div id="groups" class="form-group">
     <h3>Groups</h3>
 
-    <div *ngIf="groups.length > 0" id="oldGroups">
-      <p>
-        Your groups:
-      </p>
+    <div *ngIf="groups.length > 0" class="container" id="oldGroups">
       <form>
-        <select class="form-control" (change)="groupSelect($event.target.value)">
-          <option *ngFor="let group of groups" [value]="group.key"
-                  [attr.selected]="group.key == active ? true: null">{{group.name}}
-          </option>
-        </select>
+        <div class="input-group mb-5">
+          <label for="groupSelect" class="input-group-text">Your groups</label>
+          <select id="groupSelect" class="form-control" (change)="groupSelect($event.target.value)">
+            <option *ngFor="let group of groups" [value]="group.key"
+                    [attr.selected]="group.key == active ? true: null">{{group.name}}
+            </option>
+          </select>
+        </div>
+        <div class="input-group mb-5">
+          <div id="createGroup" class="col">
+            <a [routerLink]="['/new-group']">Create new group</a>
+          </div>
+        </div>
+
       </form>
     </div>
-    <div id="createGroup" class="form-group">
 
-        <a [routerLink]="['/new-group']">Create new group</a>
-
-    </div>
   </div>
 
 </div>

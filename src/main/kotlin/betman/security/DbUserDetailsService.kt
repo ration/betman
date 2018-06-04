@@ -22,7 +22,7 @@ class DbUserDetailsService @Autowired constructor(private val userRepository: Us
                 org.springframework.security.core.userdetails.User.withUsername(it.name).password(it.password).authorities("USER").build()
             }.doOnComplete {
                 logger.info("Failed authentication attempt from user $username - not in database.")
-                throw UsernameNotFoundException("User not found")
+                throw UsernameNotFoundException("User $username not found")
             }.blockingGet()
         }
         logger.info("Username not set $username?")

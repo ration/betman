@@ -30,6 +30,10 @@ export class GamesService {
     return this.http.get<Bet>(this.betsUrl + '/' + game);
   }
 
+  betsForUser(game: string, user: string): Observable<Bet> {
+    return this.http.get<Bet>(this.betsUrl + '/' + game + '/' + user);
+  }
+
   guess(group: string, bets: Bet): Observable<Bet> {
     return this.http.post<Bet>(this.guessUrl + '/' + group, bets);
   }

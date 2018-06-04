@@ -18,6 +18,7 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Component
+import java.time.Instant
 import betman.db.exposed.Games.name as gameName
 
 @Component
@@ -73,6 +74,15 @@ class ExposedBettingRepository : BettingRepository {
                 val old = BetDao.wrapRows(Bets.innerJoin(Matches).innerJoin(Games).select {
                     (Bets.user eq userDao.id) and (gameName eq gameDao.name) and (Bets.group eq groupDao.id) and (Matches.externalId eq score.matchId)
                 }).singleOrNull()
+                // Simply ignore attemps to modify matches that have been played or started
+                if (matchDao.date <= Instant.now().toEpochMilli()) {
+                    if (old != null) {
+                        score.home = old.home
+                        score.away = old.away
+                    }
+                    continue
+                }
+
                 if (old != null) {
                     old.away = score.away
                     old.home = score.home

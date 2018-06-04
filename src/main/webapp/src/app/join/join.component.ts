@@ -26,6 +26,7 @@ export class JoinComponent implements OnInit {
       this.groupService.get(this.key).subscribe((value: Group) => {
         this.group = value;
         if (this.group.userDisplayName) {
+          this.groupService.setActive(this.group.key);
           this.router.navigate(['/group', this.group.key]);
         }
       });
@@ -42,6 +43,7 @@ export class JoinComponent implements OnInit {
   join() {
     if (this.key && this.name) {
       this.groupService.join(this.key, this.name).subscribe(v => {
+        this.groupService.setActive(v.key);
         this.router.navigate(['/group', v.key]);
       });
     }

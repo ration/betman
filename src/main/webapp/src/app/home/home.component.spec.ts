@@ -9,6 +9,7 @@ import {AuthenticationService} from '../authentication.service';
 import {GroupsService} from '../groups.service';
 import {Group} from '../group.model';
 import {of} from 'rxjs/internal/observable/of';
+import {IntroductionComponent} from '../introduction/introduction.component';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -16,7 +17,7 @@ describe('HomeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [HomeComponent],
+      declarations: [HomeComponent, IntroductionComponent],
       imports: [HttpClientTestingModule, ReactiveFormsModule, FormsModule, RouterTestingModule.withRoutes([])],
       providers: [UserService, AuthenticationService, GroupsService]
     })

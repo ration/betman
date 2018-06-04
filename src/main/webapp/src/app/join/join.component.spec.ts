@@ -9,9 +9,9 @@ import {Group} from '../group.model';
 import {ActivatedRoute} from '@angular/router';
 import {of} from 'rxjs';
 import {AuthenticationService} from '../authentication.service';
-import {User} from '../user.model';
 import {LoginComponent} from '../login/login.component';
 import {GroupComponent} from '../group/group.component';
+import {IntroductionComponent} from '../introduction/introduction.component';
 
 const KEY = 'somekey';
 const group: Group = {name: 'name', description: 'description', game: 'game', key: KEY};
@@ -23,7 +23,7 @@ describe('JoinComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [JoinComponent, LoginComponent, GroupComponent],
+      declarations: [JoinComponent, LoginComponent, GroupComponent, IntroductionComponent],
       imports: [FormsModule, RouterTestingModule.withRoutes([{path: 'join/:key', component: JoinComponent},
         {path: 'login/:key', component: LoginComponent},
         {path: 'group/:key', component: GroupComponent}]), HttpClientTestingModule],

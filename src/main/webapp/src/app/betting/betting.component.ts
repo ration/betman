@@ -10,6 +10,7 @@ import {AlertService} from '../alert.service';
 import {debounceTime, flatMap} from 'rxjs/operators';
 import {GroupsService} from '../groups.service';
 import {Group} from '../group.model';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-betting',
@@ -24,19 +25,18 @@ export class BettingComponent implements OnInit {
 
 
   private saveSubject: Subject<Bet> = new Subject<Bet>();
-  private user = '';
+  user = '';
   private lookup = new Map<number, ScoreBet>();
 
   constructor(private gamesService: GamesService,
               private authService: AuthenticationService,
               private alertService: AlertService,
-              private groupService: GroupsService) {
+              private groupService: GroupsService,
+              private route: ActivatedRoute) {
     const key = this.groupService.getActive();
 
     if (key) {
       this.bets.groupKey = key;
-
-
       this.groupService.get(key).pipe(
         flatMap((group: Group) => this.gamesService.all(group.game))
       ).subscribe((data: Game) => {
@@ -66,13 +66,18 @@ export class BettingComponent implements OnInit {
       this.gamesService.guess(this.bets.groupKey, this.bets).subscribe(value => {
         this.bets = value;
         this.updateLookup();
+        this.alertService.success('Saved', false, 2000);
       });
     }
   }
 
   canBet(match: Match): boolean {
     const now = new Date();
-    return new Date(Date.parse(match.date)) >= now;
+    return new Date(Date.parse(match.date)) >= now && this.ownBets();
+  }
+
+  ownBets(): boolean {
+    return this.authService.currentUser() != null && this.user === this.authService.currentUser().name;
   }
 
   onChange() {
@@ -126,13 +131,14 @@ export class BettingComponent implements OnInit {
   }
 
   private getBettingData() {
+    this.user = this.route.snapshot.params.user || this.authService.currentUser().name;
 
     for (const game of this.game.matches) {
       const scoreBet = {id: game.id, home: 0, away: 0};
       this.lookup[game.id] = scoreBet;
       this.bets.scores.push(scoreBet);
     }
-    this.gamesService.bets(this.bets.groupKey).subscribe((value: Bet) => {
+    this.gamesService.betsForUser(this.bets.groupKey, this.user).subscribe((value: Bet) => {
       if (this.bets.scores.length === value.scores.length) {
         this.bets = value;
         this.updateLookup();

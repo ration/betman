@@ -19,6 +19,27 @@
           </div>
         </div>
       </form>
+    <a class="nav-link" *ngIf="group" routerLink="betting">Your betting page</a>
+
+  </div>
+
+    <div id="groupInfo">
+      <h2>Standings</h2>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">User</th>
+          <th scope="col">Score</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of group.standings; index as i">
+          <td>{{i+1}}.</td>
+          <td><a [routerLink]=" ['/betting', user.user] ">{{user.user}}</a></td>
+          <td>{{user.points}}</td>
+        </tbody>
+      </table>
     </div>
     <form #groupEditForm="ngForm" (ngSubmit)="groupEditForm.form.valid && updateGroup()">
       <div id="scoring" class="info-block">
@@ -75,23 +96,7 @@
         </div>
       </div>
     </form>
-    <div id="groupInfo">
-      <h2>Standings</h2>
-      <table class="table table-striped">
-        <thead>
-        <tr>
-          <th scope="col">User</th>
-          <th scope="col">Score</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let user of group.standings; index as i">
-          <td>{{i+1}}.</td>
-          <td>{{user.user}}</td>
-          <td>{{user.points}}</td>
-        </tbody>
-      </table>
-    </div>
   </div>
+
 </div>
 

@@ -24,6 +24,7 @@ import {GroupsService} from './groups.service';
 import {JoinComponent} from './join/join.component';
 import {AuthInterceptorProvider} from './auth.interceptor';
 import {IntroductionComponent} from './introduction/introduction.component';
+import {FooterComponent} from './footer/footer.component';
 
 
 const providers: Array<any> = [
@@ -42,7 +43,8 @@ const providers: Array<any> = [
     GroupComponent,
     NewGroupComponent,
     JoinComponent,
-    IntroductionComponent
+    IntroductionComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

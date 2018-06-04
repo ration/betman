@@ -9,6 +9,7 @@ import {UserService} from '../user.service';
 import {AlertService} from '../alert.service';
 import {ActivatedRoute} from '@angular/router';
 import {GroupsService} from '../groups.service';
+import {IntroductionComponent} from '../introduction/introduction.component';
 
 const KEY = 'somekey';
 
@@ -18,7 +19,7 @@ describe('LoginComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [LoginComponent],
+      declarations: [LoginComponent, IntroductionComponent],
       imports: [HttpClientTestingModule, ReactiveFormsModule, FormsModule, RouterTestingModule.withRoutes([
         {path: 'login', component: LoginComponent}])],
       providers: [UserService, AuthenticationService, AlertService, GroupsService,

@@ -1,4 +1,7 @@
 <form #bettingForm="ngForm">
+  <div *ngIf="game" id="bettingTitle" class="container">
+    <h2 class="text-center">{{game.name}} bets for {{user}}</h2>
+  </div>
   <div id="winners" class="container">
     <div class="input-group mb-4">
       <div class="input-group-prepend">
@@ -10,14 +13,14 @@
                 [attr.selected]="team.id == bets.winner ? true: null">{{team.name}}
         </option>
       </select>
-      <label for="goalKing" class="input-group-text">Goal King</label>
+      <label for="goalKing" class="input-group-text">erGoal King</label>
       <input name="Goal King" id="goalKing" class="form-control" type="text" [(ngModel)]="bets.goalKing"
              (ngModelChange)="onChange()" placeholder="Miroslav Klose">
     </div>
   </div>
 
   <div class="container" id="matchBets" *ngIf="game.matches.length == bets.scores.length && teams">
-    <button class="btn btn-primary m-1" (click)="guess()">I know nothing, guess for me</button>
+    <button *ngIf="ownBets()" class="btn btn-primary m-1" (click)="guess()">I know nothing, guess for me</button>
 
     <table class="table table-striped">
       <thead>

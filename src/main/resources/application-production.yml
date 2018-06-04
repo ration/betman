@@ -1,0 +1,27 @@
+
+server:
+  port: 8080
+
+spring:
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+
+db:
+  url: jdbc:postgresql://google/betman?useSSL=false&socketFactoryArg=betman-1524082165598:europe-west3:production&socketFactory=com.google.cloud.sql.postgres.SocketFactory&user=betman&password=johnwickampuupahiksia
+  username: betman
+  password: johnwickampuupahiksia
+
+
+security:
+  jwt:
+    token:
+      secret-key: LDtRzRaM7fRcKOecWAbZ
+      expire-length: 36000
+
+logging:
+  level:
+    Exposed: DEBUG
+
+

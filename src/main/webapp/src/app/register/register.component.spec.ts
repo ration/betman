@@ -10,6 +10,7 @@ import {AlertService} from '../alert.service';
 import {User} from '../user.model';
 import {of} from 'rxjs/internal/observable/of';
 import {LoginComponent} from '../login/login.component';
+import {IntroductionComponent} from '../introduction/introduction.component';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -18,12 +19,12 @@ describe('RegisterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [RegisterComponent, LoginComponent],
+      declarations: [RegisterComponent, LoginComponent, IntroductionComponent],
       imports: [HttpClientTestingModule, FormsModule, RouterTestingModule.withRoutes([{
         path: 'login',
         component: LoginComponent
       }])],
-      providers: [UserService, AuthenticationService, AlertService]
+      providers: [UserService, AuthenticationService, AlertService, IntroductionComponent]
     }).compileComponents();
   }));
 
@@ -39,7 +40,7 @@ describe('RegisterComponent', () => {
     registerSpy.and.returnValue(of('OK'));
     const user: User = {name: 'some', password: 'somePass'};
     component.model = user;
-    component.register()
+    component.register();
     expect(registerSpy).toHaveBeenCalledWith(user);
   });
 });

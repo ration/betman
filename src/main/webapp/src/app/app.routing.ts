@@ -14,6 +14,8 @@ export const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'betting', component: BettingComponent, canActivate: [AuthGuard]},
+  {path: 'betting/:user', component: BettingComponent, canActivate: [AuthGuard]},
+
   {path: 'group/:group', component: GroupComponent, canActivate: [AuthGuard]},
   {path: 'group', component: GroupComponent, canActivate: [AuthGuard]},
   {path: 'new-group', component: NewGroupComponent, canActivate: [AuthGuard]},

@@ -92,6 +92,26 @@ class ExposedBettingRepositoryTest : DbTest() {
         assertEquals(1, bet.winner)
     }
 
+    @Test
+    fun cantBetOnPast() {
+        makeBet(game)
+        var bet = repository.get(key, name).blockingGet()
+        bet.scores[0].home = 10
+        bet = repository.bet(key, bet, name).blockingGet()
+        assertEquals(10, bet.scores[0].home)
+        setGameToPast(2)
+        bet.scores[0].home = 1
+        bet = repository.bet(key, bet, name).blockingGet()
+        assertEquals(10, bet.scores[0].home)
+    }
+
+    private fun setGameToPast(id: Int) {
+        transaction {
+            val match = MatchDao.find { Matches.externalId eq id }.single()
+            match.date = Instant.now().minusSeconds(1000).toEpochMilli()
+        }
+    }
+
     private fun makeBet(game: GameDao): MatchDao {
         val germany = createTeam(game, "germany", 1)
         val england = createTeam(game, "england", 2)
@@ -116,13 +136,13 @@ class ExposedBettingRepositoryTest : DbTest() {
     }
 
     private fun createMatch(gameDao: GameDao, homeDao: TeamDao, awayDao: TeamDao,
-                            ext: Int): MatchDao = transaction {
+                            ext: Int, time: Long = Instant.now().plusSeconds(1000).toEpochMilli()): MatchDao = transaction {
         MatchDao.new {
             game = gameDao
             externalId = ext
             home = homeDao
             away = awayDao
-            date = Instant.now().toEpochMilli()
+            date = time
             description = "some"
         }
     }

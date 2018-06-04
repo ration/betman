@@ -18,7 +18,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 export class GroupComponent implements OnInit, OnDestroy {
 
   private sub: Subscription;
-  group: Group;
+  group: Group = null;
   link: any;
   userDisplayName: string;
   groupId: string;

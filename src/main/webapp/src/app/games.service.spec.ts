@@ -37,7 +37,8 @@ describe('GamesService', () => {
         name: 'Fifa2018',
         description: 'Fifa2018',
         id: 1,
-        matches: [match1]
+        matches: [match1],
+        teams: [germany, england]
       };
 
 
@@ -82,10 +83,4 @@ describe('GamesService', () => {
       httpMock.verify();
     }));
 
-  /* TODO make me
-  it('gets teams', inject([HttpTestingController, GamesService],
-    (httpMock: HttpTestingController, gamesService: GamesService) => {
-      const req = httpMock.expectOne(gamesService.getTeamsUrl + '?group=1');
-
-    })); */
 });

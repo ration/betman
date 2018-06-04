@@ -9,7 +9,7 @@
          routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">Home</a>
       <a class="nav-item nav-link" *ngIf="group" routerLink="group">{{active | async}}</a>
       <a class="nav-item nav-link" *ngIf="group" routerLink="betting">Betting</a>
-      <a class="nav-item nav-link" (click)="logout()">Logout</a>
+      <a class="nav-item nav-link" *ngIf="user" (click)="logout()">Logout {{user}}</a>
 
     </div>
   </div>
@@ -24,3 +24,4 @@
     </div>
   </div>
 </div>
+<app-footer></app-footer>

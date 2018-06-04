@@ -15,6 +15,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
   active: Observable<string> = of('Group');
   group: string = null;
   isLoggedIn: Observable<boolean>;
+  user: string = null;
 
   constructor(private authService: AuthenticationService, private groupService: GroupsService) {
 
@@ -23,6 +24,11 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
+    this.isLoggedIn.subscribe(value => {
+      if (value && this.authService.currentUser()) {
+        this.user = this.authService.currentUser().name;
+      }
+    });
 
     this.active = this.groupService.active().pipe(filter(it => it != null), map(it => it.name));
     this.active.subscribe(active => this.group = active);

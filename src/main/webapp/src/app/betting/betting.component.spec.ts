@@ -41,6 +41,9 @@ describe('BettingComponent', () => {
   it('allow edit', () => {
     const date1 = new Date();
     date1.setHours(date1.getHours() - 2);
+    const authService = TestBed.get(AuthenticationService);
+    component.user = 'user';
+    spyOn(authService, 'currentUser').and.returnValue({name: 'user'});
     const match1: Match = {
       'id': 1,
       home: germany.id,

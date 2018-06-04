@@ -3,7 +3,6 @@ import {User} from '../user.model';
 import {UserService} from '../user.service';
 import {Group} from '../group.model';
 import {GroupsService} from '../groups.service';
-import {group} from '@angular/animations';
 
 
 @Component({
@@ -34,10 +33,7 @@ export class HomeComponent implements OnInit {
   }
 
   groupSelect(selection) {
-    console.log('Changing to ' + selection);
     this.active = selection;
     this.groupService.setActive(selection);
   }
-
-
 }
