@@ -9,7 +9,7 @@
       </div>
       <select id="winner" name="winner" title="Select winner" class="form-control"
               (change)="winnerSelect($event.target.value)">
-        <option *ngFor="let team of game.teams" [value]="team.id"
+        <option *ngFor="let team of teamsByName()" [value]="team.id"
                 [attr.selected]="team.id == bets.winner ? true: null">{{team.name}}
         </option>
       </select>

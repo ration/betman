@@ -130,6 +130,10 @@ export class BettingComponent implements OnInit {
 
   }
 
+  teamsByName(): Team[] {
+    return this.game.teams.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
   private getBettingData() {
     this.user = this.route.snapshot.params.user || this.authService.currentUser().name;
 
