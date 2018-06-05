@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {GroupsService} from '../groups.service';
 import {Group} from '../group.model';
 import {AuthenticationService} from '../authentication.service';
+import {AlertService} from '../alert.service';
 
 @Component({
   selector: 'app-join',
@@ -17,10 +18,12 @@ export class JoinComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private groupService: GroupsService,
-              private authService: AuthenticationService) {
+              private authService: AuthenticationService,
+              private alertService: AlertService) {
   }
 
   ngOnInit() {
+    this.name = this.authService.currentUser().name
     this.key = this.route.snapshot.params.key;
     if (this.key && this.authService.currentUser()) {
       this.groupService.get(this.key).subscribe((value: Group) => {
@@ -45,7 +48,7 @@ export class JoinComponent implements OnInit {
       this.groupService.join(this.key, this.name).subscribe(v => {
         this.groupService.setActive(v.key);
         this.router.navigate(['/group', v.key]);
-      });
+      }, error => this.alertService.error(error.error['message']));
     }
   }
 

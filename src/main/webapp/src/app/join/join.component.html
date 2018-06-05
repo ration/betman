@@ -1,9 +1,18 @@
-<div *ngIf="group">
+<div *ngIf="group" class="col-sm m-4">
   Do you want to join <strong>{{group.name}}</strong>?
 </div>
 <form #joinForm="ngForm" (ngSubmit)="join()">
-  <input name="name" id="description" type="text"
-         class="form-control" [(ngModel)]="name" #description="ngModel"
-         placeholder="Your name in this group" aria-label="Join as" aria-describedby="Join as">
-  <input [disabled]="name == null" class="btn btn-primary" type="submit" value="Join">
+  <div class="input-group">
+
+    <div class="input-group-prepend">
+      <label for="name" class="input-group-text">Your name in this group</label>
+    </div>
+    <input id="name" name="name" type="text"
+           class="form-control wider" [(ngModel)]="name" #description="ngModel"
+           placeholder="Your name in this group" aria-label="Join as" aria-describedby="Join as">
+    <div class="input-group-append">
+
+      <input [disabled]="name == null" class="btn btn-primary" type="submit" value="Join">
+    </div>
+  </div>
 </form>

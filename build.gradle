@@ -38,7 +38,7 @@ apply plugin: 'com.palantir.docker'
 
 jar {
     baseName = 'betman'
-    version = '0.1.0'
+    version = '1.0.0'
 }
 
 
@@ -164,7 +164,7 @@ jar {
 
 bootJar {
     baseName = 'betman'
-    version =  '0.1.0'
+    version =  '1.0.0'
 }
 
 

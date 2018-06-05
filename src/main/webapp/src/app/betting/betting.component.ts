@@ -23,6 +23,7 @@ export class BettingComponent implements OnInit {
   bets: Bet = {scores: []};
   teams: Map<number, Team> = new Map<number, Team>();
   displayName: string = null;
+  group: Group = null;
 
 
   private saveSubject: Subject<Bet> = new Subject<Bet>();
@@ -40,6 +41,7 @@ export class BettingComponent implements OnInit {
       this.bets.groupKey = key;
       this.groupService.get(key).pipe(
         flatMap((group: Group) => {
+          this.group = group;
           return this.gamesService.all(group.game);
         })
       ).subscribe((data: Game) => {
@@ -156,5 +158,14 @@ export class BettingComponent implements OnInit {
     });
   }
 
+  started(): boolean {
+    if (this.game) {
+      return this.game.matches.find(match => {
+        return new Date(Date.parse(match.date)) <= (new Date());
+      }) !== undefined;
+    } else {
+      return false;
+    }
+  }
 
 }

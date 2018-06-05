@@ -88,4 +88,36 @@ describe('BettingComponent', () => {
   });
 
 
-});
+  it('cant edit winner/goalKing on started', () => {
+    expect(component.started()).toBe(false);
+    const future: Date = new Date();
+    future.setDate(future.getDate() + 1);
+    const past: Date = new Date();
+    past.setDate(past.getDate() - 1);
+    const match = {
+      id: 1,
+      home: germany.id,
+      away: england.id,
+      date: future.toISOString(),
+      description: 'preliminary',
+      homeGoals: 0,
+      awayGoals: 1,
+    };
+    const match2 = {
+      id: 1,
+      home: germany.id,
+      away: england.id,
+      date: future.toISOString(),
+      description: 'preliminary',
+      homeGoals: 0,
+      awayGoals: 1,
+    };
+    component.game = {id: -1, name: 'some', description: 'some', matches: [match, match2], teams: [germany, england]};
+    expect(component.started()).toBe(false);
+    match.date = past.toISOString();
+    component.game = {id: -1, name: 'some', description: 'some', matches: [match, match2], teams: [germany, england]};
+    expect(component.started()).toBe(true);
+
+  });
+})
+;
