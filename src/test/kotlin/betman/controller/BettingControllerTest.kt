@@ -89,5 +89,4 @@ class BettingControllerTest {
         verify(bettingRepository, times(1)).bet(any(), any(), any())
         assertNotNull(bet)
     }
-
 }

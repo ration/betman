@@ -1,11 +1,11 @@
 <form #bettingForm="ngForm">
   <div *ngIf="game" id="bettingTitle" class="container">
-    <h2 class="text-center">{{game.name}} bets for {{user}}</h2>
+    <h2 class="text-center">{{game.name}} bets for {{displayName}}</h2>
   </div>
   <div id="winners" class="container">
     <div class="input-group mb-4">
       <div class="input-group-prepend">
-        <label for="winner" class="input-group-text">Goal King</label>
+        <label for="winner" class="input-group-text">Winner</label>
       </div>
       <select id="winner" name="winner" title="Select winner" class="form-control"
               (change)="winnerSelect($event.target.value)">
