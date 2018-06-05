@@ -1,9 +1,6 @@
 package betman.db.exposed
 
-import betman.InvalidKeyException
-import betman.InvalidRequestException
-import betman.InvalidUserException
-import betman.UnknownUserException
+import betman.*
 import betman.pojos.Group
 import org.junit.Assert.*
 import org.junit.Before
@@ -122,6 +119,25 @@ class ExposedGroupRepositoryTest : DbTest() {
         join()
         val ans = repository.get(key, userName).blockingGet()
         assertTrue(ans.standings.size == 1)
+    }
+
+    @Test(expected = UserAlreadyTakenException::class)
+    fun noTwoUsersSameDisplayName() {
+        createGame()
+        createGroup()
+        createUser("another")
+        repository.join(key, userName, displayName).blockingGet()
+        repository.join(key, "another", displayName).blockingGet()
+    }
+
+    @Test(expected = UserAlreadyTakenException::class)
+    fun changeNameToSame() {
+        createGame()
+        createGroup()
+        createUser("another")
+        repository.join(key, userName, displayName).blockingGet()
+        repository.join(key, "another", "someName").blockingGet()
+        repository.updateDisplayName(key, "another", displayName)
     }
 
 }

@@ -4,7 +4,9 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup" routerLinkActive="active">
+
     <div class="navbar-nav">
+
       <a class="nav-item nav-link" [routerLink]=" ['./'] "
          routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">Home</a>
       <a class="nav-item nav-link" *ngIf="group" routerLink="group">{{active | async}}</a>
@@ -20,6 +22,7 @@
   <div class="container">
     <div class="col-sm-8 col-sm-offset-2">
       <app-alert-message></app-alert-message>
+
       <router-outlet></router-outlet>
     </div>
   </div>

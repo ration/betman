@@ -52,9 +52,10 @@ object Converters {
 
             // Maybe later unblock and streamize this entire build process
             return users.map {
+                val user = UserDao.findById(it.user)?.name ?: it.name
                 Score(points = PointCalculator.calculate(group,
                         toGame(game)!!, winner, game.goalKing, bettingRepository.get(group.key!!, getUserName(it)).blockingGet()),
-                        user = it.name)
+                        user = user, displayName = it.name)
             }.sortedByDescending { it.points }
         }
         return listOf()

@@ -14,6 +14,6 @@ class InvalidKeyException(msg: String) : BadRequestException(msg)
 class UnknownGameException : BadRequestException("Unknown game id")
 class UnknownMatchException(msg: String) : BadRequestException(msg)
 class InvalidRequestException(reason: String) : BadRequestException(reason)
-class UserAlreadyTakenException : BadRequestException("Username already taken")
+class UserAlreadyTakenException(msg: String = "Username already taken") : BadRequestException(msg)
 class InvalidTokenException(msg: String) : BadRequestException(msg)
 

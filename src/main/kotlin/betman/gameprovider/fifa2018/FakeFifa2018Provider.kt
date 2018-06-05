@@ -38,7 +38,7 @@ class FakeFifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") p
     override val description: String
         get() = "Fifa 2018 World Cup"
 
-    private lateinit var matchList: List<Match>
+    private var matchList: List<Match>
     private val data: Lsv =
             loadData()
 
@@ -57,7 +57,6 @@ class FakeFifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") p
                 mapGames("Bronze Game", data.knockout.round2Loser.matches) +
                 mapGames("Final", data.knockout.round2.matches)).sortedBy { it.id }
         Observable.interval(0, 1, TimeUnit.HOURS).subscribe { loadMatches() }
-
     }
 
 

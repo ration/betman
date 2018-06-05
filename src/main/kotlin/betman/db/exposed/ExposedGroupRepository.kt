@@ -7,6 +7,7 @@ import betman.db.exposed.GroupUser.user
 import betman.db.exposed.Groups.key
 import betman.db.exposed.Users.name
 import betman.pojos.Group
+import betman.pojos.User
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
@@ -72,9 +73,18 @@ class ExposedGroupRepository : GroupRepository {
         transaction {
             val userDao = UserDao.find { name eq username }.firstOrNull() ?: throw UnknownUserException()
             val groupDao = GroupDao.find { Groups.key eq group }.firstOrNull() ?: throw UnknownGroupException()
+            verifyExisting(displayName, userDao)
             val dao = GroupUserDao.find { (user eq userDao.id) and (GroupUser.group eq groupDao.id) }.single()
+
             dao.name = displayName
             commit()
+        }
+    }
+
+    private fun verifyExisting(displayName: String, userDao: UserDao) {
+        val existing = GroupUserDao.find { (GroupUser.name eq displayName) }.singleOrNull()
+        if (existing != null && existing.user != userDao.id) {
+            throw UserAlreadyTakenException("Group already has name $displayName")
         }
     }
 
@@ -83,6 +93,7 @@ class ExposedGroupRepository : GroupRepository {
             val userDao = UserDao.find { name eq username }.firstOrNull() ?: throw UnknownUserException()
             val groupDao = GroupDao.find { key eq inviteKey }.firstOrNull()
                     ?: throw InvalidKeyException("Unknown group key")
+            verifyExisting(displayName, userDao)
             val dao = GroupUserDao.new {
                 user = userDao.id
                 group = groupDao.id

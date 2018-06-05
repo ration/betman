@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {Bet, ScoreBet} from '../bet.model';
 import {GamesService} from '../games.service';
-import {Subject} from 'rxjs';
+import {Observable, of, Subject} from 'rxjs';
 
 
 import {AuthenticationService} from '../authentication.service';
 import {Game, Match, Team} from '../game.model';
 import {AlertService} from '../alert.service';
-import {debounceTime, flatMap} from 'rxjs/operators';
+import {debounceTime, flatMap, map} from 'rxjs/operators';
 import {GroupsService} from '../groups.service';
 import {Group} from '../group.model';
 import {ActivatedRoute} from '@angular/router';
@@ -22,6 +22,7 @@ export class BettingComponent implements OnInit {
   game: Game = {id: -1, name: '', matches: [], description: '', teams: []};
   bets: Bet = {scores: []};
   teams: Map<number, Team> = new Map<number, Team>();
+  displayName: string = null;
 
 
   private saveSubject: Subject<Bet> = new Subject<Bet>();
@@ -38,7 +39,9 @@ export class BettingComponent implements OnInit {
     if (key) {
       this.bets.groupKey = key;
       this.groupService.get(key).pipe(
-        flatMap((group: Group) => this.gamesService.all(group.game))
+        flatMap((group: Group) => {
+          return this.gamesService.all(group.game);
+        })
       ).subscribe((data: Game) => {
         for (const team of data.teams) {
           this.teams[team.id] = team;
@@ -137,12 +140,14 @@ export class BettingComponent implements OnInit {
   private getBettingData() {
     this.user = this.route.snapshot.params.user || this.authService.currentUser().name;
 
+
     for (const game of this.game.matches) {
       const scoreBet = {id: game.id, home: 0, away: 0};
       this.lookup[game.id] = scoreBet;
       this.bets.scores.push(scoreBet);
     }
     this.gamesService.betsForUser(this.bets.groupKey, this.user).subscribe((value: Bet) => {
+      this.displayName = value.userDisplayName;
       if (this.bets.scores.length === value.scores.length) {
         this.bets = value;
         this.updateLookup();

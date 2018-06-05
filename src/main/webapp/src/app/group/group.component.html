@@ -36,7 +36,7 @@
         <tbody>
         <tr *ngFor="let user of group.standings; index as i">
           <td>{{i+1}}.</td>
-          <td><a [routerLink]=" ['/betting', user.user] ">{{user.user}}</a></td>
+          <td><a [routerLink]=" ['/betting', user.user] ">{{user.displayName}}</a></td>
           <td>{{user.points}}</td>
         </tbody>
       </table>
