@@ -10,7 +10,7 @@ import java.lang.Math.pow
  * Random score generator for Football scores
  */
 object FootballGuesser {
-    
+
     fun guess(odds: Double?): Int {
         // We don't have the actual goal stats that poisson works best. Just do some guesstimation
         val base = 1-(1-1/(odds ?: 1.0)) + 0.5
