@@ -23,9 +23,10 @@ export class JoinComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.name = this.authService.currentUser().name
     this.key = this.route.snapshot.params.key;
     if (this.key && this.authService.currentUser()) {
+      this.name = this.authService.currentUser().name;
+
       this.groupService.get(this.key).subscribe((value: Group) => {
         this.group = value;
         if (this.group.userDisplayName) {
