@@ -65,4 +65,18 @@ class PointCalculatorTest {
         val score: Int = PointCalculator.calculate(group, game, null, "Some King", bet)
         assertEquals(group.goalKingPoints, score)
     }
+
+    @Test
+    fun matchWinner() {
+        val bet = Bet(groupKey = group.key!!, scores = listOf(ScoreBet(1, home = 3, away = 1)))
+        val score: Int = PointCalculator.calculate(group, game, null, "XXXX", bet)
+        assertEquals(group.correctWinnerPoints, score)
+    }
+
+    @Test
+    fun matchWinnerAndSingle() {
+        val bet = Bet(groupKey = group.key!!, scores = listOf(ScoreBet(1, home = 5, away = 1)))
+        val score: Int = PointCalculator.calculate(group, game, null, "XXXX", bet)
+        assertEquals(group.correctWinnerPoints + group.teamGoalPoints, score)
+    }
 }

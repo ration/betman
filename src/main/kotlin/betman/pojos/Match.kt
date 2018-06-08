@@ -9,7 +9,7 @@ data class Match(val id: Int,
                  val description: String,
                  var awayGoals: Int? = null,
                  var homeGoals: Int? = null,
-                 val homeOdds: Double? = null,
+                 var homeOdds: Double? = null,
                  val awayOdds: Double? = null,
                  @JsonFormat(shape = JsonFormat.Shape.STRING) val date: Date)
 
