@@ -80,6 +80,15 @@ class ExposedBettingRepository : BettingRepository {
                     if (old != null) {
                         score.home = old.home
                         score.away = old.away
+                    } else {
+                        // If the player is late, mark the bet as 0-0
+                        BetDao.new {
+                            match = matchDao.id
+                            user = userDao.id
+                            home = 0
+                            away = 0
+                            group = groupDao.id
+                        }
                     }
                     continue
                 }

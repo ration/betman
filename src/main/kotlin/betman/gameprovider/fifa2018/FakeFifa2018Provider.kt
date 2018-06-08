@@ -1,5 +1,6 @@
 package betman.gameprovider.fifa2018
 
+import betman.FootballGuesser
 import betman.api.JsonLoader
 import betman.api.provider.GameDataProvider
 import betman.pojos.Match
@@ -9,6 +10,7 @@ import io.reactivex.subjects.BehaviorSubject
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.stereotype.Component
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
@@ -38,7 +40,7 @@ class FakeFifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") p
     override val description: String
         get() = "Fifa 2018 World Cup"
 
-    private var matchList: List<Match>
+    private lateinit var matchList: List<Match>
     private val data: Lsv =
             loadData()
 
@@ -56,7 +58,7 @@ class FakeFifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") p
                 mapGames("Semi Finals", data.knockout.round4.matches) +
                 mapGames("Bronze Game", data.knockout.round2Loser.matches) +
                 mapGames("Final", data.knockout.round2.matches)).sortedBy { it.id }
-        Observable.interval(0, 1, TimeUnit.HOURS).subscribe { loadMatches() }
+        Observable.interval(0, 1, TimeUnit.MINUTES).subscribe { loadMatches() }
     }
 
 
@@ -89,8 +91,8 @@ class FakeFifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") p
 
             if (match.date.before(Date())) {
                 logger.info("Finishing ${match.description}")
-                match.homeGoals = r.nextInt(5)
-                match.awayGoals = r.nextInt(5)
+                match.homeGoals = FootballGuesser.guess(null)
+                match.awayGoals = FootballGuesser.guess(null)
             }
         }
         gameSubject.onNext(matchList)

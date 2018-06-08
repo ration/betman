@@ -42,14 +42,17 @@
 }
 
 .correct {
-  font-weight: bolder;
+  color: red;
 }
 
 .exact {
-  background-color: cornflowerblue;
+  background-color: gold;
 }
 
 .partial {
-  background-color: aquamarine;
+  background-color: bisque;
 }
 
+.winnerPartial {
+  background-color: khaki;
+}

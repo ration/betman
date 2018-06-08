@@ -11,6 +11,7 @@ import {debounceTime, flatMap, map} from 'rxjs/operators';
 import {GroupsService} from '../groups.service';
 import {Group} from '../group.model';
 import {ActivatedRoute} from '@angular/router';
+import {a} from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-betting',
@@ -114,13 +115,31 @@ export class BettingComponent implements OnInit {
     if (match.homeGoals != null && match.awayGoals != null) {
       const home = match.homeGoals === this.getScore(match.id).home;
       const away = match.awayGoals === this.getScore(match.id).away;
+      const winner = this.winnerCorrect(match);
+
       if (home && away) {
         return 'exact';
-      } else if (home || away) {
-        return 'partial';
+      } else if (winner && (home || away)) {
+        return 'winnerPartial';
+      }
+      if (winner || home || away) {
+        return'partial';
       }
     }
     return '';
+  }
+
+
+  winnerCorrect(match: Match) {
+    if (match.homeGoals != null && match.awayGoals != null) {
+      const result = match.homeGoals - match.awayGoals;
+      const betResult = this.getScore(match.id).home - this.getScore(match.id).away;
+      return ((result < 0 && betResult < 0) ||
+        (result === 0 && betResult === 0) ||
+        (result > 0 && betResult > 0));
+
+    }
+    return false;
   }
 
   canSee(match: Match) {

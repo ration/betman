@@ -1,1 +1,1 @@
-ALTER TABLE Groups ADD COLUMN correct_winner_points INTEGER NeOT NULL DEFAULT 1;
+ALTER TABLE Groups ADD COLUMN correct_winner_points INTEGER NOT NULL DEFAULT 1;
