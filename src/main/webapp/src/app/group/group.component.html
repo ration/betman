@@ -19,7 +19,7 @@
           </div>
         </div>
       </form>
-    <a class="nav-link" *ngIf="group" routerLink="betting">Your betting page</a>
+    <a class="nav-link" *ngIf="group" [routerLink]=" ['/betting'] ">Your betting page</a>
 
   </div>
 
@@ -67,10 +67,10 @@
         </div>
         <div class="row">
           <div class="col col-10">
-            Points for guessing winner
+            Points for guessing World Cup champion
           </div>
           <div *ngIf="isAdmin()" class="col">
-            <input title="Winner points" class="col points" name="winnnerPoints" [(ngModel)]="group.winnerPoints">
+            <input title="Overall Winner points" class="col points" name="winnnerPoints" [(ngModel)]="group.winnerPoints">
           </div>
           <div class="col" *ngIf="!isAdmin()">
             {{group.winnerPoints}}
@@ -85,6 +85,17 @@
           </div>
           <div class="col" *ngIf="!isAdmin()">
             {{group.goalKingPoints}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col col-10">
+            Points for guessing the winning team (or tie)
+          </div>
+          <div *ngIf="isAdmin()" class="col">
+            <input title="Winning team points per match" class="col points" name="correctWinnerPoints" [(ngModel)]="group.correctWinnerPoints">
+          </div>
+          <div class="col" *ngIf="!isAdmin()">
+            {{group.correctWinnerPoints}}
           </div>
         </div>
         <div *ngIf="isAdmin()" class="row">

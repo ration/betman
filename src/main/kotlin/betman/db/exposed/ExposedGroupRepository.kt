@@ -37,6 +37,7 @@ class ExposedGroupRepository : GroupRepository {
                 groupDao.goalKingPoints = group.goalKingPoints
                 groupDao.teamGoalPoints = group.teamGoalPoints
                 groupDao.exactScorePoints = group.exactScorePoints
+                groupDao.correctWinnerPoints= group.correctWinnerPoints
                 commit()
             }
         } catch (e: Exception) {
@@ -118,6 +119,7 @@ class ExposedGroupRepository : GroupRepository {
                 goalKingPoints = newGroup.goalKingPoints
                 teamGoalPoints = newGroup.teamGoalPoints
                 exactScorePoints = newGroup.exactScorePoints
+                correctWinnerPoints= newGroup.correctWinnerPoints
                 owner = userDao.id
             }
             Converters.toGroup(group, gameDao.name, username)

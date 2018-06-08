@@ -92,10 +92,13 @@ class ExposedGroupRepositoryTest : DbTest() {
     fun updateGroup() {
         join()
         assertEquals(1, group.teamGoalPoints)
-        val newGroup = Group(name = "new name", key = key, description = "some", teamGoalPoints = 33, game = "game", admin = "user")
+        val newGroup = Group(name = "new name", key = key, description = "some", teamGoalPoints = 33, game = "game", admin = "user",
+                correctWinnerPoints = 100)
         repository.update(newGroup, userName)
         val saved = repository.get(group.key!!, userName).blockingGet()
         assertEquals(33, saved.teamGoalPoints)
+        assertEquals(100, saved.correctWinnerPoints)
+
     }
 
     @Test

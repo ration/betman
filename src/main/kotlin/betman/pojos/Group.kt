@@ -11,4 +11,5 @@ data class Group(var id: Int? = null,
                  val winnerPoints: Int = 5,
                  val goalKingPoints: Int = 5,
                  val teamGoalPoints: Int = 1,
-                 val exactScorePoints: Int = 5)
+                 val exactScorePoints: Int = 5,
+                 val correctWinnerPoints: Int = 1)

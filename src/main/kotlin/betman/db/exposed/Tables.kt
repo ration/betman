@@ -40,6 +40,7 @@ object Groups : IntIdTable() {
     val goalKingPoints = integer("goal_king_points")
     val teamGoalPoints = integer("team_goal_points")
     val exactScorePoints = integer("exact_score_points")
+    val correctWinnerPoints = integer("correct_winner_points")
     val owner = reference("owner", Users)
 }
 

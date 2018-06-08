@@ -17,4 +17,5 @@ export class Group {
   goalKingPoints?: number;
   teamGoalPoints?: number;
   exactScorePoints?: number;
+  correctWinnerPoints?: number;
 }

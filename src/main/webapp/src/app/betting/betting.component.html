@@ -2,10 +2,13 @@
   <div *ngIf="game" id="bettingTitle" class="container">
     <h2 class="text-center">{{game.name}} bets for {{displayName}}</h2>
   </div>
-  <div id="infobox" class="jumbotron align-content-center">
-    Select your team to win the tournament ({{group.winnerPoints}} points) and the goal king ({{group.goalKingPoints}} points). Guessing the correct amount of goals in a match wields {{group.teamGoalPoints}} points, and if the score is exactly correct it is {{group.exactScorePoints}} points. Each match score can be edited right upto the moment the game begins.
+  <div *ngIf="group" id="infobox" class="jumbotron align-content-center">
+    Select your team to win the tournament ({{group.winnerPoints}} points) and the goal king ({{group.goalKingPoints}} points). Guessing the
+    correct amount of goals in a match wields {{group.teamGoalPoints}} points, and if the score is exactly correct it is
+    {{group.exactScorePoints}} points. Guessing the winner correctly will also wield {{group.correctWinnerPoints}} points. Each match score
+    can be edited right up to the moment the game begins.
   </div>
-  <div id="winners" class="container">
+  <div *ngIf="started() || ownBets()" id="winners" class="container">
     <div class="input-group mb-4">
       <div class="input-group-prepend">
         <label for="winner" class="input-group-text">Winner</label>
@@ -17,7 +20,8 @@
         </option>
       </select>
       <label for="goalKing" class="input-group-text">Goal King</label>
-      <input [disabled]="!ownBets() || started()" name="Goal King" id="goalKing" class="form-control" type="text" [(ngModel)]="bets.goalKing"
+      <input [disabled]="!ownBets() || started()" name="Goal King" id="goalKing" class="form-control" type="text"
+             [(ngModel)]="bets.goalKing"
              (ngModelChange)="onChange()" placeholder="Miroslav Klose">
     </div>
   </div>
@@ -29,7 +33,6 @@
       <thead>
       <tr>
         <th scope="col">#</th>
-      <!--  <th scope="col">Group/Stage</th>-->
         <th scope="col">Home</th>
         <th scope="col"></th>
         <th scope="col"></th>
@@ -44,23 +47,25 @@
       <tbody>
       <tr *ngFor="let match of game.matches" [class]="style(match)">
         <td>{{match.id}}</td>
-      <!--  <td>{{match.description}}</td>-->
-
         <td class="team">{{getTeam(match.home).name}}</td>
         <td><span class="right flag-icon flag-icon-{{getTeam(match.home).iso}}"></span></td>
 
-        <td><input [class]="getScore(match.id).home == match.homeGoals ? 'score correct' : 'score'"
+        <td><input *ngIf="canSee(match)" [class]="getScore(match.id).home == match.homeGoals ? 'score correct' : 'score'"
                    [disabled]="!canBet(match)" title="Home team goals" type=text class="score"
                    [(ngModel)]="getScore(match.id).home"
-                   (ngModelChange)="onChange($event)" name="{{match.id}}.homeGoals"></td>
+                   (ngModelChange)="onChange($event)" name="{{match.id}}.homeGoals">
+          <input [disabled]="true" *ngIf="!canSee(match)" [class]="getScore(match.id).home == match.homeGoals ? 'score correct' : 'score'"
+                 value="??"></td>
         <td>{{match.homeGoals}}</td>
         <td>-</td>
         <td>{{match.awayGoals}}</td>
 
-        <td><input [disabled]="!canBet(match)" title="Away team goals" type=text
+        <td><input *ngIf="canSee(match)" [disabled]="!canBet(match)" title="Away team goals" type=text
                    [class]="getScore(match.id).away == match.awayGoals ? 'score correct' : 'score'"
                    [(ngModel)]="getScore(match.id).away"
                    (ngModelChange)="onChange($event)" name="{{match.id}}.awayGoals">
+          <input *ngIf="!canSee(match)" [class]="getScore(match.id).home == match.homeGoals ? 'score correct' : 'score'"
+                 [disabled]="true" value="??">
         </td>
         <td><span class="flag-icon flag-icon-{{getTeam(match.away).iso}}"></span></td>
 

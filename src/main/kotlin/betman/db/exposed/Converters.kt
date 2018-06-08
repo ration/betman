@@ -23,7 +23,8 @@ object Converters {
                 winnerPoints = groupDao.winnerPoints,
                 goalKingPoints = groupDao.goalKingPoints,
                 teamGoalPoints = groupDao.teamGoalPoints,
-                exactScorePoints = groupDao.exactScorePoints
+                exactScorePoints = groupDao.exactScorePoints,
+                correctWinnerPoints = groupDao.correctWinnerPoints
         )
         group.standings = getStandings(group)
         return group

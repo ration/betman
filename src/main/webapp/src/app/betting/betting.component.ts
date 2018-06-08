@@ -77,8 +77,12 @@ export class BettingComponent implements OnInit {
   }
 
   canBet(match: Match): boolean {
+    return this.ownBets() && !this.matchStarted(match);
+  }
+
+  matchStarted(match: Match) {
     const now = new Date();
-    return new Date(Date.parse(match.date)) >= now && this.ownBets();
+    return new Date(Date.parse(match.date)) <= now;
   }
 
   ownBets(): boolean {
@@ -117,6 +121,13 @@ export class BettingComponent implements OnInit {
       }
     }
     return '';
+  }
+
+  canSee(match: Match) {
+    if (this.ownBets()) {
+      return true;
+    }
+    return this.matchStarted(match);
   }
 
   ngOnInit() {
