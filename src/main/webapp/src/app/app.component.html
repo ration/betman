@@ -1,4 +1,4 @@
-<nav *ngIf="isLoggedIn | async as loggedIn"  class="navbar navbar-expand-lg navbar-light bg-light">
+<nav *ngIf="isLoggedIn | async as loggedIn"  class="navbar navbar-expand-lg">
   <a class="navbar-brand" href="#">{{title}}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -11,7 +11,7 @@
          routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">Home</a>
       <a class="nav-item nav-link" *ngIf="group" routerLink="group">{{active | async}}</a>
       <a class="nav-item nav-link" *ngIf="group" routerLink="betting">Betting</a>
-      <a class="nav-item nav-link" *ngIf="user" (click)="logout()">Logout {{user}}</a>
+      <a class="nav-item nav-link" *ngIf="user" href="#" (click)="logout()">Logout {{user}}</a>
 
     </div>
   </div>

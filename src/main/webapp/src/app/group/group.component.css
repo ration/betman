@@ -1,9 +1,13 @@
+@import "../betting/betting.component.css";
+
 .copylink {
   padding: 10px;
   display: block;
   background: gainsboro;
   text-align: center;
   width: 700px;
+  color: black;
+
 }
 
 .info-block {

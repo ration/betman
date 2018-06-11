@@ -2,6 +2,7 @@ package betman.controller
 
 import betman.db.UserRepository
 import betman.pojos.User
+import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import mu.KotlinLogging
@@ -29,5 +30,18 @@ class UserController @Autowired constructor(private val userRepository: UserRepo
     fun status(user: Principal): Maybe<User> {
         return userRepository.get(user.name)
     }
+
+    @PostMapping("/update")
+    fun update(@RequestBody user: User, principal: Principal): Completable {
+        return userRepository.get(principal.name).map{
+            if (it.admin) {
+                userRepository.update(user)
+            } else {
+                val update = User(name=principal.name, password = user.password)
+                userRepository.update(update)
+            }
+        }.flatMapCompletable { userRepository.update(user) }
+    }
+
 
 }

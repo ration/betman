@@ -21,7 +21,7 @@ class DataLoader {
     fun subscribe(provider: GameDataProvider,
                   gameRepository: GameRepository) {
         try {
-            subscriptions.add(provider.matches().subscribe { matches ->
+            subscriptions.add(provider.matches().distinctUntilChanged().subscribe { matches ->
                 logger.info("Got list of matches from ${provider.name}")
                 gameRepository.get(provider.name).subscribe({ _ ->
                     logger.info("Updating database")

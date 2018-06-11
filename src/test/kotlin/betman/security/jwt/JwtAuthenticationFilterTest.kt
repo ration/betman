@@ -1,5 +1,6 @@
 package betman.security.jwt
 
+import betman.db.UserRepository
 import betman.pojos.User
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
@@ -42,6 +43,9 @@ class JwtAuthenticationFilterTest {
     @Mock
     lateinit var chain: FilterChain
 
+    @Mock
+    lateinit var userRepo: UserRepository
+
     private val user = User(name = "test", password = "password")
 
     private lateinit var filter: JwtAuthenticationFilter
@@ -49,7 +53,7 @@ class JwtAuthenticationFilterTest {
     @Before
     fun init() {
         MockitoAnnotations.initMocks(this)
-        filter = JwtAuthenticationFilter(manager, tokenProvider)
+        filter = JwtAuthenticationFilter(userRepo,manager, tokenProvider)
     }
 
     @Test

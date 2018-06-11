@@ -27,7 +27,11 @@ class ExposedUserRepositoryTest : DbTest() {
     @Before
     fun init() {
         MockitoAnnotations.initMocks(this)
-        whenever(encoder.encode(any())).thenReturn("secret")
+        whenever(encoder.encode(any())).thenAnswer { encode(it.arguments[0]) }
+    }
+
+    private fun encode(key: Any): String {
+        return "e-$key"
     }
 
     @Test
@@ -55,7 +59,7 @@ class ExposedUserRepositoryTest : DbTest() {
         repo.register(user)
         val ans = repo.get(user.name).blockingGet()
         assertEquals(user.name, ans?.name)
-        assertEquals("secret", ans?.password)
+        assertEquals(encode("myPassword"), ans?.password)
     }
 
     @Test()
@@ -73,6 +77,19 @@ class ExposedUserRepositoryTest : DbTest() {
             val fromDb: Maybe<User> = repo.register(user).map { repo.get(it.name) }.blockingGet()
             assertEquals("user$i", fromDb.blockingGet().name)
         }
+    }
+
+    @Test
+    fun updatePassword() {
+        var password = "some"
+        val user = User(name = "user", password = password)
+        val fromDb: User = repo.register(user).flatMapMaybe { repo.get(it.name) }.blockingGet()
+        assertEquals(encode(password), fromDb.password)
+        password = "newpassword"
+        val user2 = User(name = "user", password = password)
+        val updated = repo.update(user2).toSingleDefault(true).flatMapMaybe{ repo.get("user") }.blockingGet()
+        assertEquals(encode(password), updated.password)
+
     }
 
 }

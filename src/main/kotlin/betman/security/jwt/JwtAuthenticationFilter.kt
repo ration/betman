@@ -1,5 +1,6 @@
 package betman.security.jwt
 
+import betman.db.UserRepository
 import betman.pojos.User
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -16,11 +17,14 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 
-class JwtAuthenticationFilter(private val manager: AuthenticationManager,
+class JwtAuthenticationFilter(private val userRepository: UserRepository,
+        private val manager: AuthenticationManager,
                               private val tokenProvider: JwtTokenProvider) : UsernamePasswordAuthenticationFilter() {
     private val jwtLogger = KotlinLogging.logger {} // <-- protected logger in base class :(
 
     private val mapper = ObjectMapper()
+
+
 
     init {
         authenticationManager = manager
@@ -48,10 +52,11 @@ class JwtAuthenticationFilter(private val manager: AuthenticationManager,
         val user = auth.principal as org.springframework.security.core.userdetails.User
         jwtLogger.info("'{}' login successful", user.username)
         val token = tokenProvider.createToken(user.username, listOf("ROLE_USER"))
+        val isAdmin = userRepository.get(user.username).map { it.admin }.blockingGet()
 
         res.addHeader("Authorization", "Bearer $token")
         // Besides the header, let's put the token in the response as well
-        val response = User(name = user.username, token = token)
+        val response = User(name = user.username, token = token, admin = isAdmin)
         res.writer.print(mapper.writeValueAsString(response))
     }
 }

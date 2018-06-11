@@ -12,6 +12,7 @@ import {AuthenticationService} from '../authentication.service';
 import {LoginComponent} from '../login/login.component';
 import {GroupComponent} from '../group/group.component';
 import {IntroductionComponent} from '../introduction/introduction.component';
+import {AlertService} from '../alert.service';
 
 const KEY = 'somekey';
 const group: Group = {name: 'name', description: 'description', game: 'game', key: KEY};
@@ -27,7 +28,7 @@ describe('JoinComponent', () => {
       imports: [FormsModule, RouterTestingModule.withRoutes([{path: 'join/:key', component: JoinComponent},
         {path: 'login/:key', component: LoginComponent},
         {path: 'group/:key', component: GroupComponent}]), HttpClientTestingModule],
-      providers: [GroupsService, AuthenticationService,
+      providers: [GroupsService, AuthenticationService, AlertService,
         {
           provide: ActivatedRoute,
           useValue: {

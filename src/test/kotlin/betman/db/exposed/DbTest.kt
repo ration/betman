@@ -41,6 +41,7 @@ open class DbTest {
         UserDao.new {
             name = userName
             password = "password"
+            admin = false
         }
     }
 

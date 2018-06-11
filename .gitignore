@@ -16,4 +16,5 @@ src/main/resources/application-production.yml
 *.iws
 *.iml
 *.ipr
-
+*.*~
+*~

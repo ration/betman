@@ -5,4 +5,5 @@ export class User {
   token?: string;
   activateGroup?: string;
   memberGroups?: number[];
+  admin?: boolean;
 }

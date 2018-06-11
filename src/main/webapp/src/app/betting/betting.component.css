@@ -47,12 +47,15 @@
 
 .exact {
   background-color: gold;
+  color: black;
 }
 
 .partial {
   background-color: bisque;
+  color: black;
 }
 
 .winnerPartial {
   background-color: khaki;
+  color: black;
 }

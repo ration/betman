@@ -19,13 +19,13 @@
           </div>
         </div>
       </form>
-    <a class="nav-link" *ngIf="group" [routerLink]=" ['/betting'] ">Your betting page</a>
+      <a class="nav-link" *ngIf="group" [routerLink]=" ['/betting'] ">Your betting page</a>
 
-  </div>
+    </div>
 
     <div id="groupInfo">
       <h2>Standings</h2>
-      <table class="table table-striped">
+      <table class="table table-striped border-0">
         <thead>
         <tr>
           <th scope="col">#</th>
@@ -67,10 +67,11 @@
         </div>
         <div class="row">
           <div class="col col-10">
-            Points for guessing World Cup champion
+            Points for guessing World Cup champion:
           </div>
           <div *ngIf="isAdmin()" class="col">
-            <input title="Overall Winner points" class="col points" name="winnnerPoints" [(ngModel)]="group.winnerPoints">
+            <input title="Overall Winner points" class="col points" name="winnnerPoints"
+                   [(ngModel)]="group.winnerPoints">
           </div>
           <div class="col" *ngIf="!isAdmin()">
             {{group.winnerPoints}}
@@ -78,7 +79,7 @@
         </div>
         <div class="row">
           <div class="col col-10">
-            Points for guessing the goal king
+            Points for guessing the goal king:
           </div>
           <div *ngIf="isAdmin()" class="col">
             <input title="Goal king points" class="col points" name="goalKingPoints" [(ngModel)]="group.goalKingPoints">
@@ -89,10 +90,11 @@
         </div>
         <div class="row">
           <div class="col col-10">
-            Points for guessing the winning team (or tie)
+            Points for guessing the winning team (or tie):
           </div>
           <div *ngIf="isAdmin()" class="col">
-            <input title="Winning team points per match" class="col points" name="correctWinnerPoints" [(ngModel)]="group.correctWinnerPoints">
+            <input title="Winning team points per match" class="col points" name="correctWinnerPoints"
+                   [(ngModel)]="group.correctWinnerPoints">
           </div>
           <div class="col" *ngIf="!isAdmin()">
             {{group.correctWinnerPoints}}
@@ -107,6 +109,74 @@
         </div>
       </div>
     </form>
+  </div>
+  <div id="sampleScoring"  *ngIf="group">
+    <h3>Sample scoring</h3>
+    <table class="table" >
+      <thead class="table-light">
+      <tr>
+        <th>Match result</th>
+        <th>Guess</th>
+        <th>Points</th>
+        <th>Description</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td scope="row">2 - 1</td>
+        <td>1 - 3</td>
+        <td>0</td>
+        <td>Nothing correct</td>
+
+      </tr>
+      <tr class="partial">
+        <td scope="row">2 - 1</td>
+        <td><strong>2</strong> - 3</td>
+        <td>{{group.teamGoalPoints}}</td>
+        <td>Home team goal amount correct</td>
+      </tr>
+      <tr class="partial">
+        <td scope="row">2 - 1</td>
+        <td>3 - 0</td>
+        <td>{{group.correctWinnerPoints}}</td>
+        <td>Winner is correct</td>
+      </tr>
+      <tr class="winnerPartial">
+        <td scope="row">2 - 1</td>
+        <td><strong>2</strong> - 0</td>
+        <td>{{group.teamGoalPoints + group.correctWinnerPoints}}</td>
+        <td>Home team goal amount correct and winner correct</td>
+      </tr>
+      <tr class="exact">
+        <td scope="row">2 - 1</td>
+        <td><strong>2 - 1</strong></td>
+        <td>{{group.exactScorePoints}}</td>
+        <td>Score is exactly correct</td>
+      </tr>
+
+      <tr class="exact">
+        <td scope="row">Germany</td>
+        <td><strong>Germany</strong></td>
+        <td>{{group.winnerPoints}}</td>
+        <td>Champion</td>
+      </tr>
+      <tr class="exact">
+        <td scope="row">Miroslav Klose</td>
+        <td><strong>Miroslav Klose</strong></td>
+        <td>{{group.goalKingPoints}}</td>
+        <td>Correct goal king</td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr class="font-weight-bold">
+        <td colspan="2" scope="row">Total</td>
+        <td>{{group.exactScorePoints + group.teamGoalPoints+group.correctWinnerPoints + group.teamGoalPoints +
+          group.correctWinnerPoints + group.winnerPoints + group.goalKingPoints}}
+        </td>
+        <td></td>
+      </tr>
+      </tfoot>
+    </table>
   </div>
 
 </div>

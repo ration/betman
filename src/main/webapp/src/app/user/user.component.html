@@ -1,0 +1,25 @@
+<div class="container">
+  <form #userForm="ngForm"  (ngSubmit)="userForm.form.valid && onSubmit()">
+    <h3>Change password</h3>
+    <div class="input-group">
+      <div *ngIf="currentUser.admin" class="input-row">
+        <input type="text" class="form-control" placeholder="User"
+               aria-label="User"
+               name="user" id="user" [(ngModel)]="user.name" required
+               aria-describedby="basic-addon2">
+      </div>
+      <div class="input-row">
+        <input type="text" id="password" class="form-control" placeholder="New password" aria-label="Password"
+               name="password" [(ngModel)]="user.password" required
+               aria-describedby="basic-addon2">
+      </div>
+      <div class="input-row">
+
+        <div class="input-group-append">
+          <input type="submit" class="btn btn-outline-secondary" value="Change">
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>

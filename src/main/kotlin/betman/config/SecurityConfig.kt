@@ -1,5 +1,7 @@
 package betman.config
 
+import betman.controller.UserController
+import betman.db.UserRepository
 import betman.security.jwt.JwtAuthenticationFilter
 import betman.security.jwt.JwtAuthorizationFilter
 import betman.security.jwt.JwtTokenProvider
@@ -25,7 +27,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 class SecurityConfig @Autowired constructor(private val jwtTokenProvider: JwtTokenProvider,
                                             @Qualifier("dbUser") private val userDetailsService: UserDetailsService,
-                                            private val encoder: PasswordEncoder) : WebSecurityConfigurerAdapter() {
+                                            private val encoder: PasswordEncoder,
+                                            private val userRepository: UserRepository) : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         // Allow api/users (signup) and anything under Angular
@@ -50,7 +53,7 @@ class SecurityConfig @Autowired constructor(private val jwtTokenProvider: JwtTok
 
     @Bean
     fun getJWTAuthenticationFilter(): JwtAuthenticationFilter {
-        val filter = JwtAuthenticationFilter(authenticationManager(), jwtTokenProvider)
+        val filter = JwtAuthenticationFilter(userRepository, authenticationManager(), jwtTokenProvider)
         filter.setFilterProcessesUrl("/api/users/login")
         return filter
     }

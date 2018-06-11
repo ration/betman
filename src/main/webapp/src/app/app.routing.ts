@@ -8,6 +8,7 @@ import {HomeComponent} from './home/home.component';
 import {GroupComponent} from './group/group.component';
 import {NewGroupComponent} from './new-group/new-group.component';
 import {JoinComponent} from './join/join.component';
+import {UserComponent} from './user/user.component';
 
 export const appRoutes: Routes = [
   {path: '', component: HomeComponent, canActivate: [AuthGuard]},
@@ -22,6 +23,7 @@ export const appRoutes: Routes = [
   {path: 'join/:key', component: JoinComponent},
   {path: 'login/:key', component: LoginComponent},
   {path: 'register/:key', component: RegisterComponent},
+  {path: 'user', component: UserComponent},
 
 
   // otherwise redirect to home

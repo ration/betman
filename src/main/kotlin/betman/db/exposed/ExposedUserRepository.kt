@@ -1,11 +1,14 @@
 package betman.db.exposed
 
 import betman.InvalidRequestException
+import betman.InvalidUserException
 import betman.RxUtils.maybeNull
+import betman.UnknownUserException
 import betman.UserAlreadyTakenException
 import betman.db.UserRepository
 import betman.db.exposed.Users.name
 import betman.pojos.User
+import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class ExposedUserRepository @Autowired constructor(private val passwordEncoder: PasswordEncoder) : UserRepository {
+
     private val eLogger = KotlinLogging.logger {} // Collides with exposed logger
     override fun get(name: String): Maybe<User> {
         try {
@@ -49,6 +53,7 @@ class ExposedUserRepository @Autowired constructor(private val passwordEncoder: 
             val dao = UserDao.new {
                 name = user.name
                 password = encode(user.password)
+                admin = false
             }
             commit()
             toUser(dao)
@@ -56,7 +61,16 @@ class ExposedUserRepository @Autowired constructor(private val passwordEncoder: 
         }).singleOrError()
     }
 
-    private fun toUser(dao: UserDao) = User(id = dao.id.value, name = dao.name, password = dao.password)
+    override fun update(user: User): Completable {
+        return Completable.fromAction {
+            transaction {
+                val userDao = UserDao.find { Users.name eq user.name }.firstOrNull() ?: throw InvalidUserException("${user.name} not found")
+                userDao.password = passwordEncoder.encode(user.password)
+            }
+        }
+    }
+
+    private fun toUser(dao: UserDao) = User(id = dao.id.value, name = dao.name, password = dao.password, admin = dao.admin)
 
     private fun encode(password: String): String {
         return passwordEncoder.encode(password)

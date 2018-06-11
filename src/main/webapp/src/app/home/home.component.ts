@@ -26,8 +26,11 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.groupService.all().subscribe((groups: Group[]) => {
       this.groups = groups;
+
       if (!this.active && groups.length > 0) {
         this.groupService.setActive(groups[0].key);
+      } else {
+        this.groupService.setActive(this.active);
       }
     });
   }

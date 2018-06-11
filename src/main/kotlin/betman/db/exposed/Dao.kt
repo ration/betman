@@ -58,6 +58,7 @@ class UserDao(id: EntityID<Int>) : IntEntity(id) {
 
     var name by Users.name
     var password by Users.password
+    var admin by Users.admin
 }
 
 

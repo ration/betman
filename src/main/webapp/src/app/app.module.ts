@@ -25,6 +25,7 @@ import {JoinComponent} from './join/join.component';
 import {AuthInterceptorProvider} from './auth.interceptor';
 import {IntroductionComponent} from './introduction/introduction.component';
 import {FooterComponent} from './footer/footer.component';
+import { UserComponent } from './user/user.component';
 
 
 const providers: Array<any> = [
@@ -44,7 +45,8 @@ const providers: Array<any> = [
     NewGroupComponent,
     JoinComponent,
     IntroductionComponent,
-    FooterComponent
+    FooterComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,

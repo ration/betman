@@ -47,6 +47,7 @@ object Groups : IntIdTable() {
 object Users : IntIdTable() {
     val name = varchar("name", 50).uniqueIndex()
     val password = varchar("password", 4096)
+    val admin = bool("admin")
 }
 
 object GroupUser : IntIdTable(name = "users_groups") {
