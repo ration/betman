@@ -74,7 +74,7 @@ class ExposedBettingRepository : BettingRepository {
 
                 val old = BetDao.wrapRows(Bets.innerJoin(Matches).innerJoin(Games).select {
                     (Bets.user eq userDao.id) and (gameName eq gameDao.name) and (Bets.group eq groupDao.id) and (Matches.externalId eq score.matchId)
-                }).singleOrNull()
+                }).firstOrNull()
                 // Simply ignore attemps to modify matches that have been played or started
                 if (matchDao.date <= Instant.now().toEpochMilli()) {
                     if (old != null) {
