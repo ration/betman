@@ -1,17 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {Bet, ScoreBet} from '../bet.model';
 import {GamesService} from '../games.service';
-import {Observable, of, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 
 
 import {AuthenticationService} from '../authentication.service';
 import {Game, Match, Team} from '../game.model';
 import {AlertService} from '../alert.service';
-import {debounceTime, flatMap, map} from 'rxjs/operators';
+import {debounceTime, flatMap} from 'rxjs/operators';
 import {GroupsService} from '../groups.service';
 import {Group} from '../group.model';
 import {ActivatedRoute} from '@angular/router';
-import {a} from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-betting',
@@ -25,11 +24,12 @@ export class BettingComponent implements OnInit {
   teams: Map<number, Team> = new Map<number, Team>();
   displayName: string = null;
   group: Group = null;
+  init = false;
 
 
   private saveSubject: Subject<Bet> = new Subject<Bet>();
   user = '';
-  private lookup = new Map<number, ScoreBet>();
+  lookup = new Map<number, ScoreBet>();
 
   constructor(private gamesService: GamesService,
               private authService: AuthenticationService,
@@ -184,6 +184,7 @@ export class BettingComponent implements OnInit {
         this.bets = value;
         this.updateLookup();
       }
+      this.init = true;
 
     });
   }

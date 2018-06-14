@@ -46,16 +46,16 @@
 }
 
 .exact {
-  background-color: gold;
+  background-color: gold !important;
   color: black;
 }
 
 .partial {
-  background-color: bisque;
+  background-color: bisque !important;
   color: black;
 }
 
 .winnerPartial {
-  background-color: khaki;
+  background-color: khaki !important;
   color: black;
 }

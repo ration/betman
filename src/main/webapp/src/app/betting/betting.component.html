@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <div class="container" id="matchBets" *ngIf="game.matches.length == bets.scores.length && teams">
+  <div class="container" id="matchBets" *ngIf="game.matches.length == bets.scores.length && teams && init">
     <button *ngIf="ownBets()" class="btn btn-primary m-1" (click)="guess()">I know nothing, guess for me</button>
 
     <table class="table table-striped">
