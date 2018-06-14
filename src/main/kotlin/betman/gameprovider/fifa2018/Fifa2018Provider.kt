@@ -106,7 +106,8 @@ class Fifa2018Provider @Autowired constructor(@Qualifier("FileJsonLoader") priva
             val df = StdDateFormat()
             return Match(id = match.name, home = home.id, away = away.id, description = description, date = df.parse(match.date),
                     homeOdds = odds(home.name, away.name)?.homeOdds,
-                    awayOdds = odds(home.name, away.name)?.awayOdds)
+                    awayOdds = odds(home.name, away.name)?.awayOdds, homeGoals = match.homeResult?.toIntOrNull(),
+                    awayGoals = match.awayResult?.toIntOrNull())
         }
         return null
     }
