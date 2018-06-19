@@ -57,6 +57,11 @@ class GroupController @Autowired constructor(private val repository: GroupReposi
         return repository.get(key, user)
     }
 
+    @GetMapping("/chart/{key}")
+    fun chart(@PathVariable key: String): Single<Map<String, Map<Int, Int>>> {
+        return repository.chart(key)
+    }
+
 
     private fun generateKey(): String {
         val generator = RandomValueStringGenerator()

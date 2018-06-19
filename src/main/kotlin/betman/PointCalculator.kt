@@ -33,6 +33,10 @@ object PointCalculator {
                 goalKing(group, bet, goalKing)
     }
 
+    fun pointsPerGame(group: Group, game: Game, bet: Bet): Map<Int, Int> {
+        return game.matches.map { it.id to toPoints(it, bet, group) }.toMap()
+    }
+
     private fun toPoints(match: Match, bet: Bet, group: Group): Int {
         if (match.homeGoals != null) {
             return if (exactScoreMatch(bet, match)) {
@@ -74,5 +78,7 @@ object PointCalculator {
     private fun exactScoreMatch(bet: Bet, match: Match) =
             bet.scores.find { it.matchId == match.id }?.home == match.homeGoals &&
                     bet.scores.find { it.matchId == match.id }?.away == match.awayGoals
+
+
 }
 

@@ -124,28 +124,5 @@ class ExposedBettingRepositoryTest : DbTest() {
         return match
     }
 
-    private fun createTeam(gameDao: GameDao, team: String, ext: Int): TeamDao {
-        return transaction {
-            TeamDao.new {
-                game = gameDao
-                name = team
-                iso = "xx"
-                externalId = ext
-            }
-        }
-    }
-
-    private fun createMatch(gameDao: GameDao, homeDao: TeamDao, awayDao: TeamDao,
-                            ext: Int, time: Long = Instant.now().plusSeconds(1000).toEpochMilli()): MatchDao = transaction {
-        MatchDao.new {
-            game = gameDao
-            externalId = ext
-            home = homeDao
-            away = awayDao
-            date = time
-            description = "some"
-        }
-    }
-
 
 }

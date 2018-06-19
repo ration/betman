@@ -143,4 +143,18 @@ class ExposedGroupRepositoryTest : DbTest() {
         repository.updateDisplayName(key, "another", displayName)
     }
 
+    @Test
+    fun chart() {
+        val ext = 1
+        val game = createGame()
+        createGroup()
+        repository.join(key, userName, displayName).blockingGet()
+        val germany = createTeam(game, "germany", 1)
+        val england = createTeam(game, "england", 2)
+        createMatch(game, germany, england, ext)
+
+        val chart = repository.chart(key).blockingGet()
+        assertEquals(0, chart[displayName]!![ext])
+    }
+
 }

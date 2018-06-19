@@ -22,4 +22,6 @@ interface GroupRepository {
 
     fun get(username: String): Single<List<Group>>
 
+    fun chart(groupKey: String): Single<Map<String, Map<Int, Int>>>
+
 }

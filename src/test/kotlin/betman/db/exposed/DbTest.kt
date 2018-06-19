@@ -7,6 +7,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.After
 import org.junit.Before
 import java.sql.Connection
+import java.time.Instant
 
 
 open class DbTest {
@@ -48,4 +49,28 @@ open class DbTest {
     protected fun createGroup(groupName: String, groupKey: String, gameDao: GameDao, user: String) = transaction {
         ExposedGroupRepository().create(Group(name = groupName, key = groupKey, game = gameDao.name, admin = "user"), groupKey, user)
     }
+
+    protected fun createMatch(gameDao: GameDao, homeDao: TeamDao, awayDao: TeamDao,
+                              ext: Int, time: Long = Instant.now().plusSeconds(1000).toEpochMilli()): MatchDao = transaction {
+        MatchDao.new {
+            game = gameDao
+            externalId = ext
+            home = homeDao
+            away = awayDao
+            date = time
+            description = "some"
+        }
+    }
+
+    protected fun createTeam(gameDao: GameDao, team: String, ext: Int): TeamDao {
+        return transaction {
+            TeamDao.new {
+                game = gameDao
+                name = team
+                iso = "xx"
+                externalId = ext
+            }
+        }
+    }
+
 }

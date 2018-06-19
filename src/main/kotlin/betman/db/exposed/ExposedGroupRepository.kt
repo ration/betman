@@ -7,7 +7,6 @@ import betman.db.exposed.GroupUser.user
 import betman.db.exposed.Groups.key
 import betman.db.exposed.Users.name
 import betman.pojos.Group
-import betman.pojos.User
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
@@ -37,7 +36,7 @@ class ExposedGroupRepository : GroupRepository {
                 groupDao.goalKingPoints = group.goalKingPoints
                 groupDao.teamGoalPoints = group.teamGoalPoints
                 groupDao.exactScorePoints = group.exactScorePoints
-                groupDao.correctWinnerPoints= group.correctWinnerPoints
+                groupDao.correctWinnerPoints = group.correctWinnerPoints
                 commit()
             }
         } catch (e: Exception) {
@@ -63,7 +62,7 @@ class ExposedGroupRepository : GroupRepository {
             if (username != null) {
                 val userDao = UserDao.find { name eq username }.firstOrNull() ?: throw UnknownUserException()
                 displayName = GroupUserDao.find { (user eq userDao.id) and (GroupUser.group eq groupDao.id) }
-                    .map { it.name }.firstOrNull()
+                        .map { it.name }.firstOrNull()
             }
             Converters.toGroup(groupDao, GameDao.findById(groupDao.game.value)!!.name, displayName)
 
@@ -119,13 +118,17 @@ class ExposedGroupRepository : GroupRepository {
                 goalKingPoints = newGroup.goalKingPoints
                 teamGoalPoints = newGroup.teamGoalPoints
                 exactScorePoints = newGroup.exactScorePoints
-                correctWinnerPoints= newGroup.correctWinnerPoints
+                correctWinnerPoints = newGroup.correctWinnerPoints
                 owner = userDao.id
             }
             Converters.toGroup(group, gameDao.name, username)
         }).singleOrError()
     }
 
+    override fun chart(groupKey: String): Single<Map<String, Map<Int, Int>>> {
+        return get(groupKey, null).map {
+            Converters.chart(it)
+        }.toSingle()
+    }
 }
-
 

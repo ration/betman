@@ -4,6 +4,7 @@ import betman.InvalidUserException
 import betman.PointCalculator
 import betman.pojos.*
 import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.Instant
 import java.util.*
 
@@ -60,6 +61,14 @@ object Converters {
             }.sortedByDescending { it.points }
         }
         return listOf()
+    }
+
+    fun chart(group: Group): Map<String, Map<Int, Int>> {
+        return transaction {
+            val users = GroupUserDao.find { GroupUser.group eq group.id }
+            val game = GameDao.find { Games.name eq group.game }.first()
+            users.map { it.name to PointCalculator.pointsPerGame(group, toGame(game)!!, bettingRepository.get(group.key!!, getUserName(it)).blockingGet()) }.toMap()
+        }
     }
 
     private fun getUserName(dao: GroupUserDao): String = UserDao.findById(dao.user)?.name
