@@ -6,6 +6,7 @@ import betman.pojos.Bet
 import betman.pojos.Group
 import betman.pojos.ScoreBet
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -29,6 +30,7 @@ class ExposedBettingRepositoryTest : DbTest() {
         val groupRepo = ExposedGroupRepository()
         groupRepo.join(group.key!!, name, "displayName")
     }
+
 
     @Test(expected = UnknownMatchException::class)
     fun invalidMatchId() {

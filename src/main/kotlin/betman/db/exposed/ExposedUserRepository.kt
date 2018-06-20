@@ -3,8 +3,8 @@ package betman.db.exposed
 import betman.InvalidRequestException
 import betman.InvalidUserException
 import betman.RxUtils.maybeNull
-import betman.UnknownUserException
 import betman.UserAlreadyTakenException
+import betman.db.CacheRepository
 import betman.db.UserRepository
 import betman.db.exposed.Users.name
 import betman.pojos.User
@@ -22,8 +22,16 @@ import org.springframework.stereotype.Component
 @Component
 class ExposedUserRepository @Autowired constructor(private val passwordEncoder: PasswordEncoder) : UserRepository {
 
+    val userCache = CacheRepository.getOrCreate<String, User>("userCache") {
+        getFromDb(it).toSingle()
+    }
+
     private val eLogger = KotlinLogging.logger {} // Collides with exposed logger
     override fun get(name: String): Maybe<User> {
+        return userCache.get(name)
+    }
+
+    fun getFromDb(name: String): Maybe<User> {
         try {
 
             return Maybes.maybeNull(transaction {
@@ -66,6 +74,7 @@ class ExposedUserRepository @Autowired constructor(private val passwordEncoder: 
             transaction {
                 val userDao = UserDao.find { Users.name eq user.name }.firstOrNull() ?: throw InvalidUserException("${user.name} not found")
                 userDao.password = passwordEncoder.encode(user.password)
+                userCache.invalidate(user.name)
             }
         }
     }

@@ -2,6 +2,7 @@ package betman.db.exposed
 
 import betman.config.Settings
 import betman.db.HikariDatabase
+import betman.db.CacheRepository
 import betman.pojos.Group
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.After
@@ -28,6 +29,7 @@ open class DbTest {
     fun unload() {
         connection.close()
         factory.close()
+        CacheRepository.invalidateAll()
     }
 
     protected fun createGame(gameName: String = "game"): GameDao = transaction {

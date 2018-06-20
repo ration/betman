@@ -1,7 +1,9 @@
 package betman.db.exposed
 
 import betman.*
+import betman.db.CacheRepository
 import betman.pojos.Group
+import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -19,7 +21,13 @@ class ExposedGroupRepositoryTest : DbTest() {
 
     @Before
     fun init() {
+        CacheRepository.prefix = "groupTest"
         createUser(userName)
+    }
+
+    @After
+    fun after() {
+        CacheRepository.invalidateAll()
     }
 
     @Test(expected = InvalidRequestException::class)

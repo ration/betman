@@ -69,6 +69,8 @@ dependencies {
     compile "org.springframework.security.oauth:spring-security-oauth2:$oauth_version"
     compile 'org.jetbrains.exposed:exposed:0.10.2'
     compile 'com.google.cloud.sql:postgres-socket-factory:1.0.8'
+    compile 'com.github.ben-manes.caffeine:caffeine:2.6.2'
+    compile 'net.javacrumbs.future-converter:future-converter-rxjava2-java8:1.1.0'
 
     compile 'org.apache.commons:commons-math3:3.6.1'
 

@@ -11,6 +11,7 @@ data class Match(val id: Int,
                  var homeGoals: Int? = null,
                  var homeOdds: Double? = null,
                  val awayOdds: Double? = null,
+                 val internalId: Int? = null,
                  @JsonFormat(shape = JsonFormat.Shape.STRING) val date: Date)
 
 
