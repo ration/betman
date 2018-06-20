@@ -2,15 +2,24 @@ package betman.db.exposed
 
 import betman.InvalidUserException
 import betman.PointCalculator
+import betman.db.CacheRepository
 import betman.pojos.*
+import io.reactivex.Single
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.Instant
 import java.util.*
 
 object Converters {
+    // Cache for matches in game
+    val matchCache = CacheRepository.getOrCreate<Int, Map<Int, Match>>("matchCache") {
+        val matches = getMatchesFromDb(it)
+        Single.just(matches.map { it.id to it }.toMap())
+    }
 
-    val bettingRepository = ExposedBettingRepository()
+
+
+    private val bettingRepository = ExposedBettingRepository()
 
     fun toGroup(groupDao: GroupDao, gameName: String, userDisplayName: String? = null): Group {
         val userDao = UserDao.findById(groupDao.owner)!!
@@ -36,7 +45,7 @@ object Converters {
             return Game(game.id.value,
                     game.name,
                     game.description,
-                    matches = getMatches(game.id),
+                    matches = getMatches(game.id.value),
                     teams = getTeams(game.id))
         }
         return null
@@ -75,8 +84,12 @@ object Converters {
             ?: throw InvalidUserException()
 
 
-    private fun getMatches(id: EntityID<Int>): List<Match> {
-        return MatchDao.find { Matches.game eq id }.map {
+    private fun getMatches(id: Int): List<Match> {
+        return matchCache.get(id).blockingGet().values.sortedBy { it.id }.toList()
+    }
+
+    private fun getMatchesFromDb(gameId: Int): List<Match> {
+        return MatchDao.find { Matches.game eq gameId }.map {
             Match(id = it.externalId,
                     home = it.home?.externalId ?: -1,
                     away = it.away?.externalId ?: -1,
@@ -85,7 +98,8 @@ object Converters {
                     homeGoals = it.homeGoals,
                     awayGoals = it.awayGoals,
                     homeOdds = it.homeOdds?.toDouble(),
-                    awayOdds = it.awayOdds?.toDouble()
+                    awayOdds = it.awayOdds?.toDouble(),
+                    internalId = it.id.value
             )
         }.sortedBy { it.id }
     }

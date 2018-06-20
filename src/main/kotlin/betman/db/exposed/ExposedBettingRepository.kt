@@ -6,6 +6,7 @@ import betman.UnknownGroupException
 import betman.UnknownMatchException
 import betman.UnknownUserException
 import betman.db.BettingRepository
+import betman.db.CacheRepository
 import betman.db.exposed.Matches.externalId
 import betman.db.exposed.Users.name
 import betman.pojos.Bet
@@ -24,7 +25,19 @@ import betman.db.exposed.Games.name as gameName
 @Component
 class ExposedBettingRepository : BettingRepository {
 
+    private val matchDaoCache = CacheRepository.getOrCreate<Int, MatchDao>("matchDaoCache") {
+        Single.just(MatchDao.findById(it))
+    }
+
+    private val betCache = CacheRepository.getOrCreate<Pair<String,String>, Bet>("bettingCache") {
+        getFromDb(it.first,it.second).toSingle()
+    }
+
     override fun get(groupId: String, username: String): Maybe<Bet> {
+        return betCache.get(Pair(groupId, username))
+    }
+
+    fun getFromDb(groupId: String, username: String): Maybe<Bet> {
         return Maybes.maybeNull(transaction {
             val userDao = UserDao.find { name eq username }.singleOrNull() ?: throw UnknownUserException()
             val groupDao = GroupDao.find { Groups.key eq groupId }.singleOrNull() ?: throw UnknownGroupException()
@@ -55,7 +68,7 @@ class ExposedBettingRepository : BettingRepository {
         return BetDao.wrapRows(Bets.innerJoin(Matches).innerJoin(Games).select {
             (Bets.match.isNotNull()) and (Bets.user eq userDao.id) and (gameName eq gameDao.name) and (Bets.group eq groupDao.id)
         }).map {
-            val matchDao = MatchDao.findById(it.match!!)
+            val matchDao = matchDaoCache.get(it.match!!.value).blockingGet()
             ScoreBet(matchId = matchDao!!.externalId, home = it.home, away = it.away)
         }
     }
@@ -110,6 +123,7 @@ class ExposedBettingRepository : BettingRepository {
                 }
             }
             commit()
+            CacheRepository.invalidateAll()
             bet
 
         }).singleOrError()

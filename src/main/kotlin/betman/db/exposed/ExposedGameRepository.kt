@@ -2,6 +2,7 @@ package betman.db.exposed
 
 import betman.RxUtils.maybeNull
 import betman.db.GameRepository
+import betman.db.CacheRepository
 import betman.db.exposed.Games.name
 import betman.db.exposed.Matches.externalId
 import betman.pojos.Game
@@ -38,6 +39,7 @@ class ExposedGameRepository : GameRepository {
 
                     updateGames(game.matches)
                     commit()
+                    CacheRepository.invalidateAll()
                     Converters.toGame(dao)
                 })
     }

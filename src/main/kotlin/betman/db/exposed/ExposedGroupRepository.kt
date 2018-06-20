@@ -2,6 +2,7 @@ package betman.db.exposed
 
 import betman.*
 import betman.RxUtils.maybeNull
+import betman.db.CacheRepository
 import betman.db.GroupRepository
 import betman.db.exposed.GroupUser.user
 import betman.db.exposed.Groups.key
@@ -18,6 +19,16 @@ import org.springframework.stereotype.Component
 
 @Component
 class ExposedGroupRepository : GroupRepository {
+
+    private val cache = CacheRepository.getOrCreate<String, Group>("groupCache") {
+        getFromDb(it, null).toSingle()
+    }
+    private val displayNameCache = CacheRepository.getOrCreate<Pair<String,String>, String?>("displayNameCache") {
+        Single.just(usernameFromDb(it.first, it.second))
+    }
+    private val groupsCache = CacheRepository.getOrCreate<String,List<Group>>("groupsCache") {
+        getGroupsFromDb(it)
+    }
 
 
     override fun update(group: Group, username: String): Completable {
@@ -38,6 +49,7 @@ class ExposedGroupRepository : GroupRepository {
                 groupDao.exactScorePoints = group.exactScorePoints
                 groupDao.correctWinnerPoints = group.correctWinnerPoints
                 commit()
+                CacheRepository.invalidateAll()
             }
         } catch (e: Exception) {
             return Completable.error(e)
@@ -46,16 +58,49 @@ class ExposedGroupRepository : GroupRepository {
     }
 
     override fun get(username: String): Single<List<Group>> {
+        return groupsCache.get(username).toSingle()
+    }
+
+    private fun getGroupsFromDb(username: String): Single<List<Group>> {
         return Observable.just(transaction {
             val userDao = UserDao.find { name eq username }.firstOrNull() ?: throw UnknownUserException()
             GroupUserDao.find { (user eq userDao.id) }.map {
                 val groupDao = GroupDao.findById(it.group.value)!!
+
                 Converters.toGroup(groupDao, GameDao.findById(groupDao.game.value)!!.name, it.name)
             }.toList()
         }).single(listOf())
     }
 
     override fun get(groupKey: String, username: String?): Maybe<Group> {
+        return cache.get(groupKey).map {
+            it.userDisplayName = getUserName(username, it.key)
+            it
+        }
+    }
+
+    fun getUserName(username: String?, key: String?): String? {
+        return if (username != null && key != null) {
+            displayNameCache.get(Pair(username, key)).blockingGet()
+        } else {
+            null
+        }
+    }
+
+    private fun usernameFromDb(username: String?, key: String?): String? {
+        return transaction {
+            if (username != null && key != null) {
+                val userDao = UserDao.find { name eq username }.firstOrNull() ?: throw UnknownUserException()
+                val groupDao = GroupDao.find { Groups.key eq key }.firstOrNull() ?: throw UnknownGroupException()
+                GroupUserDao.find { (user eq userDao.id) and (GroupUser.group eq groupDao.id) }
+                        .map { it.name }.firstOrNull()
+            } else {
+                null
+            }
+        }
+    }
+
+    fun getFromDb(groupKey: String, username: String?): Maybe<Group> {
         return Maybes.maybeNull(transaction {
             val groupDao = GroupDao.find { Groups.key eq groupKey }.firstOrNull() ?: throw UnknownGroupException()
             var displayName: String? = null
@@ -78,6 +123,9 @@ class ExposedGroupRepository : GroupRepository {
 
             dao.name = displayName
             commit()
+            cache.invalidateAll()
+            groupsCache.invalidateAll()
+            displayNameCache.invalidate(Pair(username, group))
         }
     }
 
@@ -99,7 +147,7 @@ class ExposedGroupRepository : GroupRepository {
                 group = groupDao.id
                 name = displayName
             }
-            commit()
+            CacheRepository.invalidateAll()
             Converters.toGroup(groupDao, GameDao.findById(groupDao.game.value)!!.name, dao.name)
         }).singleOrError()
     }
@@ -121,6 +169,8 @@ class ExposedGroupRepository : GroupRepository {
                 correctWinnerPoints = newGroup.correctWinnerPoints
                 owner = userDao.id
             }
+            cache.invalidateAll()
+
             Converters.toGroup(group, gameDao.name, username)
         }).singleOrError()
     }
