@@ -25,11 +25,11 @@ import betman.db.exposed.Games.name as gameName
 @Component
 class ExposedBettingRepository : BettingRepository {
 
-    private val matchDaoCache = CacheRepository.getOrCreate<Int, MatchDao>("matchDaoCache") {
+    private val matchDaoCache = CacheRepository.instance.getOrCreate<Int, MatchDao>("matchDaoCache") {
         Single.just(MatchDao.findById(it))
     }
 
-    private val betCache = CacheRepository.getOrCreate<Pair<String,String>, Bet>("bettingCache") {
+    private val betCache = CacheRepository.instance.getOrCreate<Pair<String,String>, Bet>("bettingCache") {
         getFromDb(it.first,it.second).toSingle()
     }
 
@@ -123,7 +123,7 @@ class ExposedBettingRepository : BettingRepository {
                 }
             }
             commit()
-            CacheRepository.invalidateAll()
+            CacheRepository.instance.invalidateAll()
             bet
 
         }).singleOrError()

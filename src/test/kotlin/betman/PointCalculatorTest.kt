@@ -86,7 +86,7 @@ class PointCalculatorTest {
                 ScoreBet(2, home = 3, away = 2)))
         val chart: Map<Int, Int> = PointCalculator.pointsPerGame(group, game, user1Bet)
         assertEquals(group.exactScorePoints, chart[1])
-        assertEquals(group.teamGoalPoints, chart[2])
+        assertEquals(group.exactScorePoints + group.teamGoalPoints, chart[2])
 
     }
 }

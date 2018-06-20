@@ -8,7 +8,8 @@ import {AuthenticationService} from '../authentication.service';
 import {UserService} from '../user.service';
 import {AlertService} from '../alert.service';
 import {HttpErrorResponse} from '@angular/common/http';
-
+import {Chart} from '../chart.model';
+import {Chart as ChartJs} from 'chart.js';
 
 @Component({
   selector: 'app-group',
@@ -22,6 +23,7 @@ export class GroupComponent implements OnInit, OnDestroy {
   link: any;
   userDisplayName: string;
   groupId: string;
+  chart: null;
 
   constructor(private route: ActivatedRoute,
               private groupService: GroupsService,
@@ -38,6 +40,9 @@ export class GroupComponent implements OnInit, OnDestroy {
     this.groupId = this.route.snapshot.params.group || this.groupService.getActive();
     if (this.groupId) {
       this.loadGroup(this.groupId);
+      this.groupService.chart(this.groupId).subscribe((chart: Chart) => {
+        this.generateChart(chart);
+      });
     }
   }
 
@@ -80,5 +85,76 @@ export class GroupComponent implements OnInit, OnDestroy {
         this.userDisplayName = this.authService.currentUser().name;
       }
     });
+  }
+
+  private getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+
+  private generateChart(chart: Chart) {
+    if (chart.points.size > 0) {
+      // TODO the api lies. this should not be needed
+
+      const labels: number[] = Array.from(new Map(Object.entries(chart.points.values().next().value)).values());
+
+      const datasets = Array.from(chart.points.entries(), ([key, value]) => {
+        const data = Array.from(new Map(Object.entries(value)).values());
+        const color = this.getRandomColor();
+        return {
+          label: key,
+          data: data,
+          fill: false,
+          backgroundColor: color,
+          borderColor: color,
+        };
+      });
+
+      const ctx = document.getElementById('canvas');
+
+      this.chart = new ChartJs(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: datasets
+        },
+        options: {
+          responsive: true,
+          title: {
+            display: true,
+            text: 'Point accumulation'
+          },
+          tooltips: {
+            mode: 'index',
+            intersect: false,
+          },
+          hover: {
+            mode: 'nearest',
+            intersect: true
+          },
+          scales: {
+            xAxes: [{
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Game'
+              }
+            }],
+            yAxes: [{
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Points'
+              }
+            }]
+          }
+        }
+      });
+    }
   }
 }

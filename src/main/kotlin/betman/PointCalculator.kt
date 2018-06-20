@@ -33,9 +33,20 @@ object PointCalculator {
                 goalKing(group, bet, goalKing)
     }
 
+    /**
+     * Accumulation of points per game
+     */
     fun pointsPerGame(group: Group, game: Game, bet: Bet): Map<Int, Int> {
-        return game.matches.map { it.id to toPoints(it, bet, group) }.toMap()
-    }
+        var sum = 0
+        val ans: MutableMap<Int, Int> = mutableMapOf()
+        for (match in game.matches) {
+            if (match.homeGoals == null) {
+                continue
+            }
+            sum += toPoints(match, bet, group)
+            ans[match.id] = sum
+        }
+        return ans}
 
     private fun toPoints(match: Match, bet: Bet, group: Group): Int {
         if (match.homeGoals != null) {
@@ -52,9 +63,9 @@ object PointCalculator {
         val scoreBet = bet.scores.find { it.matchId == match.id }
         if (scoreBet != null) {
             return (match.homeGoals to match.awayGoals).biLet { homeGoals, awayGoals ->
-                val result = Winner.fromScore(homeGoals,awayGoals)
+                val result = Winner.fromScore(homeGoals, awayGoals)
                 val betResult = Winner.fromScore(scoreBet.home, scoreBet.away)
-                if (result == betResult)  group.correctWinnerPoints  else 0
+                if (result == betResult) group.correctWinnerPoints else 0
             } ?: 0
         }
         return 0

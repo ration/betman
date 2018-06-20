@@ -30,7 +30,7 @@ open class DbTest {
     fun unload() {
         connection.close()
         factory.close()
-        CacheRepository.invalidateAll()
+        CacheRepository.instance.invalidateAll()
     }
 
     protected fun createGame(gameName: String = "game"): GameDao = transaction {
@@ -54,6 +54,8 @@ open class DbTest {
 
     protected fun createMatch(gameDao: GameDao, homeDao: TeamDao, awayDao: TeamDao,
                               ext: Int, time: Long = Instant.now().plusSeconds(1000).toEpochMilli()): MatchDao = transaction {
+        CacheRepository.instance.invalidateAll()
+
         MatchDao.new {
             game = gameDao
             externalId = ext
@@ -61,6 +63,8 @@ open class DbTest {
             away = awayDao
             date = time
             description = "some"
+            homeGoals = 2
+            awayGoals = 1
         }
     }
 

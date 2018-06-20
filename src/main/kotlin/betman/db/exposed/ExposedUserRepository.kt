@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component
 @Component
 class ExposedUserRepository @Autowired constructor(private val passwordEncoder: PasswordEncoder) : UserRepository {
 
-    val userCache = CacheRepository.getOrCreate<String, User>("userCache") {
+    val userCache = CacheRepository.instance.getOrCreate<String, User>("userCache") {
         getFromDb(it).toSingle()
     }
 

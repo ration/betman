@@ -12,7 +12,7 @@ import java.util.*
 
 object Converters {
     // Cache for matches in game
-    val matchCache = CacheRepository.getOrCreate<Int, Map<Int, Match>>("matchCache") {
+    val matchCache = CacheRepository.instance.getOrCreate<Int, Map<Int, Match>>("matchCache") {
         val matches = getMatchesFromDb(it)
         Single.just(matches.map { it.id to it }.toMap())
     }

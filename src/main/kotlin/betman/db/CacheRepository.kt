@@ -9,7 +9,13 @@ import java.util.concurrent.TimeUnit
 
 
 /** Async cache for pojo types */
-object CacheRepository {
+class CacheRepository {
+
+    companion object {
+        // Just to make testing a bit easier this isn't an object type
+        val instance = CacheRepository()
+    }
+
     private val caches: MutableMap<String, Cache<*, *>> = mutableMapOf()
     var prefix: String = ""
 

@@ -21,13 +21,8 @@ class ExposedGroupRepositoryTest : DbTest() {
 
     @Before
     fun init() {
-        CacheRepository.prefix = "groupTest"
+        CacheRepository.instance.prefix = "groupTest"
         createUser(userName)
-    }
-
-    @After
-    fun after() {
-        CacheRepository.invalidateAll()
     }
 
     @Test(expected = InvalidRequestException::class)

@@ -20,13 +20,13 @@ import org.springframework.stereotype.Component
 @Component
 class ExposedGroupRepository : GroupRepository {
 
-    private val cache = CacheRepository.getOrCreate<String, Group>("groupCache") {
+    private val cache = CacheRepository.instance.getOrCreate<String, Group>("groupCache") {
         getFromDb(it, null).toSingle()
     }
-    private val displayNameCache = CacheRepository.getOrCreate<Pair<String,String>, String?>("displayNameCache") {
+    private val displayNameCache = CacheRepository.instance.getOrCreate<Pair<String,String>, String?>("displayNameCache") {
         Single.just(usernameFromDb(it.first, it.second))
     }
-    private val groupsCache = CacheRepository.getOrCreate<String,List<Group>>("groupsCache") {
+    private val groupsCache = CacheRepository.instance.getOrCreate<String,List<Group>>("groupsCache") {
         getGroupsFromDb(it)
     }
 
@@ -49,7 +49,7 @@ class ExposedGroupRepository : GroupRepository {
                 groupDao.exactScorePoints = group.exactScorePoints
                 groupDao.correctWinnerPoints = group.correctWinnerPoints
                 commit()
-                CacheRepository.invalidateAll()
+                CacheRepository.instance.invalidateAll()
             }
         } catch (e: Exception) {
             return Completable.error(e)
@@ -147,7 +147,7 @@ class ExposedGroupRepository : GroupRepository {
                 group = groupDao.id
                 name = displayName
             }
-            CacheRepository.invalidateAll()
+            CacheRepository.instance.invalidateAll()
             Converters.toGroup(groupDao, GameDao.findById(groupDao.game.value)!!.name, dao.name)
         }).singleOrError()
     }

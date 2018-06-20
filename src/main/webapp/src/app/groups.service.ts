@@ -5,12 +5,15 @@ import {Group, Groups} from './group.model';
 import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {AuthenticationService} from './authentication.service';
+import {Chart} from './chart.model';
 
 @Injectable()
 export class GroupsService {
   public static readonly newGroupUrl = environment.host + '/api/groups/new';
   public static readonly getGroupUrl = environment.host + '/api/groups/';
   public static readonly getGroupInfo = environment.host + '/api/groups/info/';
+  public static readonly chartUrl = environment.host + '/api/groups/chart/';
+
   public static readonly joinGroupUrl = environment.host + '/api/groups/join';
   public static readonly updateGroupUrl = environment.host + '/api/groups/update';
 
@@ -81,6 +84,12 @@ export class GroupsService {
     return this.http.post<Group>(GroupsService.joinGroupUrl, null, {params});
   }
 
+  chart(key: string): Observable<Chart> {
+    return this.http.get<Map<string, Map<number, string>>>(GroupsService.chartUrl + key).pipe(map(data => {
+      const chart: Chart = {points: new Map(Object.entries(data))};
+      return chart;
+    }));
+  }
 
   private resetGroup() {
     console.log('Resetting group');

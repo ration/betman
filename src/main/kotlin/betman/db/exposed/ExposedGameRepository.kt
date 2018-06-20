@@ -39,7 +39,7 @@ class ExposedGameRepository : GameRepository {
 
                     updateGames(game.matches)
                     commit()
-                    CacheRepository.invalidateAll()
+                    CacheRepository.instance.invalidateAll()
                     Converters.toGame(dao)
                 })
     }
