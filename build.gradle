@@ -141,7 +141,7 @@ task testAngular(type: Exec) {
     workingDir "$webappDir"
     inputs.dir "$webappDir"
     group = BasePlugin.BUILD_GROUP
-    commandLine "ng${cmd_ext}", "test", "--browsers", "ChromeHeadless", "--single-run"
+    commandLine "ng${cmd_ext}", "test", "--browsers", "ChromeHeadless"
 }
 
 task buildAngular(type: Exec) {
